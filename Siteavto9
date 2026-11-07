@@ -351,11 +351,52 @@ body::before{animation:aur 14s ease-in-out infinite alternate}
 
 /* шапка: меню-бургер на средних экранах, чтобы всё помещалось */
 .tr .b.p.dm{white-space:nowrap}
-@media(min-width:1241px){.tr .b.p.dm{display:none}}
-@media(max-width:1240px) and (min-width:861px){
+@media(min-width:1361px){.tr .b.p.dm{display:none}}
+@media(max-width:1360px) and (min-width:861px){
  .pill{display:none;position:absolute;top:60px;left:auto;right:16px;width:min(340px,calc(100% - 32px));flex-direction:column;border-radius:24px;padding:10px;margin:0}
  .pill.open{display:flex}.pill a{padding:13px 16px}.bg{display:grid}
 }
+</style>
+<style>
+/* ===== Nota: исправления вёрстки ===== */
+/* бейджи корзины/избранного/сообщений больше не обрезаются кругом кнопки */
+.b:has(>.bdg){overflow:visible}.b:has(>.bdg)::before{border-radius:inherit}.b:has(>.bdg) .rip{display:none}
+.bdg{top:-5px;right:-5px;z-index:3;box-shadow:0 0 0 2px var(--bg)}
+/* карточки: радиус не больше 28px, чтобы скругление не «съедало» текст */
+.gl,.tile,.hl,.hr,.stats div,.cont>div,.sv-card,.ftc,.card,.mini{border-radius:min(var(--r),28px)}
+.hero>*,.tiles>*,.grid>*,.cont>*{min-width:0}
+.hl,.hcap,.tile,.cb,.sv-rw,.sv-f,.mi-b,.li,.stats div{overflow-wrap:anywhere}
+.hl h1,.tile h3,.hcap b,.cb h3{overflow-wrap:break-word;hyphens:auto}
+.hcap{padding:22px 26px 26px}.tile{padding:24px 22px}
+.tiles{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.grid{grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr))}
+.pill a{white-space:nowrap}
+/* ===== Nota: кнопка «+» ===== */
+.pubfab{position:fixed;right:18px;bottom:90px;width:56px;height:56px;border-radius:50%;z-index:35;display:grid;place-items:center;color:#0b0c10;font-size:1.7rem;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 12px 30px -8px rgba(var(--c1r),.6);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.pubfab .i{width:1em;height:1em;stroke-width:2.6;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.pubfab:hover{transform:translateY(-4px) scale(1.07);box-shadow:0 18px 38px -8px rgba(var(--c1r),.75)}.pubfab:hover .i{transform:rotate(90deg)}
+.pubfab:active{transform:scale(.92);transition-duration:.1s}
+.pubfab::after{content:attr(aria-label);position:absolute;right:68px;white-space:nowrap;padding:8px 14px;border-radius:999px;background:rgba(20,21,27,.92);border:1px solid var(--bd);color:var(--tx);font-size:.8rem;font-weight:700;opacity:0;transform:translateX(8px);pointer-events:none;transition:.25s}
+.pubfab:hover::after,.pubfab:focus-visible::after{opacity:1;transform:none}
+@media(max-width:860px){.pubfab{bottom:calc(152px + env(safe-area-inset-bottom));right:14px;width:50px;height:50px}.pubfab::after{display:none}}
+/* ===== Nota: окно публикации ===== */
+.mb.pub{width:min(760px,100%)}
+.ph4{font-size:.8rem;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;margin:22px 0 10px}.ph4:first-child{margin-top:4px}
+.pdz{display:grid;justify-items:center;gap:6px;padding:26px 16px;border:2px dashed var(--bd);border-radius:22px;background:var(--g);text-align:center;cursor:pointer;transition:border-color .25s,background .25s,transform .25s}
+.pdz:hover{border-color:var(--c1);background:var(--g2);transform:translateY(-2px)}.pdz .i{width:2.4rem;height:2.4rem;color:var(--c1)}
+.pth{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:12px}.pth:empty{display:none}
+.pth div{position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden;animation:pop .35s both}.pth img{width:100%;height:100%;object-fit:cover;display:block}
+.pth button{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.72);color:#fff;display:grid;place-items:center;transition:transform .2s}.pth button:hover{transform:scale(1.15)}
+.pth em{position:absolute;left:6px;bottom:6px;font-style:normal;font-size:.64rem;font-weight:800;background:rgba(0,0,0,.68);padding:2px 8px;border-radius:99px}
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pg .wd{grid-column:1/-1}
+.pf-f{display:grid;gap:6px;font-size:.8rem;color:var(--mu);min-width:0;align-content:start}.pf-f .in{width:100%;color:var(--tx);border-radius:16px}.pf-f textarea.in{min-height:130px;resize:vertical}
+.pf-e{font-style:normal;color:#ff8e9b;font-size:.76rem}.pf-f.bad .in{border-color:#ff8e9b}.pf-f .in:disabled{opacity:.4}
+#pubf .b.p{margin-top:18px}.ld{pointer-events:none;opacity:.85}.ld::after{content:"";width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-top-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:560px){.pg{grid-template-columns:1fr}}
+/* ===== Nota: сообщения ===== */
+.nem{display:grid;justify-items:center;gap:10px;text-align:center;padding:44px 22px}.nei{font-size:2.6rem;animation:flt 4s ease-in-out infinite}
+.nr{display:grid;justify-items:end;gap:4px}.nr small{font-size:.7rem;color:var(--mu)}.nd .av{object-fit:cover}
 </style>
 </head>
 <body>
@@ -391,6 +432,8 @@ body::before{animation:aur 14s ease-in-out infinite alternate}
 <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
 <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
 <symbol id="i-cmp" viewBox="0 0 24 24"><path d="M7 20V4M17 4v16M3 8l4-4 4 4M13 16l4 4 4-4"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></symbol>
 <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></symbol>
 </svg>
 
@@ -512,6 +555,7 @@ body::before{animation:aur 14s ease-in-out infinite alternate}
   <button data-a="prof"><svg class="i"><use href="#i-user"/></svg><span data-t="prof"></span></button>
 </div>
 <a class="wafab" id="wafab" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="i"><use href="#i-chat"/></svg></a>
+<button type="button" class="pubfab" data-a="pub" aria-label="Добавить объявление"><svg class="i"><use href="#i-plus"/></svg></button>
 <div class="cmpbar gl" id="cmpbar"><div class="cmp-i"><b data-t="cmp_bar"></b><span id="cmpn"></span><div class="cmp-ch" id="cmpth"></div></div><div class="cmp-a"><button type="button" class="b p" data-a="cmpo"><svg class="i"><use href="#i-cmp"/></svg><span data-t="cmp_add"></span></button><button type="button" class="b ic sm" data-a="cmpx" aria-label="Clear"><svg class="i"><use href="#i-x"/></svg></button></div></div>
 <div class="gx-lb" id="gxlb" hidden role="dialog" aria-modal="true">
   <div class="gx-lbi" id="gxlbi" data-a="lbz"></div>
@@ -523,6 +567,61 @@ body::before{animation:aur 14s ease-in-out infinite alternate}
 <div class="md" id="md"><div class="mb" id="mb" role="dialog" aria-modal="true"></div></div>
 <div class="toast" id="toast"></div>
 
+<script>
+/* ===== NotaData — единственный слой данных. Интерфейс вызывает только NotaData.* =====
+   Сейчас работает локальный провайдер (IndexedDB этого браузера). Для Supabase: NotaData.use(supabaseProvider),
+   где провайдер реализует те же методы. Соответствие таблицам:
+   profiles(id uuid pk = auth.users.id, username, display_name, avatar_url, created_at)
+   listings(id, owner_id→profiles, brand, model, year, mileage, engine_type, engine_volume, transmission, drive_type,
+            body_type, condition, city, description, price numeric, image_urls text[], created_at)
+   conversations(id, participant_1, participant_2, created_at)
+   messages(id, conversation_id, sender_id, content, image_url, voice_url, created_at,
+            read_at timestamptz null  -- доп. поле для «непрочитанных»; meta jsonb -- ответы/закрепы/реакции, необязательно)
+   createListing(d,files): files -> supabase.storage.from("listings").upload(), URL -> image_urls; insert в listings
+   getListings: from("listings").select().order("created_at",{ascending:false});  getListingById: .eq("id",id).single()
+   searchUsers: from("profiles").select().or("username.ilike.%q%,display_name.ilike.%q%")
+   getConversations / getMessages: select по participant_1|2 = auth.uid() и по conversation_id
+   sendMessage: insert в messages (медиа — в Storage "chat"); onChange(cb,"messages"): supabase.channel().on("postgres_changes",...)
+   auth.current(): оставьте синхронным — держите кэш пользователя через supabase.auth.onAuthStateChange. */
+(()=>{"use strict";
+const J=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
+const uid=()=>crypto.randomUUID?crypto.randomUUID():"id"+Date.now().toString(36)+Math.random().toString(36).slice(2,9);
+const iso=()=>new Date().toISOString(),bump=k=>{try{localStorage.setItem("nota_rev_"+k,Date.now()+":"+Math.random())}catch(e){}};
+const IDB=(()=>{let p;const open=()=>p||(p=new Promise((ok,no)=>{try{const r=indexedDB.open("nota",1);r.onupgradeneeded=()=>["listings","conversations","messages"].forEach(s=>r.result.createObjectStore(s,{keyPath:"id"}));r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}catch(e){no(e)}}));
+ const tx=async(s,m,f)=>{const d=await open();return new Promise((ok,no)=>{const t=d.transaction(s,m),q=f(t.objectStore(s));t.oncomplete=()=>ok(q&&q.result);t.onerror=t.onabort=()=>no(t.error||new Error("хранилище недоступно"))})};
+ return{all:s=>tx(s,"readonly",o=>o.getAll()),get:(s,id)=>tx(s,"readonly",o=>o.get(id)),put:(s,v)=>tx(s,"readwrite",o=>o.put(v)),del:(s,id)=>tx(s,"readwrite",o=>o.delete(id))}})();
+/* Профили берутся из уже существующего входа сайта (nx_users / nx_sess) */
+const prof=u=>({id:u.id,username:u.user,display_name:u.nick,avatar_url:u.av||"",created_at:new Date(u.created).toISOString(),online:u.id==J("nx_sess",null)||Date.now()-u.seen<9e4});
+const auth={current(){const s=J("nx_sess",null),u=J("nx_users",[]).find(x=>x.id==s);return u?prof(u):null},
+ profile(id){const u=J("nx_users",[]).find(x=>x.id==id);return u?prof(u):{id,username:"",display_name:"Пользователь",avatar_url:"",online:false}}};
+const need=()=>{const u=auth.current();if(!u)throw new Error("auth");return u};
+const shrink=(f,s,q)=>new Promise((ok,no)=>{const r=new FileReader();r.onerror=()=>no(new Error("файл не читается"));r.onload=()=>{const im=new Image();im.onerror=()=>no(new Error("не удалось обработать фото"));
+ im.onload=()=>{const k=Math.min(1,s/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",q))};im.src=r.result};r.readAsDataURL(f)});
+const byT=(a,b)=>a.created_at.localeCompare(b.created_at);
+const local={name:"local",
+ async createListing(d,files){const me=need(),urls=[];for(const f of files)urls.push(await shrink(f,1400,.8));
+  const l={id:uid(),owner_id:me.id,brand:d.brand,model:d.model,year:d.year,mileage:d.mileage,engine_type:d.engine_type,engine_volume:d.engine_volume,transmission:d.transmission,drive_type:d.drive_type,body_type:d.body_type,condition:d.condition,city:d.city,description:d.description,price:d.price,image_urls:urls,created_at:iso()};
+  await IDB.put("listings",l);bump("listings");return l},
+ async getListings(){return(await IDB.all("listings")).sort((a,b)=>byT(b,a))},
+ getListingById:id=>IDB.get("listings",id),
+ async searchUsers(q){const me=auth.current();q=String(q||"").trim().replace(/^[@#]/,"").toLowerCase();if(q.length<2)return[];
+  return J("nx_users",[]).filter(u=>(!me||u.id!=me.id)&&(u.id==q||u.user.includes(q)||u.nick.toLowerCase().includes(q))).slice(0,8).map(prof)},
+ async getOrCreateConversation(pid){const me=need(),k=[me.id,pid].sort().join(),all=await IDB.all("conversations");let c=all.find(x=>[x.participant_1,x.participant_2].sort().join()==k);
+  if(!c){c={id:uid(),participant_1:me.id,participant_2:pid,created_at:iso()};await IDB.put("conversations",c);bump("messages")}return c},
+ async getConversations(){const me=auth.current();if(!me)return[];const[cs,ms]=await Promise.all([IDB.all("conversations"),IDB.all("messages")]);
+  return cs.filter(c=>c.participant_1==me.id||c.participant_2==me.id).map(c=>{const mm=ms.filter(m=>m.conversation_id==c.id).sort(byT),last=mm[mm.length-1]||null;
+   return{...c,peer:auth.profile(c.participant_1==me.id?c.participant_2:c.participant_1),last_message:last,unread_count:mm.filter(m=>m.sender_id!=me.id&&!m.read_at).length}})
+  .sort((a,b)=>((b.last_message||b).created_at).localeCompare((a.last_message||a).created_at))},
+ async getMessages(cid){need();return(await IDB.all("messages")).filter(m=>m.conversation_id==cid).sort(byT)},
+ async sendMessage(row){need();const m={read_at:null,meta:{},...row,created_at:row.created_at||iso()};await IDB.put("messages",m);bump("messages");return m},
+ async updateMessage(row){const o=await IDB.get("messages",row.id);if(!o)return;await IDB.put("messages",{...o,...row,read_at:o.read_at});bump("messages")},
+ async deleteMessage(id){await IDB.del("messages",id);bump("messages")},
+ async markRead(cid){const me=need();for(const m of await IDB.all("messages"))if(m.conversation_id==cid&&m.sender_id!=me.id&&!m.read_at){m.read_at=iso();await IDB.put("messages",m)}bump("messages")},
+ onChange(cb,k){const sig=()=>localStorage.getItem("nota_rev_"+k)+"|"+localStorage.getItem("nx_sess");let s=sig();const chk=()=>{const n=sig();if(n!==s){s=n;cb()}};setInterval(chk,2500);addEventListener("storage",chk)}};
+let P=local;const N=window.NotaData={auth,provider:"local",use(p){P=p;N.provider=p.name||"custom"}};
+["createListing","getListings","getListingById","searchUsers","getOrCreateConversation","getConversations","getMessages","sendMessage","updateMessage","deleteMessage","markRead","onChange"].forEach(n=>N[n]=(...a)=>P[n](...a));
+})();
+</script>
 <script>
 // ===== Nota =====
 // Номер WhatsApp хранится ТОЛЬКО здесь: международный формат, цифры, без «+»
@@ -873,6 +972,28 @@ cu_reg|Регистрационный сбор|Тіркеу алымы|Registrat
 cu_tot|Платежи итого|Төлемдер жиыны|Total payments
 cu_all|Авто с платежами|Көлік төлемдермен|Car with payments
 cu_note|Ориентировочный расчёт по ставкам Казахстана на 2026 год (МРП 4 325 ₸). Ставка НДС, утильсбор и пошлина зависят от конкретного авто и декларации: проверьте на сайте КГД МФ РК перед сделкой.|2026 жылға арналған Қазақстан мөлшерлемелері бойынша болжамды есеп (АЕК 4 325 ₸). ҚҚС мөлшерлемесі, утильалым және баж нақты көлік пен декларацияға байланысты: мәміле алдында ҚР ҚМ МКК сайтынан тексеріңіз.|Approximate calculation at Kazakhstan 2026 rates (MRP 4,325 ₸). VAT, recycling fee and duty depend on the specific car and declaration: check the State Revenue Committee website before any deal.
+k_city|Город|Қала|City
+Новое объявление|Жаңа хабарландыру|New listing
+Фото автомобиля|Көлік фотосы|Car photos
+Выберите фото|Фото таңдаңыз|Choose photos
+Информация об автомобиле|Көлік туралы ақпарат|Car information
+Описание и цена|Сипаттама және баға|Description and price
+Марка|Маркасы|Make
+Модель|Моделі|Model
+Год выпуска|Шығарылған жылы|Year
+Пробег, км|Жүрісі, км|Mileage, km
+Тип двигателя|Қозғалтқыш түрі|Engine type
+Объём двигателя, л|Қозғалтқыш көлемі, л|Engine size, L
+Коробка передач|Беріліс қорабы|Transmission
+Привод|Жетек|Drive
+Тип кузова|Кузов түрі|Body type
+Состояние|Жағдайы|Condition
+Город|Қала|City
+Описание|Сипаттама|Description
+Цена, ₸ (KZT)|Бағасы, ₸ (KZT)|Price, ₸ (KZT)
+Опубликовать|Жариялау|Publish
+Объявление опубликовано|Хабарландыру жарияланды|Listing published
+Написать продавцу|Сатушыға жазу|Message seller
 waCu|Здравствуйте! Посчитал таможню на сайте Nota: {n}, платежи {t}. Хочу уточнить детали.|Сәлеметсіз бе! Nota сайтында кедендік төлемдерді есептедім: {n}, төлемдер {t}. Толығырақ білгім келеді.|Hello! I calculated customs on Nota: {n}, payments {t}. I'd like to clarify the details.`;
 const L={ru:{},kk:{},en:{}};
 D.split("\n").forEach(l=>{const f=l.split("|"),v=f.length==3?f:f.slice(1);L.ru[f[0]]=v[0];L.kk[f[0]]=v[1];L.en[f[0]]=v[2]});
@@ -952,12 +1073,12 @@ function readAv(file){return new Promise(res=>{const r=new FileReader();r.onload
 const avatar=(u,cls="")=>u.av?`<img class="av ${cls}" src="${u.av}" alt="">`:`<span class="av ${cls}">${esc(u.nick[0]||"?").toUpperCase()}</span>`;
 const isOn=u=>u.id==sess||Date.now()-u.seen<90000;
 const fdate=ts=>new Date(ts).toLocaleDateString(LOC[S.lang],{day:"numeric",month:"long",year:"numeric"});
-function hdrUser(){const u=me();$("#hu").innerHTML=u?avatar(u,"s"):I("user")}
+function hdrUser(){const u=me();$("#hu").innerHTML=u?avatar(u,"s"):I("user");if(u&&AFTER){const f=AFTER;AFTER=null;setTimeout(f,400)}}
 
 // ---------- Отрисовка ----------
-const card=c=>`<article class="card gl" data-id="${c.id}"><div class="cph ph" data-a="open">${ph(c)}<span class="chip${c.st=="Резерв"?" rs":""}">${t(c.st)}</span><button class="b ic sm fv${favs.includes(c.id)?" on":""}" data-a="fav" aria-label="${t("favs")}">${I("heart")}</button><button class="b ic sm cm${cmp.includes(c.id)?" on":""}" data-a="cmp" aria-label="${t("cmp_add")}">${I("cmp")}</button></div><div class="cb"><h3>${c.b} ${c.m}</h3><p class="sp">${c.y} · ${dist(c.km)} · ${c.vol?c.vol+" "+t("u_l")+", ":""}${c.hp} ${t("u_hp")}<br>${t(c.g)} · ${t(c.drive)} · ${t(c.body)}</p><div class="cf"><b class="pr">${money(c.p)}</b><span class="ca"><button class="b ic" data-a="wa" aria-label="WhatsApp">${I("chat")}</button><button class="b ic" data-a="buy" aria-label="${t("addc")}">${I("cart")}</button></span></div><button class="b w100" data-a="open">${t("det")}</button></div></article>`;
+const card=c=>`<article class="card gl" data-id="${c.id}"><div class="cph ph" data-a="open">${ph(c)}<span class="chip${c.st=="Резерв"?" rs":""}">${t(c.st)}</span><button class="b ic sm fv${favs.includes(c.id)?" on":""}" data-a="fav" aria-label="${t("favs")}">${I("heart")}</button><button class="b ic sm cm${cmp.includes(c.id)?" on":""}" data-a="cmp" aria-label="${t("cmp_add")}">${I("cmp")}</button></div><div class="cb"><h3>${c.b} ${c.m}</h3><p class="sp">${c.y} · ${dist(c.km)} · ${eng(c,", ")}<br>${t(c.g)} · ${t(c.drive)} · ${t(c.body)}</p><div class="cf"><b class="pr">${money(c.p)}</b><span class="ca"><button class="b ic" data-a="${c.lid?"msg":"wa"}" aria-label="${c.lid?t("Написать продавцу"):"WhatsApp"}">${I("chat")}</button>${c.lid?"":`<button class="b ic" data-a="buy" aria-label="${t("addc")}">${I("cart")}</button>`}</span></div><button class="b w100" data-a="open">${t("det")}</button></div></article>`;
 const F={q:"",sort:"0",max:16e6,y1:0,y2:0};
-function paint(np){let l=cars.filter(c=>(!brand||c.b==brand)&&(c.b+" "+c.m).toLowerCase().includes(F.q.trim().toLowerCase())&&c.p<=F.max&&(!F.y1||c.y>=F.y1)&&(!F.y2||c.y<=F.y2));
+function paint(np){let l=cars.filter(c=>(!brand||c.b==brand)&&(c.b+" "+c.m).toLowerCase().includes(F.q.trim().toLowerCase())&&(F.max>=16e6||c.p<=F.max)&&(!F.y1||c.y>=F.y1)&&(!F.y2||c.y<=F.y2));
  const s=F.sort;if(s==1)l.sort((a,b)=>a.p-b.p);if(s==2)l.sort((a,b)=>b.p-a.p);if(s==3)l.sort((a,b)=>b.y-a.y);if(s==4)l.sort((a,b)=>b.pop-a.pop);
  $("#cnt").textContent=t("found")+": "+l.length;
  $("#grid").innerHTML=l.length?l.slice(0,lim).map(card).join(""):`<p class="none">${t("none")}</p>`;
@@ -970,13 +1091,13 @@ function sync(){ls.s("nx_fav",favs);ls.s("nx_cart",cart);counts();paint(true);re
 // ---------- Окна ----------
 const md=$("#md"),mb=$("#mb");
 const show=(h,cls)=>{mb.className="mb"+(cls?" "+cls:"");mb.innerHTML=`<button class="b ic sm x" data-a="cl" aria-label="Close">${I("x")}</button>`+h;md.classList.add("show");document.body.style.overflow="hidden";setPh()};
-const closeM=()=>{md.classList.remove("show");mode=null;document.body.style.overflow="";GX.id=0;$("#gxlb").hidden=true};
+const closeM=()=>{md.classList.remove("show");if(mode&&mode[0]=="prof")AFTER=null;mode=null;document.body.style.overflow="";GX.id=0;$("#gxlb").hidden=true};
 const refresh=()=>{if(mode)({car:()=>carModal(mode[1],true),favs:openFavs,cart:openCart,set:openSet,prof:openProf,donate:openDonate,bsite:openBuySite,cmp:openCmp})[mode[0]]?.()};
-const desc=c=>t("desc").replace("{n}",c.b+" "+c.m).replace("{y}",c.y).replace("{e}",(c.vol?c.vol+" "+t("u_l")+", ":"")+c.hp+" "+t("u_hp")).replace("{g}",t(c.g)).replace("{d}",t(c.drive));
+const desc=c=>t("desc").replace("{n}",c.b+" "+c.m).replace("{y}",c.y).replace("{e}",eng(c,", ")).replace("{g}",t(c.g)).replace("{d}",t(c.drive));
 function viewed(id){const u=me();if(u&&!u.views.includes(id)){u.views.push(id);saveU()}}
 function carModal(id,keep){const c=byId(id);if(!c)return;mode=["car",id];if(GX.id!=id){GX.id=id;GX.i=0}if(!keep){viewed(id);recAdd(id)}
- const sp=[["k_year",c.y],["k_km",dist(c.km)],["k_fuel",t(c.fuel)],["k_eng",(c.vol?c.vol+" "+t("u_l")+" / ":"")+c.hp+" "+t("u_hp")],["k_gear",t(c.g)],["k_drive",t(c.drive)],["k_body",t(c.body)],["k_col",c.col],["k_st",t(c.st)]];
- show(`<div class="dt">${gxHTML(c)}<div><h2>${c.b} ${c.m}</h2><b class="pr xl">${money(c.p)}</b><div class="spg">${sp.map(([k,v])=>`<div><span>${t(k)}</span><b>${v}</b></div>`).join("")}</div><p class="mu">${desc(c)}</p><div class="ab"><button class="b p" data-a="wa">${I("chat")} ${t("wa")}</button><button class="b${favs.includes(id)?" on":""}" data-a="fav">${I("heart")} ${t("favs")}</button><button class="b" data-a="buy">${I("cart")} ${t("addc")}</button><button class="b${cmp.includes(id)?" on":""}" data-a="cmp">${I("cmp")} ${t("cmp_add")}</button><button class="b ic" data-a="share" aria-label="${t("share")}">${I("share")}</button><button class="b ic" data-a="copy" aria-label="${t("copyl")}">${I("link")}</button></div></div></div>`);gxLoad(c)}
+ const sp=[["k_year",c.y],["k_km",dist(c.km)],["k_fuel",t(c.fuel)],["k_eng",eng(c," / ")],["k_gear",t(c.g)],["k_drive",t(c.drive)],["k_body",t(c.body)],["k_col",c.col],["k_st",t(c.st)],...(c.lid?[["k_city",c.city]]:[])].filter(r=>r[1]!=="—");
+ show(`<div class="dt">${gxHTML(c)}<div><h2>${c.b} ${c.m}</h2><b class="pr xl">${money(c.p)}</b><div class="spg">${sp.map(([k,v])=>`<div><span>${t(k)}</span><b>${v}</b></div>`).join("")}</div><p class="mu">${c.lid?esc(c.about).replace(/\n/g,"<br>"):desc(c)}</p><div class="ab"><button class="b p" data-a="${c.lid?"msg":"wa"}">${I("chat")} ${c.lid?t("Написать продавцу"):t("wa")}</button><button class="b${favs.includes(id)?" on":""}" data-a="fav">${I("heart")} ${t("favs")}</button>${c.lid?"":`<button class="b" data-a="buy">${I("cart")} ${t("addc")}</button>`}<button class="b${cmp.includes(id)?" on":""}" data-a="cmp">${I("cmp")} ${t("cmp_add")}</button><button class="b ic" data-a="share" aria-label="${t("share")}">${I("share")}</button><button class="b ic" data-a="copy" aria-label="${t("copyl")}">${I("link")}</button></div></div></div>`);gxLoad(c)}
 function openFavs(){mode=["favs"];const l=favs.map(byId).filter(Boolean);show(`<h2>${t("favs")}</h2>`+(l.length?`<div class="grid">${l.map(card).join("")}</div>`:`<p class="none">${t("empty_f")}</p>`))}
 function openCart(){mode=["cart"];const l=cart.map(i=>({c:byId(i.id),q:i.q}));
  show(`<h2>${t("cart_t")}</h2>`+(l.length?l.map(({c,q})=>`<div class="it" data-id="${c.id}"><div class="th ph">${ph(c)}</div><div><b>${c.b} ${c.m}</b><div class="qt"><button class="b" data-a="mn">−</button><span>${q}</span><button class="b" data-a="pl">+</button><button class="b ic sm" data-a="rm" aria-label="Remove">${I("trash")}</button></div></div><b>${money(c.p*q)}</b></div>`).join("")+`<div class="tt"><span>${t("total")}</span><span>${money(l.reduce((s,x)=>s+x.c.p*x.q,0))}</span></div><div class="ab"><button class="b p" data-a="chk">${I("chat")} ${t("checkout")}</button><button class="b" data-a="clc">${t("clear_c")}</button></div>`:`<p class="none">${t("empty_c")}</p>`))}
@@ -1236,7 +1357,7 @@ function openCmp(){mode=["cmp"];const l=cmp.map(byId).filter(Boolean);
  if(!l.length){show(`<h2>${t("cmp_t")}</h2><p class="none">${t("cmp_one")}</p>`);return}
  const best=(f,dir)=>{const m=dir>0?Math.max(...l.map(f)):Math.min(...l.map(f));return c=>l.length>1&&f(c)==m};
  const rows=[["cmp_price",c=>money(c.p),best(c=>c.p,-1)],["k_year",c=>c.y,best(c=>c.y,1)],["k_km",c=>dist(c.km),best(c=>c.km,-1)],["k_fuel",c=>t(c.fuel)],
-  ["k_eng",c=>(c.vol?c.vol+" "+t("u_l")+" / ":"")+c.hp+" "+t("u_hp"),best(c=>c.hp,1)],["k_gear",c=>t(c.g)],["k_drive",c=>t(c.drive)],["k_body",c=>t(c.body)],["k_col",c=>c.col],["k_st",c=>t(c.st)]];
+  ["k_eng",c=>eng(c," / "),best(c=>c.hp,1)],["k_gear",c=>t(c.g)],["k_drive",c=>t(c.drive)],["k_body",c=>t(c.body)],["k_col",c=>c.col],["k_st",c=>t(c.st)]];
  show(`<h2>${t("cmp_t")}</h2><p class="mu">${l.length<2?t("cmp_one"):t("cmp_best")}</p><div class="cmpw"><table class="cmp"><thead><tr><th></th>${l.map(c=>`<th data-id="${c.id}"><div class="cph ph" data-a="open">${ph(c)}</div><b>${c.b} ${c.m}</b><button class="b" data-a="cmp">${I("x")} ${t("cmp_rm")}</button></th>`).join("")}</tr></thead><tbody>${rows.map(([k,f,bst])=>`<tr><th>${t(k)}</th>${l.map(c=>`<td class="${bst&&bst(c)?"best":""}">${f(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="ab"><button class="b" data-a="cmpx">${I("trash")} ${t("cmp_clear")}</button></div>`)}
 
 // ---------- Недавно просмотренные ----------
@@ -1274,7 +1395,7 @@ async function drawCard(c){const W=1080,H=1350,cv=document.createElement("canvas
  x.fillStyle="#f4f5f8";x.fillText(name,64,890);
  const pr=money(c.p),pgr=x.createLinearGradient(64,0,600,0);pgr.addColorStop(0,a[0]);pgr.addColorStop(1,a[1]);x.fillStyle=pgr;x.font=`800 88px ${ff}`;x.fillText(pr,64,992);
  // характеристики
- const sp=[c.y,dist(c.km),(c.vol?c.vol+" "+t("u_l")+", ":"")+c.hp+" "+t("u_hp"),t(c.g),t(c.drive)];x.font=`700 30px ${ff}`;let px=64,py=1040;
+ const sp=[c.y,dist(c.km),eng(c,", "),t(c.g),t(c.drive)];x.font=`700 30px ${ff}`;let px=64,py=1040;
  sp.forEach(s=>{const w=x.measureText(String(s)).width+48;if(px+w>1016){px=64;py+=82}x.fillStyle="rgba(255,255,255,.08)";rr(px,py,w,62,31);x.fill();x.strokeStyle="rgba(255,255,255,.14)";x.lineWidth=2;x.stroke();x.fillStyle="#f4f5f8";x.textBaseline="middle";x.fillText(String(s),px+24,py+32);px+=w+12});
  x.textBaseline="alphabetic";x.fillStyle="#9ca3b3";x.font=`600 28px ${ff}`;x.fillText(t("sh_demo"),64,1296);
  return cv}
@@ -1363,7 +1484,55 @@ const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$(".p
 $$("main section[id]").forEach(s=>io2.observe(s));
 setInterval(()=>{if(!sess)return;users=ls.g("nx_users",[]);const u=me();if(u){u.seen=Date.now();saveU()}},30000);
 addEventListener("pagehide",()=>{users=ls.g("nx_users",[]);const u=me();if(u){u.seen=0;saveU()}});
-applyAll();loadPhotos();
+// ================= Nota: публикация объявлений (интерфейс). Данные — только через NotaData =================
+const ND=window.NotaData;let AFTER=null,PF={files:[],urls:[],busy:0};
+const hs=s=>{let h=5381;for(const ch of s)h=((h<<5)+h+ch.charCodeAt(0))>>>0;return 1000+h%90000000};
+function eng(c,s){return[c.vol?c.vol+" "+t("u_l"):"",c.hp?c.hp+" "+t("u_hp"):""].filter(Boolean).join(s)}
+function lcar(l){const c={id:hs(l.id),lid:l.id,owner:l.owner_id,b:l.brand,m:l.model,y:+l.year,km:+l.mileage,fuel:l.engine_type,vol:+l.engine_volume||0,hp:0,g:l.transmission,drive:l.drive_type,body:l.body_type,kzt:+l.price,c:"#8d949e",col:"—",st:l.condition,pop:5,w:"u:"+l.id,city:l.city,about:l.description};
+ Object.defineProperty(c,"p",{get(){return this.kzt/RATES.KZT},enumerable:true});c.img=c.im0=l.image_urls[0];GALLERY[c.id]=l.image_urls;return c}
+function addListings(a){let n=0;[...a].reverse().forEach(l=>{if(cars.some(c=>c.lid==l.id))return;cars.unshift(lcar(l));n++});if(n){chips();yrBuild();paint(true)}return n}
+async function loadListings(){try{addListings(await ND.getListings())}catch(e){}}
+function needAuth(f,m){AFTER=f;say(m);openProf()}
+const OPT={eng:["Бензин","Дизель","Гибрид","Электро","Газ"],gear:["АКПП","МКПП","вариатор","робот"],drv:["Передний","Задний","Полный"],body:["Седан","Кроссовер","Внедорожник","Хэтчбек","Универсал","Купе","Минивэн","Пикап"],cond:["Новое","Отличное","Хорошее","Требует ремонта"],city:["Алматы","Астана","Шымкент","Караганда","Актобе","Атырау","Павлодар","Костанай","Усть-Каменогорск","Актау","Тараз","Семей","Петропавловск","Уральск","Кызылорда"]};
+const sel=(n,a)=>`<select class="in" name="${n}"><option value="">${t("Выберите")}</option>${a.map(x=>`<option value="${x}">${t(x)}</option>`).join("")}</select>`;
+const fl=(n,l,h,w)=>`<label class="pf-f${w?" wd":""}" data-f="${n}"><span>${t(l)}</span>${h}<em class="pf-e"></em></label>`;
+const num=(n,min,max,step,ph)=>`<input class="in" name="${n}" type="number" inputmode="${step&&step<1?"decimal":"numeric"}" min="${min}" max="${max}" step="${step||1}" placeholder="${ph||""}">`;
+const txt=(n,l)=>`<input class="in" name="${n}" list="${l}" maxlength="40" autocomplete="off">`;
+function pubOpen(){mode=["pub"];PF={files:[],urls:[],busy:0};const dl=(id,a)=>`<datalist id="${id}">${a.map(x=>`<option value="${esc(x)}">`).join("")}</datalist>`;
+ show(`<h2>${t("Новое объявление")}</h2><form id="pubf" novalidate><h4 class="ph4">${t("Фото автомобиля")}</h4>
+ <label class="pdz">${I("img")}<b>${t("Выберите фото")}</b><span class="mu">${t("До 10 фото, JPG или PNG")}</span><input class="fi" id="pff" type="file" accept="image/*" multiple></label><em class="pf-e" id="pfe"></em><div class="pth" id="pth"></div>
+ <h4 class="ph4">${t("Информация об автомобиле")}</h4><div class="pg">${fl("brand","Марка",txt("brand","dlb"))}${fl("model","Модель",`<input class="in" name="model" maxlength="40" autocomplete="off">`)}${fl("year","Год выпуска",num("year",1970,new Date().getFullYear()+1))}${fl("mileage","Пробег, км",num("mileage",0,2000000))}${fl("engine_type","Тип двигателя",sel("engine_type",OPT.eng))}${fl("engine_volume","Объём двигателя, л",num("engine_volume",0.6,8,.1,"2.0"))}${fl("transmission","Коробка передач",sel("transmission",OPT.gear))}${fl("drive_type","Привод",sel("drive_type",OPT.drv))}${fl("body_type","Тип кузова",sel("body_type",OPT.body))}${fl("condition","Состояние",sel("condition",OPT.cond))}${fl("city","Город",txt("city","dlc"),1)}</div>
+ <h4 class="ph4">${t("Описание и цена")}</h4><div class="pg">${fl("description","Описание",`<textarea class="in" name="description" maxlength="3000" placeholder="${t("Комплектация, история, состояние…")}"></textarea>`,1)}${fl("price","Цена, ₸ (KZT)",num("price",1,9999999999,1000,"12000000"),1)}</div>
+ <div class="err" id="pferr"></div><button class="b p w100" type="submit" id="pfs">${I("check")} ${t("Опубликовать")}</button>${dl("dlb",[...new Set(cars.map(c=>c.b))])}${dl("dlc",OPT.city)}</form>`,"pub")}
+function pubPrev(){PF.urls.forEach(u=>URL.revokeObjectURL(u));PF.urls=PF.files.map(f=>URL.createObjectURL(f));
+ $("#pth").innerHTML=PF.urls.map((u,i)=>`<div><img src="${u}" alt="">${i?"":`<em>${t("Главное")}</em>`}<button type="button" data-a="pfrm" data-i="${i}" aria-label="${t("Удалить")}">${I("x")}</button></div>`).join("")}
+function pubCheck(f){const v=n=>f.elements[n].value.trim(),Y=new Date().getFullYear()+1,e={},bad=t("Заполните поле");
+ if(!PF.files.length)e.photos=t("Добавьте хотя бы одно фото");
+ ["brand","model","engine_type","transmission","drive_type","body_type","condition","city"].forEach(n=>{if(!v(n))e[n]=bad});
+ if(!(+v("year")>=1970&&+v("year")<=Y))e.year=t("Год: от 1970 до ")+Y;
+ if(v("mileage")===""||+v("mileage")<0)e.mileage=t("Укажите пробег");
+ if(v("engine_type")!="Электро"&&!(+v("engine_volume")>0))e.engine_volume=t("Укажите объём");
+ if(!(+v("price")>0))e.price=t("Укажите цену");
+ if(v("description").length<10)e.description=t("Опишите авто подробнее (от 10 символов)");return e}
+function pubErr(f,e){f.querySelectorAll(".pf-f").forEach(l=>{const m=e[l.dataset.f];l.classList.toggle("bad",!!m);l.querySelector(".pf-e").textContent=m||""});$("#pfe").textContent=e.photos||"";
+ const k=Object.keys(e)[0];if(k){const el=k=="photos"?$(".pdz"):f.querySelector(`[data-f="${k}"]`);el&&el.scrollIntoView({block:"center",behavior:"smooth"})}}
+document.addEventListener("change",e=>{const el=e.target;
+ if(el.id=="pff"){const ok=[...el.files].filter(f=>/^image\//.test(f.type)&&f.size<25e6);if(PF.files.length+ok.length>10)say(t("Максимум 10 фото"));PF.files=[...PF.files,...ok].slice(0,10);el.value="";$("#pfe").textContent="";pubPrev()}
+ if(el.name=="engine_type"&&el.form&&el.form.id=="pubf"){const v=el.form.elements.engine_volume;v.disabled=el.value=="Электро";if(v.disabled)v.value=""}});
+document.addEventListener("submit",async e=>{const f=e.target;if(f.id!=="pubf")return;e.preventDefault();if(PF.busy)return;
+ const er=pubCheck(f);pubErr(f,er);if(Object.keys(er).length)return;
+ const g=n=>f.elements[n].value.trim(),btn=$("#pfs");PF.busy=1;btn.classList.add("ld");$("#pferr").textContent="";
+ try{const b=g("brand"),kn=cars.find(c=>c.b.toLowerCase()==b.toLowerCase()),ev=g("engine_type")=="Электро";
+  const l=await ND.createListing({brand:kn?kn.b:b[0].toUpperCase()+b.slice(1),model:g("model"),year:+g("year"),mileage:+g("mileage"),engine_type:g("engine_type"),engine_volume:ev?0:+g("engine_volume"),transmission:g("transmission"),drive_type:g("drive_type"),body_type:g("body_type"),condition:g("condition"),city:g("city"),description:g("description"),price:Math.round(+g("price"))},PF.files);
+  addListings([l]);PF.urls.forEach(u=>URL.revokeObjectURL(u));closeM();ACT.rst();say(t("Объявление опубликовано"));$("#cars").scrollIntoView({behavior:"smooth"})}
+ catch(x){$("#pferr").textContent=x&&x.message=="auth"?t("Войдите в профиль"):t("Не удалось опубликовать: ")+(x&&x.message||"");say(t("Ошибка публикации"))}
+ PF.busy=0;btn.classList.remove("ld")});
+Object.assign(ACT,{
+ pub:()=>ND.auth.current()?pubOpen():needAuth(ACT.pub,t("Войдите, чтобы опубликовать объявление")),
+ pfrm:(i,a)=>{PF.files.splice(+a.dataset.i,1);pubPrev()},
+ msg:id=>{const c=byId(id);if(!c||!c.lid)return;const u=ND.auth.current();if(!u)return needAuth(()=>ACT.msg(id),t("Войдите, чтобы написать продавцу"));
+  if(c.owner==u.id)return say(t("Это ваше объявление"));closeM();window.NotaMessages&&window.NotaMessages.openWith(c.owner)}});
+applyAll();loadPhotos();loadListings();ND.onChange(loadListings,"listings");
 const lc=byId(24);if(lc.img)heroImg(lc);
 const hm=location.hash.match(/^#car-(\d+)/);if(hm)carModal(+hm[1]);
 })();
@@ -1421,23 +1590,26 @@ const dur=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
 const say=m=>{const e=$("#toast");if(!e)return;e.textContent=m;e.classList.add("show");clearTimeout(say.t);say.t=setTimeout(()=>e.classList.remove("show"),2400)};
 const WP={g1:"linear-gradient(160deg,#1b1d27,#10121a)",g2:"linear-gradient(135deg,#1d2b4a,#3b1f4f)",g3:"linear-gradient(135deg,#0f3b3a,#143a5c)",g4:"linear-gradient(135deg,#4a1d2b,#1f1d4f)",g5:"linear-gradient(160deg,#3a2a12,#1a1208)",s1:"#0d0e13",s2:"#12202b",s3:"#1b1530",s4:"#112417"};
 const bg=w=>w&&w.startsWith("data:")?`linear-gradient(rgba(9,9,12,.35),rgba(9,9,12,.35)),url("${w}") center/cover`:(WP[w]||WP.g1);
-const M=(me,text,min,x={})=>({id:uid(),me,type:"text",text,t:now()-min*6e4,st:"read",...x});
-const seed=()=>[
- {id:"d1",name:"Айдос Мусин",online:1,verified:1,wp:"g2",unread:0,msgs:[M(0,"Здравствуйте! Toyota Camry 2023 ещё в наличии?",55),M(1,"Добрый день! Да, в наличии. Могу прислать фото и отчёт о проверке.",52),M(0,"Отлично, пришлите, пожалуйста. И какая итоговая цена с доставкой?",48)]},
- {id:"d2",name:"Дана Касымова",online:0,verified:0,wp:"s2",unread:2,msgs:[M(1,"Дана, подобрали для вас Lada Vesta и Hyundai Solaris до 1,1 млн ₽.",300),M(0,"Спасибо! Посмотрела — Solaris нравится больше.",120),M(0,"Можно посмотреть её по видеосвязи?",118)]},
- {id:"d3",name:"Менеджер Nota",online:1,verified:1,wp:"g3",unread:0,msgs:[M(0,"Ваша заявка принята. Подборку подготовим в течение дня.",1440),M(1,"Спасибо, жду!",1430)]}];
-let D=(()=>{try{const v=JSON.parse(localStorage.getItem(K));if(Array.isArray(v)&&v.length)return v}catch(e){}return seed()})();
-const save=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}};
-const svc={
- save,get:id=>D.find(d=>d.id==id),msg:(did,id)=>(svc.get(did)||{msgs:[]}).msgs.find(x=>x.id==id),
- send(did,m){m={id:uid(),me:1,t:now(),st:"sent",...m};svc.get(did).msgs.push(m);save();return m},
- recv(did,text){const m={id:uid(),me:0,type:"text",text,t:now(),st:"read"};svc.get(did).msgs.push(m);save();return m},
- remove(did,id){const d=svc.get(did);d.msgs=d.msgs.filter(x=>x.id!=id);save()},
- pin(did,id){const m=svc.msg(did,id);m.pin=!m.pin;save()},
- react(did,id,e){const m=svc.msg(did,id);m.rx=m.rx||{};if(m.rx[e])delete m.rx[e];else m.rx[e]=1;if(!Object.keys(m.rx).length)delete m.rx;save()},
- wall(did,w){svc.get(did).wp=w;save()},
- read(did){const d=svc.get(did);d.unread=0;save()}
-};
+const ND=window.NotaData,ME=()=>{const u=ND.auth.current();return u&&u.id};
+let D=[];const wps=()=>{try{return JSON.parse(localStorage.getItem("nm_wp"))||{}}catch(e){return{}}};
+const AV=d=>d.av?`<img class="av" src="${E(d.av)}" alt="">`:`<span class="av">${E((d.name||"?")[0]).toUpperCase()}</span>`;
+const fromRow=r=>{const x=r.meta||{},img=r.image_url,v=r.voice_url;return{id:r.id,sid:r.sender_id,me:r.sender_id==ME()?1:0,type:v?"voice":img?"img":"text",text:r.content,imgs:img?[img,...(x.imgs||[])]:undefined,src:v,dur:x.dur,wave:x.wave,reply:x.reply,fwd:x.fwd,pin:x.pin,rx:x.rx,edited:x.edited,t:Date.parse(r.created_at),st:r.read_at?"read":"sent"}};
+const toRow=(did,m)=>({id:m.id,conversation_id:did,sender_id:m.sid,content:m.text||"",image_url:m.type=="img"?m.imgs[0]:null,voice_url:m.type=="voice"?m.src:null,created_at:new Date(m.t).toISOString(),meta:{imgs:m.type=="img"?m.imgs.slice(1):undefined,dur:m.dur,wave:m.wave,reply:m.reply,fwd:m.fwd,pin:m.pin,rx:m.rx,edited:m.edited}});
+const fail=e=>say("Не удалось сохранить: "+(e&&e.message||"ошибка")),persist=(did,m)=>ND.updateMessage(toRow(did,m)).catch(fail);
+const svc={get:id=>D.find(d=>d.id==id),msg:(did,id)=>(svc.get(did)||{msgs:[]}).msgs.find(x=>x.id==id),
+ send(did,m){m={id:uid(),me:1,sid:ME(),t:now(),st:"sent",...m};const d=svc.get(did);d.msgs.push(m);d.last=m;ND.sendMessage(toRow(did,m)).catch(fail);return m},
+ remove(did,id){const d=svc.get(did);d.msgs=d.msgs.filter(x=>x.id!=id);d.last=d.msgs[d.msgs.length-1]||null;ND.deleteMessage(id).catch(fail)},
+ pin(did,id){const m=svc.msg(did,id);m.pin=!m.pin;persist(did,m)},
+ react(did,id,e){const m=svc.msg(did,id);m.rx=m.rx||{};if(m.rx[e])delete m.rx[e];else m.rx[e]=1;if(!Object.keys(m.rx).length)delete m.rx;persist(did,m)},
+ wall(did,w){const o=wps();o[did]=w;try{localStorage.setItem("nm_wp",JSON.stringify(o))}catch(e){}svc.get(did).wp=w},
+ read(did){svc.get(did).unread=0;ND.markRead(did).catch(()=>{})}};
+async function reload(){if(!ME()){D=[];cur=null;list();chat();return}
+ let cs;try{cs=await ND.getConversations()}catch(e){return}const w=wps();
+ D=cs.map(c=>{const o=D.find(x=>x.id==c.id),p=c.peer;return{id:c.id,peer:p.id,name:p.display_name||p.username||"Пользователь",av:p.avatar_url,online:p.online,wp:w[c.id],unread:c.unread_count,last:c.last_message?fromRow(c.last_message):null,msgs:o?o.msgs:[],sig:o&&o.sig}});
+ if(cur&&!svc.get(cur))cur=null;const d=cur&&svc.get(cur);
+ if(d&&$("#nm").classList.contains("show")){try{const n=(await ND.getMessages(cur)).map(fromRow),sig=n.map(m=>m.id+m.st+(m.pin||"")+(m.edited||"")+Object.keys(m.rx||{})).join();d.msgs=n;if(d.unread){d.unread=0;ND.markRead(cur).catch(()=>{})}if(sig!==d.sig){d.sig=sig;chat(true)}}catch(e){}}else if(!d)chat();
+ list()}
+
 let cur=null,replyTo=null,editing=null,pend=[],rec=null,draft=null,G=null;const TY={},AU={};
 const prv=m=>m.type=="img"?"📷 Фото"+(m.text?" · "+m.text:""):m.type=="voice"?"🎙 Голосовое · "+dur(m.dur):m.text;
 const ticks=s=>s=="read"?'<b style="color:#0b5fff">✓✓</b>':s=="delivered"?"✓✓":"✓";
@@ -1450,18 +1622,22 @@ const msgH=m=>{const d=svc.get(cur),r=m.reply&&d.msgs.find(x=>x.id==m.reply);
  return `<div class="m${m.me?" me":""}" data-m="${m.id}">${b}${m.rx?`<div class="rx">${Object.keys(m.rx).map(e=>`<span>${e}</span>`).join("")}</div>`:""}<small>${m.pin?"📌 ":""}${m.edited?"изменено · ":""}${tm(m.t)}${m.me?" "+ticks(m.st):""}</small></div>`};
 const rp=id=>{const m=svc.msg(cur,id),el=$(`[data-m="${id}"]`);if(m&&el)el.outerHTML=msgH(m)};
 function badge(){const n=D.reduce((s,d)=>s+(d.unread||0),0),b=$("#nmb");if(b){b.textContent=n;b.hidden=!n}}
-function list(){const q=$("#nsq").value.trim().toLowerCase();
- $("#nlst").innerHTML=D.filter(d=>d.name.toLowerCase().includes(q)).map(d=>{const l=d.msgs[d.msgs.length-1];return `<div class="nd${d.id==cur?" on":""}" data-d="${d.id}"><span class="av">${E(d.name[0])}</span><div class="mt"><b><span class="dot${d.online?" on":""}"></span>${E(d.name)}${d.verified?" ✔":""}</b><p>${l?E(prv(l)):"Нет сообщений"}</p></div>${d.unread?`<span class="nu">${d.unread}</span>`:""}</div>`}).join("")||'<p class="none">Диалоги не найдены</p>';badge()}
+function list(){const q=$("#nsq").value.trim().toLowerCase(),me=ME(),el=$("#nlst"),ne=$("#nc .ne");
+ if(ne)ne.innerHTML=`<div style="font-size:3rem">💬</div><h3>${D.length?"Выберите диалог":"Здесь появятся ваши переписки"}</h3><p class="mu">${D.length?"Откройте чат в списке, чтобы продолжить":me?"Нажмите ✎ и найдите пользователя, чтобы написать первым":"Войдите в профиль, чтобы переписываться"}</p>`;
+ if(!D.length){el.innerHTML=`<div class="nem"><div class="nei">💬</div><h3>${me?"Пока нет переписок":"Войдите в профиль"}</h3><p class="mu">${me?"Найдите пользователя по имени, @юзернейму или ID — или нажмите «Написать продавцу» в объявлении.":"Сообщения доступны зарегистрированным пользователям."}</p><button class="b p" data-n="${me?"new":"login"}">${me?"Найти пользователя":"Войти в профиль"}</button></div>`;badge();return}
+ el.innerHTML=D.filter(d=>d.name.toLowerCase().includes(q)).map(d=>{const l=d.msgs.length?d.msgs[d.msgs.length-1]:d.last;return `<div class="nd${d.id==cur?" on":""}" data-d="${d.id}">${AV(d)}<div class="mt"><b><span class="dot${d.online?" on":""}"></span>${E(d.name)}</b><p>${l?E(prv(l)):"Нет сообщений"}</p></div><div class="nr">${l?`<small>${tm(l.t)}</small>`:""}${d.unread?`<span class="nu">${d.unread}</span>`:""}</div></div>`}).join("")||'<p class="none">Диалоги не найдены</p>';badge()}
 function sfilter(){const q=($("#nmq").value||"").trim().toLowerCase();let f=null;$$("#nb .m").forEach(m=>{const hit=!q||m.textContent.toLowerCase().includes(q);m.classList.toggle("dim",!hit);if(q&&hit&&!f)f=m});if(f)f.scrollIntoView({block:"center",behavior:"smooth"})}
 function chat(keep){const d=svc.get(cur),nc=$("#nc");nc.classList.toggle("emp",!d);$("#nm").classList.toggle("chat",!!d);if(!d)return;
- $("#nhd").innerHTML=`<button class="b ic sm bk" data-n="back" aria-label="Назад">←</button><span class="av">${E(d.name[0])}</span><div style="flex:1;min-width:0"><b>${E(d.name)}${d.verified?" ✔":""}</b><small class="mu" style="display:block" id="nst">${stat(d)}</small></div><button class="b ic sm" data-n="msearch" aria-label="Поиск по сообщениям"><svg class="i"><use href="#i-search"/></svg></button><button class="b ic sm" data-n="wall" aria-label="Обои">🎨</button>`;
+ $("#nhd").innerHTML=`<button class="b ic sm bk" data-n="back" aria-label="Назад">←</button>${AV(d)}<div style="flex:1;min-width:0"><b>${E(d.name)}${d.verified?" ✔":""}</b><small class="mu" style="display:block" id="nst">${stat(d)}</small></div><button class="b ic sm" data-n="msearch" aria-label="Поиск по сообщениям"><svg class="i"><use href="#i-search"/></svg></button><button class="b ic sm" data-n="wall" aria-label="Обои">🎨</button>`;
  const nb=$("#nb"),s=nb.scrollTop;nb.style.background=bg(d.wp);
  nb.innerHTML=d.msgs.length?d.msgs.map(msgH).join(""):'<p class="none">Сообщений пока нет — напишите первым</p>';
  nb.scrollTop=keep?s:nb.scrollHeight;
  const p=[...d.msgs].reverse().find(m=>m.pin),pn=$("#npin");pn.hidden=!p;if(p){pn.dataset.id=p.id;pn.innerHTML="📌 "+E(prv(p))}
  sfilter()}
-function open(id){cur=id;svc.read(id);replyTo=editing=null;pend=[];$("#ni").value="";bar();pv();tog();chat();list()}
-function openNm(){$("#nm").classList.add("show");document.body.style.overflow="hidden";if(!cur&&innerWidth>860)cur=D[0].id;if(cur)open(cur);else{list();chat()}}
+async function open(id){cur=id;replyTo=editing=null;pend=[];$("#ni").value="";bar();pv();tog();chat();list();const d=svc.get(id);try{d.msgs=(await ND.getMessages(id)).map(fromRow)}catch(e){say("Не удалось загрузить сообщения")}if(cur==id){svc.read(id);chat();list()}}
+async function openNm(){$("#nm").classList.add("show");document.body.style.overflow="hidden";await reload();if(!cur&&innerWidth>860&&D[0])return open(D[0].id);if(cur)open(cur);else{list();chat()}}
+async function start(pid){try{const c=await ND.getOrCreateConversation(pid);closeSheet();await reload();open(c.id)}catch(e){say(e&&e.message=="auth"?"Войдите в профиль":"Не удалось начать переписку")}}
+function newSheet(){sheet(`<h4>Новая переписка</h4><input class="in" id="nus" placeholder="Имя, @юзернейм или ID" autocomplete="off"><div id="nur"><p class="mu" style="font-size:.82rem">Введите минимум 2 символа</p></div>`);setTimeout(()=>{const x=$("#nus");x&&x.focus()},60)}
 function closeNm(){$("#nm").classList.remove("show");document.body.style.overflow=""}
 function bar(){const b=$("#nrb"),id=replyTo||editing,m=id&&cur&&svc.msg(cur,id);b.hidden=!m;if(m)b.innerHTML=`<span>${editing?"✎ Редактирование":"↩ Ответ"}: ${E(prv(m))}</span><button class="b ic sm" data-n="barx" aria-label="Отмена">✕</button>`}
 function pv(){const p=$("#npv");p.hidden=!pend.length;p.innerHTML=pend.map((s,i)=>`<div><img src="${s}" alt=""><button data-n="pvdel" data-i="${i}" aria-label="Убрать">✕</button></div>`).join("")}
@@ -1469,16 +1645,11 @@ function tog(){const v=$("#ni").value.trim()||pend.length||editing;$("#nmic").hi
 const sheet=h=>{const s=$("#nsh");s.innerHTML=`<div class="nsb">${h}</div>`;s.hidden=false},closeSheet=()=>{$("#nsh").hidden=true};
 const shrink=(f,s,q=.8)=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,s/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",q))};im.onerror=()=>r("");im.src=fr.result};fr.onerror=()=>r("");fr.readAsDataURL(f)});
 const b2d=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.onerror=()=>r("");f.readAsDataURL(b)});
-function track(did,id){[[800,"delivered"],[2200,"read"]].forEach(([ms,st])=>setTimeout(()=>{const m=svc.msg(did,id);if(!m)return;m.st=st;save();if(cur==did)rp(id)},ms))}
-const REP=["Понял, спасибо!","Хорошо, давайте так.","Можете уточнить детали?","Отлично, договорились 👍","Мне нужно подумать, отвечу позже.","Принято, жду от вас новостей."];
-function auto(did){if(TY[did])return;TY[did]=1;if(cur==did&&$("#nst"))$("#nst").textContent="печатает…";
- setTimeout(()=>{TY[did]=0;const d=svc.get(did);if(!d)return;svc.recv(did,REP[Math.floor(Math.random()*REP.length)]);
-  if(cur==did&&$("#nm").classList.contains("show"))chat();else d.unread=(d.unread||0)+1;save();list()},1800+Math.random()*1200)}
 function send(){const inp=$("#ni"),txt=inp.value.trim();if(!cur)return;
- if(editing){const m=svc.msg(cur,editing);if(m&&txt){m.edited=1;m.text=txt;save();rp(m.id)}editing=null;inp.value="";bar();tog();return}
+ if(editing){const m=svc.msg(cur,editing);if(m&&txt){m.edited=1;m.text=txt;persist(cur,m);rp(m.id)}editing=null;inp.value="";bar();tog();return}
  if(!txt&&!pend.length)return;
  const m=svc.send(cur,pend.length?{type:"img",imgs:pend,text:txt,reply:replyTo}:{type:"text",text:txt,reply:replyTo});
- pend=[];replyTo=null;inp.value="";pv();bar();tog();chat();list();track(cur,m.id);auto(cur)}
+ pend=[];replyTo=null;inp.value="";pv();bar();tog();chat();list()}
 /* Голос */
 const ui=()=>{$("#nfa").hidden=!!(rec||draft);$("#nfr").hidden=!rec;$("#nfd").hidden=!draft;if(rec)$("#rt").textContent=dur((now()-rec.t0)/1000)};
 async function peaks(b){try{const ac=new (window.AudioContext||window.webkitAudioContext)(),buf=await ac.decodeAudioData(await b.arrayBuffer()),d=buf.getChannelData(0),n=36,s=Math.floor(d.length/n),o=[];for(let i=0;i<n;i++){let m=0;for(let j=0;j<s;j+=Math.max(1,s>>6))m=Math.max(m,Math.abs(d[i*s+j]||0));o.push(m)}ac.close();const mx=Math.max(...o,.01);return o.map(v=>Math.max(12,Math.round(v/mx*100)))}catch(e){return Array.from({length:36},()=>20+Math.floor(Math.random()*70))}}
@@ -1523,7 +1694,7 @@ function act(n,el){const id=el.dataset.id;
  case"rcancel":if(rec){rec.cancel=1;rec.mr.stop()}break;
  case"rstop":if(rec)rec.mr.stop();break;
  case"ddel":dclear();break;
- case"dsend":{if(!draft)break;const m=svc.send(cur,{type:"voice",src:draft.src,dur:draft.dur,wave:draft.wave,reply:replyTo});dclear();replyTo=null;bar();chat();list();track(cur,m.id);auto(cur);break}
+ case"dsend":{if(!draft)break;const m=svc.send(cur,{type:"voice",src:draft.src,dur:draft.dur,wave:draft.wave,reply:replyTo});dclear();replyTo=null;bar();chat();list();break}
  case"reply":replyTo=id;editing=null;bar();closeSheet();$("#ni").focus();break;
  case"edit":{const m=svc.msg(cur,id);editing=id;replyTo=null;$("#ni").value=m.text;bar();tog();closeSheet();$("#ni").focus();break}
  case"barx":if(editing)$("#ni").value="";replyTo=editing=null;bar();tog();break;
@@ -1534,14 +1705,17 @@ function act(n,el){const id=el.dataset.id;
  case"fwdto":{const m=svc.msg(cur,id),c={type:m.type,fwd:1};["text","imgs","src","dur","wave"].forEach(k=>{if(m[k]!==undefined)c[k]=m[k]});svc.send(el.dataset.t,c);closeSheet();say("Переслано: "+svc.get(el.dataset.t).name);list();if(el.dataset.t==cur)chat();break}
  case"pvdel":pend.splice(+el.dataset.i,1);pv();tog();break;
  case"gopin":{const x=$(`[data-m="${el.dataset.id}"]`);if(x)x.scrollIntoView({block:"center",behavior:"smooth"});break}
+ case"login":closeNm();document.querySelector('[data-a="prof"]').click();break;
+ case"new":newSheet();break;
+ case"start":start(el.dataset.u);break;
  case"gx":G=null;$("#ngal").hidden=true;break;
  case"gp":G--;gr();break;
  case"gn":G++;gr();break;
- case"gd":{const x=allImgs()[G],m=svc.msg(cur,x.mid);m.imgs.splice(x.i,1);if(!m.imgs.length){if(m.text)m.type="text";else svc.remove(cur,m.id)}save();chat(true);list();gr();say("Фото удалено");break}
+ case"gd":{const x=allImgs()[G],m=svc.msg(cur,x.mid);m.imgs.splice(x.i,1);if(!m.imgs.length){if(m.text)m.type="text";else svc.remove(cur,m.id)}persist(cur,m);chat(true);list();gr();say("Фото удалено");break}
  }}
 /* Сборка интерфейса */
 document.body.insertAdjacentHTML("beforeend",`<div class="nm" id="nm" role="dialog" aria-label="Сообщения">
-<aside class="nl"><div class="nlh"><h2>Сообщения</h2><button class="b ic sm" data-n="close" aria-label="Закрыть">✕</button></div><div style="padding:0 14px 10px"><input class="in" id="nsq" placeholder="Поиск диалогов" style="width:100%" autocomplete="off"></div><div class="lst" id="nlst"></div></aside>
+<aside class="nl"><div class="nlh"><h2>Сообщения</h2><span style="display:flex;gap:6px"><button class="b ic sm" data-n="new" aria-label="Новая переписка">✎</button><button class="b ic sm" data-n="close" aria-label="Закрыть">✕</button></span></div><div style="padding:0 14px 10px"><input class="in" id="nsq" placeholder="Поиск диалогов" style="width:100%" autocomplete="off"></div><div class="lst" id="nlst"></div></aside>
 <section class="nc emp" id="nc"><div class="ne"><div style="font-size:3rem">💬</div><h3>Выберите диалог</h3><p class="mu">Откройте чат в списке, чтобы начать переписку</p></div>
 <div class="nh" id="nhd"></div><div class="nsr" id="nms" hidden><input class="in" id="nmq" placeholder="Поиск по сообщениям" style="flex:1" autocomplete="off"></div><div class="npn" id="npin" data-n="gopin" hidden></div>
 <div class="nb" id="nb"></div><div class="nrb" id="nrb" hidden></div><div class="npv" id="npv" hidden></div>
@@ -1564,7 +1738,10 @@ $("#nfile").addEventListener("change",async e=>{for(const f of [...e.target.file
 $("#ni").addEventListener("input",tog);$("#ni").addEventListener("keydown",e=>{if(e.key=="Enter"){e.preventDefault();send()}});
 $("#nsq").addEventListener("input",list);$("#nmq").addEventListener("input",sfilter);
 document.addEventListener("keydown",e=>{if(e.key!="Escape"||!nm.classList.contains("show"))return;if(!$("#nsh").hidden)closeSheet();else if(!$("#ngal").hidden){G=null;$("#ngal").hidden=true}else closeNm()});
-badge();
+nm.addEventListener("input",async e=>{if(e.target.id!="nus")return;const q=e.target.value.trim(),r=$("#nur");if(q.replace(/^[@#]/,"").length<2){r.innerHTML='<p class="mu" style="font-size:.82rem">Введите минимум 2 символа</p>';return}
+ const a=await ND.searchUsers(q);r.innerHTML=a.length?a.map(p=>`<button class="b w100" style="justify-content:flex-start;gap:10px" data-n="start" data-u="${E(p.id)}">${AV({av:p.avatar_url,name:p.display_name})}<span>${E(p.display_name)} <small class="mu">@${E(p.username)} · ID ${E(p.id)}</small></span></button>`).join(""):'<p class="mu" style="font-size:.82rem">Никого не найдено</p>'});
+ND.onChange(reload,"messages");reload();
+window.NotaMessages={openWith:async pid=>{await openNm();await start(pid)}};
 })();
 </script>
 </body>
