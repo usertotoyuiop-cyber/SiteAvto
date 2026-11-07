@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#09090c">
+<title>Nota — подбор и доставка авто</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%238fd3ff'/><stop offset='1' stop-color='%23b7a6ff'/></linearGradient></defs><rect width='64' height='64' rx='18' fill='url(%23g)'/><g fill='none' stroke='%230b0c10' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'><path d='M25 46V19l22-5v27'/><circle cx='19' cy='46' r='6'/><circle cx='41' cy='41' r='6'/></g></svg>">
+<meta name="theme-color" content="#09090c">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--c1r:143,211,255;--c2r:183,166,255;--c3r:143,240,210;--bg:#09090c;--g:rgba(255,255,255,.055);--g2:rgba(255,255,255,.09);--bd:rgba(255,255,255,.1);--tx:#f4f5f8;--mu:#9ca3b3;--c1:#8fd3ff;--c2:#b7a6ff;--c3:#8ff0d2;--r:26px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{background:var(--bg);color:var(--tx);font-family:'Manrope',system-ui,sans-serif;line-height:1.55;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60vw 40vw at 85% -10%,rgba(var(--c1r),.13),transparent),radial-gradient(50vw 40vw at -10% 35%,rgba(var(--c2r),.11),transparent)}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+.i{width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.w{width:min(1180px,100% - 32px);margin-inline:auto}
+section{padding:56px 0}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.12}
+.mu{color:var(--mu)}
+.gl{background:var(--g);border:1px solid var(--bd);border-radius:var(--r);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+
+/* Кнопки: приподнимаются и переливаются спокойным градиентом */
+.b{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:999px;background:var(--g2);border:1px solid var(--bd);font-weight:700;font-size:.92rem;transition:transform .25s,box-shadow .3s,color .3s,border-color .3s}
+.b::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .35s;background:linear-gradient(110deg,var(--c1),var(--c2),var(--c3),var(--c1));background-size:300% 100%;animation:sheen 6s linear infinite}
+.b:hover{transform:translateY(-3px);box-shadow:0 12px 30px -8px rgba(var(--c1r),.45),0 0 0 1px rgba(var(--c2r),.4);color:#0b0c10;border-color:transparent}
+.b:hover::before,.b.on::before{opacity:.92}.b.on{color:#0b0c10}
+.b:active{transform:translateY(-1px) scale(.98)}
+.b.p{background:#fff;color:#0b0c10;border-color:#fff}
+.b.ic{padding:0;width:44px;height:44px}.b.sm{width:38px;height:38px}.b.w100{width:100%}
+@keyframes sheen{to{background-position:-300% 0}}
+
+/* Шапка */
+.top{position:fixed;top:12px;left:0;right:0;z-index:30}
+.top .w{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:800;font-size:1.4rem;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}.logo span{background:linear-gradient(110deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.pill{display:flex;gap:4px;padding:6px;border-radius:999px;background:rgba(20,21,27,.7);border:1px solid var(--bd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.pill a{padding:9px 14px;border-radius:999px;font-size:.84rem;font-weight:600;color:var(--mu);transition:.25s}
+.pill a:hover{color:#fff;background:var(--g2)}.pill a.act{color:#fff;background:var(--g2)}
+.tr{display:flex;align-items:center;gap:8px}
+.bdg{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--c1);color:#0b0c10;font-size:.68rem;font-weight:800;display:grid;place-items:center;padding:0 4px}
+.bg{display:none}
+
+/* Аватары */
+.av{width:38px;height:38px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,var(--c2),var(--c1));display:grid;place-items:center;font-weight:800;color:#0b0c10;flex:none}
+.av.s{width:30px;height:30px;font-size:.8rem}.av.l{width:104px;height:104px;font-size:2.2rem}
+
+/* Первый экран */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;padding-top:96px}
+.hl{padding:38px 30px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:var(--g2);font-size:.78rem;font-weight:700}
+.hl h1{font-size:clamp(2.1rem,4.8vw,3.6rem);margin:22px 0 16px}
+.hl p{color:var(--mu);max-width:50ch;margin-bottom:24px}
+.hb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px;width:100%}
+.stats div{padding:18px 8px;border-radius:20px;background:var(--g);border:1px solid var(--bd);transition:.3s}.stats div:hover{transform:translateY(-4px);border-color:rgba(var(--c1r),.4)}
+.stats b{display:block;font-size:1.5rem}.stats span{color:var(--mu);font-size:.76rem;line-height:1.3;display:block}
+.hr{position:relative;min-height:440px;overflow:hidden;background:linear-gradient(160deg,#1b1d27,#0f1015) center/cover no-repeat;display:flex;align-items:flex-end}
+.hr::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,12,0) 30%,rgba(9,9,12,.9))}
+.hr .cs{position:absolute;top:18%;left:8%;width:84%;opacity:.5}.hr.pic .cs{display:none}
+.hcap{position:relative;z-index:2;padding:26px;display:grid;gap:14px;width:100%}.hcap b{display:block}.hcap span{color:var(--mu);font-size:.82rem}
+
+/* Секции */
+.sh{text-align:center;margin-bottom:30px}.sh h2{font-size:clamp(1.7rem,3.4vw,2.4rem)}.sh p{color:var(--mu);max-width:56ch;margin:10px auto 0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.tile{padding:26px;transition:transform .3s,border-color .3s,box-shadow .3s}.tile:hover{transform:translateY(-6px);border-color:rgba(var(--c1r),.4);box-shadow:0 18px 40px -16px rgba(var(--c1r),.3)}
+.tile .ib{width:48px;height:48px;border-radius:15px;background:var(--g2);display:grid;place-items:center;font-size:1.35rem;color:var(--c1);margin-bottom:16px}
+.tile h3{font-size:1.08rem;margin-bottom:6px}.tile p{color:var(--mu);font-size:.9rem}
+.steps{counter-reset:s}.steps .tile::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));color:#0b0c10;font-weight:800;margin-bottom:14px}
+
+/* Каталог */
+.tb{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+.in{padding:12px 18px;border-radius:999px;background:var(--g);border:1px solid var(--bd);min-width:0;transition:border-color .25s,box-shadow .25s}
+.in:focus{outline:0;border-color:var(--c1);box-shadow:0 0 0 3px rgba(var(--c1r),.18)}
+select.in option{background:#15161b}.tb .in{flex:1 1 200px}
+.rg{display:flex;align-items:center;gap:10px;flex:1 1 240px;color:var(--mu);font-size:.85rem}.rg input{flex:1;accent-color:var(--c1)}.rg b{color:var(--tx);white-space:nowrap}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chips .b{padding:9px 16px;font-size:.85rem;white-space:nowrap}
+.cnt{color:var(--mu);margin:4px 0 16px;font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.card{overflow:hidden;display:flex;flex-direction:column;transition:transform .35s,border-color .35s,box-shadow .35s;animation:pop .5s both}
+@keyframes pop{from{opacity:0;transform:translateY(18px)}}
+.card:hover{transform:translateY(-8px);border-color:rgba(var(--c1r),.4);box-shadow:0 24px 50px -20px rgba(var(--c1r),.35)}
+.cph{position:relative;aspect-ratio:16/10;background:linear-gradient(160deg,#1c1e28,#101116);overflow:hidden;cursor:pointer;display:flex;align-items:center}
+.cph img,.ph.big img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s}.card:hover .cph img{transform:scale(1.07)}
+.cph .cs{width:90%;margin:auto}
+.chip{position:absolute;top:12px;left:12px;padding:5px 12px;border-radius:999px;background:rgba(9,9,12,.65);backdrop-filter:blur(8px);font-size:.72rem;font-weight:700;border:1px solid var(--bd)}.chip.rs{color:var(--mu)}
+.fv{position:absolute;top:10px;right:10px}
+.cb{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}.cb h3{font-size:1.12rem}
+.sp{color:var(--mu);font-size:.85rem}.cf{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px}
+.pr{font-size:1.15rem}.xl{font-size:1.7rem;display:block;margin:8px 0}.ca{display:flex;gap:6px}.ca .b{width:40px;height:40px}
+.mo{display:flex;justify-content:center;margin-top:26px}.none{grid-column:1/-1;text-align:center;color:var(--mu);padding:40px}
+
+/* Отзывы, FAQ, контакты */
+.stars{color:var(--c3);display:flex;gap:2px;margin-bottom:10px}.stars .i{fill:currentColor;width:1em;height:1em}
+.rvw p{color:#d6dae3;margin-bottom:14px}.rvw b{display:block}
+details{padding:0;margin-bottom:10px;overflow:hidden}summary{list-style:none;padding:20px 24px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;gap:12px;transition:color .25s}summary:hover{color:var(--c1)}
+summary::-webkit-details-marker{display:none}summary::after{content:"+";font-size:1.5rem;line-height:1;color:var(--c1);transition:transform .3s}details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 24px 20px;color:var(--mu)}
+.faq{max-width:780px;margin:auto}
+.cont{display:grid;grid-template-columns:1fr 1fr;gap:16px}.cont>div{padding:32px}.cont h2{font-size:1.8rem;margin-bottom:10px}
+.fm{display:grid;gap:12px}.fm label{font-size:.8rem;color:var(--mu);display:grid;gap:6px}.fm textarea{min-height:100px;resize:vertical;border-radius:20px}
+.li{display:flex;align-items:center;gap:10px;margin-top:14px;color:var(--mu)}.li .i{color:var(--c1)}
+footer{padding:32px 0 40px;color:var(--mu);font-size:.85rem;border-top:1px solid var(--bd)}footer .w{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+/* Окна */
+.md{position:fixed;inset:0;z-index:70;background:rgba(5,6,9,.7);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s}.md.show{opacity:1;pointer-events:auto}
+.mb{position:relative;background:#111218;border:1px solid var(--bd);border-radius:28px;width:min(940px,100%);max-height:92vh;overflow:auto;padding:30px;transform:translateY(28px) scale(.97);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.md.show .mb{transform:none}.mb.sm{width:min(560px,100%)}
+.x{position:absolute;top:14px;right:14px;z-index:3}
+.mb h2{margin:0 40px 16px 0;font-size:1.6rem}
+.dt{display:grid;grid-template-columns:1.1fr 1fr;gap:26px}
+.ph.big{border-radius:20px;overflow:hidden;background:linear-gradient(160deg,#1c1e28,#101116);aspect-ratio:4/3;display:flex;align-items:center;cursor:zoom-in}.ph.big .cs{width:92%;margin:auto}.ph.big.zoom{cursor:zoom-out}.ph.big.zoom img{transform:scale(1.6)}.ph.big img{transition:transform .5s}
+.spg{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;margin:14px 0}.spg div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--bd);padding:7px 0;font-size:.88rem}.spg span{color:var(--mu)}
+.ab{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.it{display:grid;grid-template-columns:96px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--bd)}
+.it .th{border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#1a1c25;display:flex;align-items:center}.it .th img{width:100%;height:100%;object-fit:cover}.it .th .cs{width:100%}
+.qt{display:flex;align-items:center;gap:8px;margin-top:6px}.qt .b{width:32px;height:32px;padding:0}
+.tt{display:flex;justify-content:space-between;font-size:1.3rem;font-weight:800;margin:18px 0 6px}
+.sg{display:grid;gap:20px}.sg h4{font-size:.8rem;color:var(--mu);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em}.chs{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Профиль */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:999px;background:var(--g);margin-bottom:18px}.tabs .b{border:0;background:none}
+.err{color:#ff8e9b;font-size:.85rem;min-height:1.2em}
+.pf{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.pf h3{font-size:1.4rem}.idc{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:var(--g2);font-weight:700;font-size:.85rem;margin-top:8px}
+.ps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}.ps div{padding:16px;border-radius:18px;background:var(--g);border:1px solid var(--bd)}.ps span{display:block;color:var(--mu);font-size:.75rem}.ps b{font-size:.98rem}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#6b7280;margin-right:6px}.dot.on{background:#3ddc97;box-shadow:0 0 10px #3ddc97}
+.fr{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:14px;margin-top:10px;border-radius:18px;background:var(--g);border:1px solid var(--bd)}.fr small{color:var(--mu);display:block}
+.srow{display:flex;gap:8px}.srow .in{flex:1}
+.avu{display:flex;align-items:center;gap:14px}.fi{display:none}
+.hint{color:var(--mu);font-size:.8rem;margin-top:12px}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,140px);background:#1c1e28;border:1px solid var(--bd);padding:13px 22px;border-radius:999px;z-index:90;transition:transform .4s cubic-bezier(.2,.8,.2,1);box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:92vw}.toast.show{transform:translate(-50%,0)}
+.wafab{position:fixed;right:18px;bottom:22px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--c3),var(--c1));color:#0b0c10;display:grid;place-items:center;font-size:1.5rem;z-index:35;box-shadow:0 10px 30px -6px rgba(var(--c3r),.5);transition:transform .25s}.wafab:hover{transform:translateY(-4px) scale(1.05)}
+.bnav{display:none}
+.noanim *,.noanim *::before,.noanim *::after{animation:none!important;transition:none!important}.noanim .rv{opacity:1;transform:none}
+
+@media(max-width:1000px){.pill a{padding:9px 10px}}
+@media(max-width:860px){
+ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+ .top{top:calc(8px + env(safe-area-inset-top))}
+ .pill{display:none;position:absolute;top:56px;left:0;right:0;flex-direction:column;border-radius:24px;padding:10px;margin:0 16px}.pill.open{display:flex}.pill a{padding:14px}
+ .bg{display:grid}.tr .dm{display:none}
+ .hero{grid-template-columns:1fr;padding-top:84px}.hr{min-height:320px}.hl{padding:28px 18px}
+ .cont,.dt{grid-template-columns:1fr}.ps{grid-template-columns:1fr}.spg{grid-template-columns:1fr}
+ .md{place-items:end center;padding:0}.mb{border-radius:26px 26px 0 0;width:100%;max-height:92vh;padding:24px 18px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%)}
+ .bnav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:36;display:grid;grid-template-columns:repeat(5,1fr);padding:6px;border-radius:26px;background:rgba(20,21,27,.88);border:1px solid var(--bd);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+ .bnav a,.bnav button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;min-height:50px;border-radius:20px;font-size:.66rem;color:var(--mu);transition:.25s}
+ .bnav .i{font-size:1.35rem}.bnav .on,.bnav a:active,.bnav button:active{color:#fff;background:var(--g2)}
+ .bnav .bdg{top:2px;right:calc(50% - 22px)}
+ .wafab{bottom:calc(92px + env(safe-area-inset-bottom));right:14px;width:50px;height:50px}
+ .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+ .it{grid-template-columns:76px 1fr}.it>b{grid-column:2}
+ input,select,textarea{font-size:16px}
+ .tb .in{flex:1 1 100%}
+}
+@media(pointer:coarse){.b.ic{width:46px;height:46px}.b.sm{width:42px;height:42px}}
+</style>
+<style>
+/* ===== Сервисы: калькулятор, кредит, трекер ===== */
+.sv-card{padding:28px;max-width:1000px;margin:auto}
+.sv-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;border-radius:999px;background:var(--g);margin-bottom:24px}
+.sv-tabs .b{border:0;background:none;padding:12px 8px}
+.sv-pane{display:none}.sv-pane.on{display:block;animation:pop .4s both}
+.sv-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:start}
+.sv-fg{display:grid;gap:18px}
+.sv-f{display:grid;gap:8px;font-size:.8rem;color:var(--mu);min-width:0}
+.sv-f>span b{color:var(--tx)}.sv-f .in{width:100%;color:var(--tx)}
+.sv-f .chs .b{padding:9px 14px;font-size:.85rem}
+.sv-rg{width:100%;accent-color:var(--c1);height:28px}
+.sv-res{padding:24px;border-radius:22px;background:var(--g);border:1px solid var(--bd);display:grid;gap:12px;position:sticky;top:96px;min-width:0}
+.sv-lb{color:var(--mu);font-size:.8rem;display:block}
+.sv-big{display:block;font-size:clamp(1.7rem,4vw,2.3rem);font-weight:800;letter-spacing:-.02em;line-height:1.1;background:linear-gradient(110deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sv-rows{display:grid}
+.sv-rw{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--bd);font-size:.88rem}
+.sv-rw:last-child{border-bottom:0}.sv-rw span{color:var(--mu)}.sv-rw b{text-align:right}
+.sv-act{display:flex;gap:8px;flex-wrap:wrap}
+.sv-bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--g2)}.sv-bar em{display:block;height:100%}
+.sv-lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.76rem;color:var(--mu)}
+.sv-lg em{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.sv-try{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:.85rem}
+.sv-try .b{padding:8px 14px;font-size:.82rem}
+.sv-ord{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px;border-radius:20px;background:var(--g);border:1px solid var(--bd);margin-top:18px}
+.sv-no{font-size:1.5rem;display:block}
+.sv-on{text-align:right;color:var(--mu);font-size:.88rem}.sv-on b{color:var(--tx);font-size:1.05rem}
+.sv-tm{display:grid;margin-top:22px;max-width:640px}
+.sv-s{position:relative;display:grid;grid-template-columns:36px 1fr;gap:14px;padding-bottom:20px}
+.sv-s::before{content:"";position:absolute;left:17px;top:36px;bottom:0;width:2px;background:var(--bd)}
+.sv-s:last-child{padding-bottom:0}.sv-s:last-child::before{display:none}
+.sv-d{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--g2);border:1px solid var(--bd);color:var(--mu);font-weight:800;font-size:.85rem;z-index:1}
+.sv-s.done::before{background:linear-gradient(var(--c1),var(--c2))}
+.sv-s.done .sv-d{background:linear-gradient(135deg,var(--c1),var(--c2));color:#0b0c10;border-color:transparent}
+.sv-s.now .sv-d{border-color:var(--c1);color:var(--c1);box-shadow:0 0 0 5px rgba(var(--c1r),.18);animation:svp 2s ease-in-out infinite}
+@keyframes svp{50%{box-shadow:0 0 0 9px rgba(var(--c1r),.05)}}
+.sv-s.pend{opacity:.55}.sv-s b{display:block}.sv-s p{color:var(--mu);font-size:.85rem}.sv-s small{color:var(--mu);font-size:.75rem}
+
+/* Настройки */
+.sv-sw{width:44px;height:44px;border-radius:50%;border:2px solid var(--bd);transition:transform .25s,border-color .25s}
+.sv-sw:hover{transform:scale(1.08)}.sv-sw.on{border-color:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.14)}
+.sv-fx{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sv-fx label{display:flex;align-items:center;gap:8px;color:var(--mu);font-size:.85rem;white-space:nowrap}
+.sv-fx .in{min-width:0;width:100%;padding:10px 14px}
+body.noblur *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.noblur .pill{background:rgba(20,21,27,.97)}body.noblur .bnav{background:rgba(20,21,27,.98)}body.noblur .md{background:rgba(5,6,9,.88)}
+
+/* Галерея авто */
+.dt>*{min-width:0}.gx{min-width:0}
+.gx-main{position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(160deg,#1c1e28,#101116);aspect-ratio:4/3;cursor:zoom-in;touch-action:pan-y}
+.gx-track{display:flex;height:100%;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.gx-sl{flex:none;width:100%;height:100%;display:flex;align-items:center}
+.gx-sl img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none}
+.gx-sl .cs{width:88%;margin:auto}
+.gx-nav{position:absolute;top:calc(50% - 19px);background:rgba(9,9,12,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.gx-p{left:10px}.gx-n{right:10px}.gx-p .i{transform:scaleX(-1)}
+.gx-cnt{position:absolute;right:12px;bottom:12px;padding:4px 12px;border-radius:999px;background:rgba(9,9,12,.65);font-size:.74rem;font-weight:700;border:1px solid var(--bd)}
+.gx-th{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding:2px 2px 6px;scrollbar-width:none;position:relative}.gx-th::-webkit-scrollbar{display:none}
+.gx-t{flex:none;width:76px;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:2px solid transparent;opacity:.6;background:#1a1c25;display:flex;align-items:center;padding:0;transition:opacity .25s,border-color .25s}
+.gx-t.on{border-color:var(--c1);opacity:1}.gx-t:hover{opacity:1}
+.gx-t img{width:100%;height:100%;object-fit:cover;display:block}.gx-t .cs{width:100%}
+.gx-lb{position:fixed;inset:0;z-index:88;background:rgba(0,0,0,.95)}
+.gx-lb[hidden],.gx-lb [hidden]{display:none!important}
+.gx-lbi{position:absolute;inset:0;display:flex;overflow:auto;cursor:zoom-in}
+.gx-lbi img{margin:auto;max-width:100%;max-height:100%;object-fit:contain;display:block}
+.gx-lbi.zoom{cursor:zoom-out}.gx-lbi.zoom img{max-width:none;max-height:none;width:200%;height:auto}
+.gx-lsv{margin:auto;width:min(900px,92vw)}.gx-lsv .cs{width:100%}
+.gx-lx{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:2}
+.gx-lb .gx-nav{z-index:2;top:calc(50% - 22px)}
+.gx-lb .gx-cnt{left:50%;right:auto;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));z-index:2}
+
+/* Модалки и подвал */
+.sv-kaspi{margin:18px 0;padding:22px;border-radius:22px;background:linear-gradient(135deg,rgba(var(--c1r),.14),rgba(var(--c2r),.14));border:1px solid var(--bd);display:grid;gap:4px}
+.sv-num{font-size:1.5rem;font-weight:800;letter-spacing:-.01em}
+.sv-ul{list-style:none;display:grid;gap:10px;margin:16px 0}
+.sv-ul li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem}.sv-ul .i{color:var(--c3);margin-top:3px}
+footer .ftw{justify-content:center;margin-top:28px}
+.ftc{width:100%;max-width:820px;padding:32px 26px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.ftc h3{font-size:1.3rem}.ftc p{color:var(--mu);max-width:62ch}
+.ftb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%}
+.b.wag{width:100%;max-width:420px;background:linear-gradient(135deg,var(--c3),var(--c1));color:#0b0c10;border-color:transparent}
+
+@media(max-width:1100px) and (min-width:861px){.tr .b.p.dm{display:none}}
+@media(max-width:860px){
+ .sv-card{padding:18px 14px}.sv-grid{grid-template-columns:1fr}.sv-res{position:static;padding:18px}
+ .sv-fx{grid-template-columns:1fr}.ftb .b{flex:1 1 100%}.ftc{padding:26px 16px}
+ .gx-t{width:64px}.sv-on{text-align:left}
+}
+@media(max-width:420px){.sv-tabs .b .i{display:none}.sv-tabs .b{font-size:.84rem}}
+</style>
+<style>
+/* ===== Nota: логотип с нотой ===== */
+.logo{gap:10px}
+.logo-ic{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--c1),var(--c2));color:#0b0c10;box-shadow:0 8px 22px -8px rgba(var(--c1r),.75);animation:bobn 3.2s ease-in-out infinite}
+.logo-ic .i{width:21px;height:21px;stroke-width:2.2}
+.logo:hover .logo-ic{animation-duration:.9s}
+.logo-t span{background-image:linear-gradient(110deg,var(--c1),var(--c2),var(--c1));background-size:200% auto;animation:txs 4s linear infinite}
+.logo-t{font-weight:800}.eq{display:inline-flex;align-items:flex-end;gap:2px;height:14px;margin-left:-4px}
+.eq b{width:3px;height:100%;border-radius:2px;background:linear-gradient(var(--c1),var(--c2));transform-origin:bottom;animation:eqb 1s ease-in-out infinite}
+.eq b:nth-child(2){animation-delay:.2s}.eq b:nth-child(3){animation-delay:.4s}
+
+/* ===== Фильтр года ===== */
+.yr2{display:flex;gap:10px;flex:1 1 260px}.yr2 .in{flex:1}
+.b.rst{display:none;padding:10px 16px;font-size:.85rem}.b.rst.show{display:inline-flex;animation:pop .35s both}
+
+/* ===== Сравнение ===== */
+.cm{position:absolute;top:10px;right:54px}
+.cm.on{background:linear-gradient(135deg,var(--c1),var(--c2));color:#0b0c10;border-color:transparent}
+.cmpbar{position:fixed;left:50%;bottom:24px;z-index:40;width:min(560px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 10px 10px 18px;border-radius:999px;background:rgba(20,21,27,.92);transform:translate(-50%,170%);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.cmpbar.show{transform:translate(-50%,0)}
+.cmp-i{display:flex;align-items:center;gap:10px;min-width:0;font-size:.85rem}.cmp-i>span{color:var(--mu)}
+.cmp-ch{display:flex;gap:6px;overflow:hidden}.cmp-c{padding:4px 10px;border-radius:999px;background:var(--g2);border:1px solid var(--bd);font-size:.74rem;font-weight:700;white-space:nowrap;animation:pop .35s both}
+.cmp-a{display:flex;gap:6px;align-items:center;flex:none}.cmp-a .b.p{padding:10px 18px}
+.cmpw{overflow-x:auto;margin:14px -6px 4px;padding:0 6px}
+.cmp{border-collapse:separate;border-spacing:0;min-width:100%;font-size:.88rem}
+.cmp thead th{padding:6px 8px 14px;text-align:center;vertical-align:top;min-width:150px}
+.cmp thead th b{display:block;margin:2px 0 8px}
+.cmp .cph{width:100%;max-width:170px;border-radius:14px;margin:0 auto 8px}
+.cmp thead .b{padding:6px 12px;font-size:.74rem}
+.cmp tbody th{position:sticky;left:0;z-index:1;background:#111218;text-align:left;color:var(--mu);font-weight:500;font-size:.76rem;padding:12px 8px 12px 0;width:92px;border-top:1px solid var(--bd)}
+.cmp thead th:first-child{position:sticky;left:0;background:#111218;z-index:1;min-width:92px}
+.cmp td{padding:12px 8px;text-align:center;border-top:1px solid var(--bd);font-weight:700}
+.cmp td.best{color:var(--c3);background:rgba(var(--c3r),.08)}
+.cmp tbody tr{animation:rise .45s both}.cmp tbody tr:nth-child(2){animation-delay:.05s}.cmp tbody tr:nth-child(3){animation-delay:.1s}.cmp tbody tr:nth-child(4){animation-delay:.15s}.cmp tbody tr:nth-child(5){animation-delay:.2s}.cmp tbody tr:nth-child(n+6){animation-delay:.25s}
+
+/* ===== Недавно просмотренные ===== */
+#recent[hidden]{display:none}
+.rec-row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:none}.rec-row::-webkit-scrollbar{display:none}
+.mini{flex:0 0 min(240px,70vw);scroll-snap-align:start;overflow:hidden;animation:pop .5s both;transition:transform .3s,border-color .3s,box-shadow .3s}
+.mini:nth-child(2){animation-delay:.06s}.mini:nth-child(3){animation-delay:.12s}.mini:nth-child(4){animation-delay:.18s}.mini:nth-child(n+5){animation-delay:.24s}
+.mini:hover{transform:translateY(-6px);border-color:rgba(var(--c1r),.4);box-shadow:0 20px 40px -20px rgba(var(--c1r),.35)}
+.mi-b{padding:12px 14px;display:grid;gap:2px}.mi-b span{color:var(--mu);font-size:.85rem}
+
+/* ===== Карточка для шеринга ===== */
+.shp{margin:16px 0;border-radius:20px;overflow:hidden;background:var(--g);border:1px solid var(--bd);min-height:120px;display:grid;place-items:center;text-align:center;padding:2px}
+.shp img{display:block;width:100%;max-height:52vh;object-fit:contain;border-radius:18px;animation:pop .5s both}
+
+/* ===== Таможня ===== */
+.sv-tabs{grid-template-columns:repeat(4,1fr)}
+.sv-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ===== Анимации ===== */
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+@keyframes bobn{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-4px) rotate(7deg)}}
+@keyframes eqb{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@keyframes txs{to{background-position:200% center}}
+@keyframes aur{from{opacity:.6;transform:scale(1)}to{opacity:1;transform:scale(1.14)}}
+@keyframes rip{from{transform:scale(0);opacity:.3}to{transform:scale(1);opacity:0}}
+@keyframes hpop{0%{transform:scale(1)}40%{transform:scale(1.55) rotate(-8deg)}100%{transform:scale(1)}}
+@keyframes bmp{0%,100%{transform:scale(1)}45%{transform:scale(1.6)}}
+@keyframes ring{0%{box-shadow:0 10px 30px -6px rgba(var(--c3r),.5),0 0 0 0 rgba(var(--c3r),.55)}100%{box-shadow:0 10px 30px -6px rgba(var(--c3r),.5),0 0 0 22px rgba(var(--c3r),0)}}
+@keyframes flt{50%{transform:translateY(-10px)}}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+@keyframes spb{0%,100%{transform:translateY(0) rotate(-8deg) scale(1)}50%{transform:translateY(-14px) rotate(8deg) scale(1.08)}}
+body::before{animation:aur 14s ease-in-out infinite alternate}
+.hl>*{animation:rise .8s both}.hl>*:nth-child(2){animation-delay:.08s}.hl>*:nth-child(3){animation-delay:.16s}.hl>*:nth-child(4){animation-delay:.24s}.hl>*:nth-child(5){animation-delay:.32s}.hl>*:nth-child(n+6){animation-delay:.4s}
+.hr{animation:rise 1s .15s both}.hr .cs{animation:flt 5s ease-in-out infinite}
+.sh h2::after{content:"";display:block;height:3px;width:0;margin:12px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .9s .35s cubic-bezier(.2,.8,.2,1)}
+.sh.in h2::after{width:64px}.noanim .sh h2::after{width:64px}
+.grid .card:nth-child(3n+2){animation-delay:.07s}.grid .card:nth-child(3n+3){animation-delay:.14s}
+.card.tilt{transition:transform .12s ease-out,border-color .35s,box-shadow .35s}
+.tiles .tile{transition:transform .35s,border-color .35s,box-shadow .35s}.tiles .tile:hover{transform:translateY(-6px);border-color:rgba(var(--c1r),.4);box-shadow:0 20px 40px -22px rgba(var(--c1r),.35)}
+.rip{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;z-index:0;animation:rip .65s ease-out forwards}
+.fv.pulse svg,.b.pulse svg{animation:hpop .5s}
+.bdg.bump{animation:bmp .4s}
+.wafab{animation:ring 2.4s ease-out infinite}
+.sv-s{animation:rise .5s both}.sv-s:nth-child(2){animation-delay:.07s}.sv-s:nth-child(3){animation-delay:.14s}.sv-s:nth-child(4){animation-delay:.21s}.sv-s:nth-child(5){animation-delay:.28s}.sv-s:nth-child(6){animation-delay:.35s}.sv-s:nth-child(7){animation-delay:.42s}
+.sv-rw{animation:rise .4s both}.sv-rw:nth-child(2){animation-delay:.04s}.sv-rw:nth-child(3){animation-delay:.08s}.sv-rw:nth-child(4){animation-delay:.12s}.sv-rw:nth-child(n+5){animation-delay:.16s}
+.sv-bar em{transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.gx-main img{transition:transform .8s}.gx-main:hover .gx-sl img{transform:scale(1.04)}
+.stats div{animation:rise .7s both}.stats div:nth-child(2){animation-delay:.1s}.stats div:nth-child(3){animation-delay:.2s}
+#sp{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));z-index:90;pointer-events:none}
+#splash{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;animation:splashOut .6s 2.2s forwards}
+#splash.out{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s .6s;animation:none}
+.sp-in{display:grid;justify-items:center;gap:18px}
+.sp-in .logo-ic{width:78px;height:78px;border-radius:26px;animation:spb 1.6s ease-in-out infinite}.sp-in .logo-ic .i{width:42px;height:42px}
+.sp-n{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;display:flex;align-items:center;gap:10px;animation:rise .7s .1s both}
+.sp-n b span{background:linear-gradient(110deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sp-n .eq{height:24px}.sp-n .eq b{width:5px}
+.noanim #splash,.noanim .rip{display:none}
+
+@media(max-width:860px){
+ .cmpbar{bottom:calc(86px + env(safe-area-inset-bottom));width:calc(100% - 100px);left:12px;transform:translateY(190%)}
+ .cmpbar.show{transform:none}.cmp-ch{display:none}.cmpbar{padding-left:16px}
+ .sv-2{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){.sv-tabs .b .i{display:none}.sv-tabs .b{font-size:.82rem;padding:12px 4px}}
+
+/* шапка: меню-бургер на средних экранах, чтобы всё помещалось */
+.tr .b.p.dm{white-space:nowrap}
+@media(min-width:1241px){.tr .b.p.dm{display:none}}
+@media(max-width:1240px) and (min-width:861px){
+ .pill{display:none;position:absolute;top:60px;left:auto;right:16px;width:min(340px,calc(100% - 32px));flex-direction:column;border-radius:24px;padding:10px;margin:0}
+ .pill.open{display:flex}.pill a{padding:13px 16px}.bg{display:grid}
+}
+</style>
+</head>
+<body>
+<div id="sp"></div>
+<div id="splash"><div class="sp-in"><i class="logo-ic"><svg class="i"><use href="#i-note"/></svg></i><div class="sp-n"><b>Not<span>a</span></b><i class="eq"><b></b><b></b><b></b></i></div></div></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-set" viewBox="0 0 24 24"><path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-12.3 7.6L3 21l1.5-5.4A8.5 8.5 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14.5h4"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/></symbol>
+<symbol id="i-hand" viewBox="0 0 24 24"><path d="M12 21s-8-4.5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6.5-8 11-8 11z"/><path d="m9 11 2 2 4-4"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-car" viewBox="0 0 24 24"><path d="M4 16l1.6-5a2 2 0 0 1 1.9-1.4h9a2 2 0 0 1 1.9 1.4L20 16M3 16h18v3H3z"/><path d="M7 19v1.5M17 19v1.5"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.3l1.1-6.2L3 9.7l6.2-.9z"/></symbol>
+<symbol id="i-arr" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7.5h7M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h3"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
+<symbol id="i-cmp" viewBox="0 0 24 24"><path d="M7 20V4M17 4v16M3 8l4-4 4 4M13 16l4 4 4-4"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></symbol>
+</svg>
+
+<header class="top"><div class="w">
+  <a href="#home" class="logo"><i class="logo-ic"><svg class="i"><use href="#i-note"/></svg></i><b class="logo-t">Not<span>a</span></b><i class="eq"><b></b><b></b><b></b></i></a>
+  <nav class="pill" id="pill">
+    <a href="#home" data-t="n_home"></a><a href="#why" data-t="n_why"></a><a href="#steps" data-t="n_steps"></a><a href="#cars" data-t="n_cars"></a><a href="#tools" data-t="n_tools"></a><a href="#reviews" data-t="n_rev"></a><a href="#faq" data-t="n_faq"></a><a href="#contacts" data-t="n_con"></a>
+  </nav>
+  <div class="tr">
+    <a href="#contacts" class="b p dm" data-t="req"></a>
+    <button class="b ic dm" data-a="favs" aria-label="Favorites" style="position:relative"><svg class="i"><use href="#i-heart"/></svg><b class="bdg fc">0</b></button>
+    <button class="b ic dm" data-a="cart" aria-label="Cart" style="position:relative"><svg class="i"><use href="#i-cart"/></svg><b class="bdg cc">0</b></button>
+    <button class="b ic dm" data-a="prof" aria-label="Profile" id="hu"></button>
+    <button class="b ic" data-a="set" aria-label="Settings"><svg class="i"><use href="#i-set"/></svg></button>
+    <button class="b ic bg" data-a="menu" aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
+  </div>
+</div></header>
+
+<main>
+<section class="w hero" id="home">
+  <div class="hl gl rv">
+    <span class="badge"><svg class="i"><use href="#i-car"/></svg><span data-t="badge"></span></span>
+    <h1 data-t="h1"></h1>
+    <p data-t="hsub"></p>
+    <div class="hb"><a href="#cars" class="b p" data-t="b_view"></a><a href="#contacts" class="b" data-t="b_pick"></a><a href="#" class="b" id="wa1" target="_blank" rel="noopener">WhatsApp</a></div>
+    <div class="stats"><div><b>500+</b><span data-t="s1"></span></div><div><b>50+</b><span data-t="s2"></span></div><div><b>24/7</b><span data-t="s3"></span></div></div>
+  </div>
+  <div class="hr gl rv" id="hr">
+    <div class="hcap"><div><b data-t="c1t"></b><span data-t="c1d"></span></div><div><b data-t="c2t"></b><span data-t="c2d"></span></div></div>
+  </div>
+</section>
+
+<section class="w" id="why"><div class="sh rv"><h2 data-t="why_t"></h2><p data-t="why_s"></p></div>
+  <div class="tiles">
+    <div class="tile gl rv"><div class="ib"><svg class="i"><use href="#i-shield"/></svg></div><h3 data-t="w1t"></h3><p data-t="w1d"></p></div>
+    <div class="tile gl rv"><div class="ib"><svg class="i"><use href="#i-tag"/></svg></div><h3 data-t="w2t"></h3><p data-t="w2d"></p></div>
+    <div class="tile gl rv"><div class="ib"><svg class="i"><use href="#i-truck"/></svg></div><h3 data-t="w3t"></h3><p data-t="w3d"></p></div>
+    <div class="tile gl rv"><div class="ib"><svg class="i"><use href="#i-hand"/></svg></div><h3 data-t="w4t"></h3><p data-t="w4d"></p></div>
+  </div></section>
+
+<section class="w" id="steps"><div class="sh rv"><h2 data-t="st_t"></h2></div>
+  <div class="tiles steps">
+    <div class="tile gl rv"><h3 data-t="p1t"></h3><p data-t="p1d"></p></div><div class="tile gl rv"><h3 data-t="p2t"></h3><p data-t="p2d"></p></div>
+    <div class="tile gl rv"><h3 data-t="p3t"></h3><p data-t="p3d"></p></div><div class="tile gl rv"><h3 data-t="p4t"></h3><p data-t="p4d"></p></div>
+  </div></section>
+
+<section class="w" id="cars"><div class="sh rv"><h2 data-t="cat_t"></h2><p data-t="cat_s"></p></div>
+  <div class="tb">
+    <input class="in" id="q" type="search" data-p="srch" autocomplete="off">
+    <select class="in" id="sort"></select>
+    <label class="rg"><span data-t="upto"></span><input type="range" id="mx" min="400000" max="16000000" step="100000" value="16000000"><b id="mxv"></b></label>
+    <div class="yr2"><select class="in" id="y1" aria-label="Year from"></select><select class="in" id="y2" aria-label="Year to"></select></div>
+    <button type="button" class="b rst" id="rst" data-a="rst"><svg class="i"><use href="#i-x"/></svg><span data-t="rst"></span></button>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="cnt" id="cnt"></div>
+  <div class="grid" id="grid"></div>
+  <div class="mo"><button class="b" id="more" data-a="more"></button></div>
+</section>
+
+<section class="w" id="tools"><div class="sh rv"><h2 data-t="tl_t"></h2><p data-t="tl_s"></p></div>
+  <div class="gl sv-card rv">
+    <div class="sv-tabs" role="tablist">
+      <button type="button" class="b on" role="tab" data-a="svtab" data-v="calc"><svg class="i"><use href="#i-calc"/></svg><span data-t="tab_calc"></span></button>
+      <button type="button" class="b" role="tab" data-a="svtab" data-v="credit"><svg class="i"><use href="#i-card"/></svg><span data-t="tab_cr"></span></button>
+      <button type="button" class="b" role="tab" data-a="svtab" data-v="customs"><svg class="i"><use href="#i-doc"/></svg><span data-t="tab_cu"></span></button>
+      <button type="button" class="b" role="tab" data-a="svtab" data-v="track"><svg class="i"><use href="#i-pin"/></svg><span data-t="tab_trk"></span></button>
+    </div>
+    <div class="sv-pane on" id="sv-calc"></div><div class="sv-pane" id="sv-credit"></div><div class="sv-pane" id="sv-customs"></div><div class="sv-pane" id="sv-track"></div>
+  </div></section>
+
+<section class="w" id="recent" hidden><div class="sh rv"><h2 data-t="rc_t"></h2><p data-t="rc_s"></p></div>
+  <div class="rec-row" id="recg"></div>
+  <div class="mo"><button type="button" class="b" data-a="recx"><svg class="i"><use href="#i-trash"/></svg><span data-t="rc_clr"></span></button></div>
+</section>
+
+<section class="w" id="reviews"><div class="sh rv"><h2 data-t="rev_t"></h2></div>
+  <div class="tiles">
+    <div class="tile gl rv rvw"><div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div><p data-t="r1"></p><b>Андрей К.</b></div>
+    <div class="tile gl rv rvw"><div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div><p data-t="r2"></p><b>Марина Л.</b></div>
+    <div class="tile gl rv rvw"><div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div><p data-t="r3"></p><b>Ерлан Т.</b></div>
+  </div></section>
+
+<section class="w" id="faq"><div class="sh rv"><h2 data-t="faq_t"></h2></div><div class="faq">
+  <details class="gl rv"><summary data-t="q1"></summary><p data-t="a1"></p></details>
+  <details class="gl rv"><summary data-t="q2"></summary><p data-t="a2"></p></details>
+  <details class="gl rv"><summary data-t="q3"></summary><p data-t="a3"></p></details>
+</div></section>
+
+<section class="w" id="contacts"><div class="cont">
+  <div class="gl rv"><h2 data-t="con_t"></h2><p class="mu" data-t="con_s"></p>
+    <div class="li"><svg class="i"><use href="#i-phone"/></svg>+7 776 333 87 13</div>
+    <div class="li"><svg class="i"><use href="#i-chat"/></svg>WhatsApp</div></div>
+  <form class="gl rv fm" id="cf" style="padding:32px">
+    <input class="in" required data-p="f_name"><input class="in" required type="tel" data-p="f_phone"><textarea class="in" data-p="f_msg"></textarea>
+    <button class="b p" type="submit"><svg class="i"><use href="#i-chat"/></svg><span data-t="send"></span></button>
+  </form></div></section>
+</main>
+
+<footer>
+  <div class="w"><span>© 2026 Nota</span><span data-t="foot_ph"></span></div>
+  <div class="w ftw"><div class="gl ftc rv">
+    <h3 data-t="ft_t"></h3>
+    <p data-t="ft_p"></p>
+    <p data-t="ft_p2"></p>
+    <div class="ftb">
+      <button type="button" class="b p" data-a="dnt"><svg class="i"><use href="#i-heart"/></svg><span data-t="b_don"></span></button>
+      <button type="button" class="b" data-a="bsite"><svg class="i"><use href="#i-tag"/></svg><span data-t="b_bsite"></span></button>
+    </div>
+    <a class="b wag" id="wasite" href="https://wa.me/77763338713?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D1%8F%20%D1%85%D0%BE%D1%87%D1%83%20%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C%20%D0%B2%D0%B0%D1%88%20%D1%81%D0%B0%D0%B9%D1%82%2C%20%D0%BF%D0%BE%20%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B5%20%D0%B0%D0%B2%D1%82%D0%BE" target="_blank" rel="noopener"><svg class="i"><use href="#i-chat"/></svg><span data-t="wa"></span></a>
+  </div></div>
+</footer>
+
+<div class="bnav" role="navigation">
+  <a href="#home"><svg class="i"><use href="#i-home"/></svg><span data-t="n_home"></span></a>
+  <a href="#cars"><svg class="i"><use href="#i-car"/></svg><span data-t="n_cars"></span></a>
+  <button data-a="favs"><svg class="i"><use href="#i-heart"/></svg><span data-t="favs"></span><b class="bdg fc">0</b></button>
+  <button data-a="cart"><svg class="i"><use href="#i-cart"/></svg><span data-t="cart_t"></span><b class="bdg cc">0</b></button>
+  <button data-a="prof"><svg class="i"><use href="#i-user"/></svg><span data-t="prof"></span></button>
+</div>
+<a class="wafab" id="wafab" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="i"><use href="#i-chat"/></svg></a>
+<div class="cmpbar gl" id="cmpbar"><div class="cmp-i"><b data-t="cmp_bar"></b><span id="cmpn"></span><div class="cmp-ch" id="cmpth"></div></div><div class="cmp-a"><button type="button" class="b p" data-a="cmpo"><svg class="i"><use href="#i-cmp"/></svg><span data-t="cmp_add"></span></button><button type="button" class="b ic sm" data-a="cmpx" aria-label="Clear"><svg class="i"><use href="#i-x"/></svg></button></div></div>
+<div class="gx-lb" id="gxlb" hidden role="dialog" aria-modal="true">
+  <div class="gx-lbi" id="gxlbi" data-a="lbz"></div>
+  <button type="button" class="b ic sm gx-lx" data-a="lbx" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+  <button type="button" class="b ic gx-nav gx-p" data-a="lbp" aria-label="Prev"><svg class="i"><use href="#i-arr"/></svg></button>
+  <button type="button" class="b ic gx-nav gx-n" data-a="lbn" aria-label="Next"><svg class="i"><use href="#i-arr"/></svg></button>
+  <span class="gx-cnt" id="gxlbc"></span>
+</div>
+<div class="md" id="md"><div class="mb" id="mb" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== Nota =====
+// Номер WhatsApp хранится ТОЛЬКО здесь: международный формат, цифры, без «+»
+const WHATSAPP_NUMBER="77763338713";
+// Текст кнопки «Купить сайт» в WhatsApp и реквизиты для пожертвований
+const SITE_WA="Здравствуйте, я хочу купить ваш сайт, по продаже авто";
+const KASPI={phone:"+77763338713",view:"+7 776 333 87 13",name:"Нұрғиса Б."};
+// Курсы относительно рубля (ПРИМЕРНЫЕ — поменяйте на актуальные)
+const RATES={RUB:1,KZT:6.0,USD:0.0125};
+(()=>{"use strict";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const ls={g:(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const I=n=>`<svg class="i"><use href="#i-${n}"/></svg>`;
+
+// ---------- Переводы: ключ|ru|kk|en (3 поля = ключ совпадает с русским) ----------
+const D=`n_home|Главная|Басты бет|Home
+n_why|Преимущества|Артықшылықтар|Benefits
+n_steps|Этапы|Кезеңдер|Steps
+n_cars|Авто|Көліктер|Cars
+n_rev|Отзывы|Пікірлер|Reviews
+n_faq|FAQ|FAQ|FAQ
+n_con|Контакты|Байланыс|Contacts
+req|Оставить заявку|Өтінім қалдыру|Send request
+badge|Подбор и доставка авто под ключ|Көлікті таңдау және жеткізу|Turnkey car sourcing and delivery
+h1|Подберём и привезём авто без лишних переплат|Көлікті артық төлемсіз таңдап, жеткіземіз|We find and deliver your car with no overpaying
+hsub|Подбор, проверка, выкуп, оплата, доставка, таможня и документы — берём весь процесс на себя. Вы получаете понятную схему работы и автомобиль под ваш бюджет.|Таңдау, тексеру, сатып алу, төлем, жеткізу, кеден және құжаттар — барлық процесті өзіміз атқарамыз. Сіз түсінікті жұмыс сызбасын және бюджетіңізге сай көлік аласыз.|Selection, inspection, purchase, payment, delivery, customs and paperwork — we handle the whole process. You get a clear workflow and a car that fits your budget.
+b_view|Смотреть авто|Көліктерді көру|Browse cars
+b_pick|Получить подборку|Таңдау алу|Get a selection
+s1|довольных клиентов|қанағаттанған клиент|happy clients
+s2|актуальных вариантов|өзекті нұсқа|cars available
+s3|поддержка и сопровождение|қолдау және сүйемелдеу|support and guidance
+c1t|Подбор под бюджет|Бюджетке сай таңдау|Selection for your budget
+c1d|От семейных авто до премиальных кроссоверов|Отбасылық көліктен премиум кроссоверге дейін|From family cars to premium crossovers
+c2t|Проверка и доставка|Тексеру және жеткізу|Inspection and delivery
+c2d|История авто, оплата, логистика, таможня, документы|Көлік тарихы, төлем, логистика, кеден, құжаттар|Car history, payment, logistics, customs, documents
+why_t|Почему выбирают нас|Бізді не үшін таңдайды|Why choose us
+why_s|Доверие, прозрачные условия и сопровождение на каждом этапе.|Сенім, ашық шарттар және әр кезеңде сүйемелдеу.|Trust, transparent terms and support at every step.
+w1t|Проверка по 150 пунктам|150 тармақ бойынша тексеру|150-point inspection
+w1d|Диагностика, история обслуживания и проверка документов.|Диагностика, қызмет тарихы және құжаттарды тексеру.|Diagnostics, service history and document checks.
+w2t|Прозрачная цена|Ашық баға|Transparent pricing
+w2d|Все расходы известны заранее, без скрытых платежей.|Барлық шығын алдын ала белгілі, жасырын төлемсіз.|All costs are known upfront, with no hidden fees.
+w3t|Доставка и таможня|Жеткізу және кеден|Delivery and customs
+w3d|Логистику и растаможку берём на себя.|Логистика мен кеденді өзіміз рәсімдейміз.|We take care of logistics and customs clearance.
+w4t|Гарантия и поддержка|Кепілдік және қолдау|Warranty and support
+w4d|Сопровождаем сделку и после получения ключей.|Кілтті алғаннан кейін де қолдау көрсетеміз.|We stay with you after you get the keys.
+st_t|Как мы работаем|Біз қалай жұмыс істейміз|How we work
+p1t|Заявка|Өтінім|Request
+p1d|Вы оставляете заявку и называете бюджет.|Өтінім қалдырып, бюджетті айтасыз.|You send a request and name your budget.
+p2t|Подбор|Таңдау|Selection
+p2d|Предлагаем проверенные варианты.|Тексерілген нұсқаларды ұсынамыз.|We offer verified options.
+p3t|Проверка и выкуп|Тексеру және сатып алу|Inspection and purchase
+p3d|Осматриваем авто и оформляем покупку.|Көлікті қарап, сатып алуды рәсімдейміз.|We inspect the car and complete the purchase.
+p4t|Доставка и выдача|Жеткізу және тапсыру|Delivery and handover
+p4d|Привозим, оформляем документы, вручаем ключи.|Жеткізіп, құжаттарды рәсімдеп, кілтті тапсырамыз.|We deliver, handle documents and hand over the keys.
+cat_t|Каталог автомобилей|Автомобиль каталогы|Car catalog
+cat_s|Каждое авто проверено. Ищите по марке, цене и сортировке.|Әр көлік тексерілген. Марка, баға және сұрыптау бойынша іздеңіз.|Every car is inspected. Search by make, price and sorting.
+srch|Поиск по марке и модели|Марка мен модель бойынша іздеу|Search by make and model
+all|Все марки|Барлық маркалар|All makes
+upto|Бюджет до|Бюджет дейін|Budget up to
+found|Найдено|Табылды|Found
+more|Показать ещё|Тағы көрсету|Show more
+none|Ничего не найдено|Ештеңе табылмады|Nothing found
+so0|По умолчанию|Әдепкі|Default
+so1|Сначала дешёвые|Арзандары алдымен|Cheapest first
+so2|Сначала дорогие|Қымбаттары алдымен|Most expensive first
+so3|Сначала новые|Жаңалары алдымен|Newest first
+so4|Сначала популярные|Танымалдары алдымен|Most popular first
+det|Подробнее|Толығырақ|Details
+addc|В корзину|Себетке|Add to cart
+added|Добавлено в корзину|Себетке қосылды|Added to cart
+wa|Написать в WhatsApp|WhatsApp-қа жазу|Message on WhatsApp
+share|Поделиться|Бөлісу|Share
+copyl|Скопировать ссылку|Сілтемені көшіру|Copy link
+copied|Ссылка скопирована|Сілтеме көшірілді|Link copied
+k_year|Год|Жыл|Year
+k_km|Пробег|Жүріс|Mileage
+k_fuel|Двигатель|Қозғалтқыш|Engine
+k_eng|Объём / мощность|Көлем / қуат|Size / power
+k_gear|Коробка|Беріліс қорабы|Gearbox
+k_drive|Привод|Жетек|Drive
+k_body|Кузов|Кузов|Body
+k_col|Цвет|Түс|Color
+k_st|Статус|Мәртебе|Status
+u_km|км|км|km
+u_l|л|л|L
+u_hp|л.с.|а.к.|hp
+desc|{n}, {y} года. Двигатель: {e}, коробка: {g}, привод: {d}. Проверен по 150 пунктам, история обслуживания подтверждена.|{n}, {y} жыл. Қозғалтқыш: {e}, қорап: {g}, жетек: {d}. 150 тармақ бойынша тексерілген, қызмет тарихы расталған.|{n}, {y}. Engine: {e}, gearbox: {g}, drive: {d}. Inspected on 150 points, service history confirmed.
+rev_t|Отзывы клиентов|Клиенттер пікірі|Customer reviews
+r1|Всё оформили быстро, машина пришла в идеальном состоянии. Цена совпала с договорённостью.|Бәрін тез рәсімдеді, көлік тамаша күйде келді. Баға келісімге сай болды.|Everything was done quickly and the car arrived in perfect condition. The price matched the agreement.
+r2|Помогли подобрать вариант под бюджет и сопровождали до получения ключей.|Бюджетке сай нұсқаны таңдап, кілтті алғанша сүйемелдеді.|They helped me find an option within budget and supported me until I got the keys.
+r3|Понравилась прозрачность: показали историю авто и все расходы заранее.|Ашықтығы ұнады: көлік тарихы мен барлық шығынды алдын ала көрсетті.|I liked the transparency: they showed the car history and all costs upfront.
+faq_t|Частые вопросы|Жиі қойылатын сұрақтар|FAQ
+q1|Сколько времени занимает доставка?|Жеткізу қанша уақытқа созылады?|How long does delivery take?
+a1|Срок зависит от авто и маршрута. Точные сроки менеджер назовёт после подбора.|Мерзім көлік пен бағытқа байланысты. Нақты мерзімді менеджер таңдағаннан кейін айтады.|It depends on the car and route. A manager gives exact timing after selection.
+q2|Можно ли проверить авто перед покупкой?|Сатып алар алдында көлікті тексеруге бола ма?|Can I inspect the car before buying?
+a2|Да, мы предоставим отчёт о проверке, историю и фото.|Иә, тексеру есебін, тарихты және фотоларды береміз.|Yes, we provide an inspection report, history and photos.
+q3|Какие расходы входят в цену?|Бағаға қандай шығындар кіреді?|What costs are included?
+a3|Все расходы согласуются заранее и фиксируются в договоре.|Барлық шығын алдын ала келісіліп, шартқа жазылады.|All costs are agreed upfront and fixed in the contract.
+con_t|Остались вопросы?|Сұрақтарыңыз бар ма?|Have questions?
+con_s|Оставьте заявку — сообщение откроется в WhatsApp, вам останется только отправить.|Өтінім қалдырыңыз — хабарлама WhatsApp-та ашылады, тек жіберу қалады.|Send a request — the message opens in WhatsApp and you just press send.
+f_name|Ваше имя|Атыңыз|Your name
+f_phone|Телефон|Телефон|Phone
+f_msg|Какая машина вас интересует?|Қандай көлік қызықтырады?|Which car are you interested in?
+send|Отправить в WhatsApp|WhatsApp-қа жіберу|Send via WhatsApp
+foot_ph|Фото авто: Wikipedia / Wikimedia Commons (открытые лицензии)|Көлік фотолары: Wikipedia / Wikimedia Commons (ашық лицензиялар)|Car photos: Wikipedia / Wikimedia Commons (open licenses)
+cart_t|Корзина|Себет|Cart
+total|Итого|Барлығы|Total
+empty_c|В корзине пусто|Себет бос|Your cart is empty
+checkout|Оформить через WhatsApp|WhatsApp арқылы рәсімдеу|Checkout via WhatsApp
+clear_c|Очистить|Тазалау|Clear
+favs|Избранное|Таңдаулылар|Favorites
+empty_f|Нажмите на сердце на карточке авто|Көлік карточкасындағы жүректі басыңыз|Tap the heart on a car card
+prof|Профиль|Профиль|Profile
+login|Вход|Кіру|Log in
+reg|Регистрация|Тіркелу|Sign up
+nick|Никнейм|Лақап ат|Nickname
+user|Юзернейм|Юзернейм|Username
+pass|Пароль|Құпиясөз|Password
+pass2|Повторите пароль|Құпиясөзді қайталаңыз|Repeat password
+avatar|Фото профиля|Профиль суреті|Profile photo
+choose|Выбрать фото|Сурет таңдау|Choose photo
+do_login|Войти|Кіру|Log in
+do_reg|Создать аккаунт|Аккаунт құру|Create account
+logout|Выйти|Шығу|Log out
+save|Сохранить|Сақтау|Save
+p_status|Статус|Мәртебе|Status
+online|В сети|Желіде|Online
+offline|Не в сети|Желіде емес|Offline
+joined|Дата регистрации|Тіркелген күні|Registered
+viewed|Просмотрено авто|Қаралған көлік|Cars viewed
+find_t|Поиск людей|Адамдарды іздеу|Find people
+find_ph|ID или @юзернейм|ID немесе @юзернейм|ID or @username
+nf|Никого не найдено|Ешкім табылмады|Nobody found
+e_user|Юзернейм: 3–20 символов, латиница, цифры и _|Юзернейм: 3–20 таңба, латын әріптері, сандар және _|Username: 3–20 chars, latin letters, digits and _
+e_taken|Этот юзернейм уже занят|Бұл юзернейм бос емес|This username is taken
+e_nick|Никнейм: от 2 до 24 символов|Лақап ат: 2–24 таңба|Nickname: 2–24 characters
+e_pw|Пароль: минимум 6 символов|Құпиясөз: кемінде 6 таңба|Password: at least 6 characters
+e_pw2|Пароли не совпадают|Құпиясөздер сәйкес емес|Passwords do not match
+e_bad|Неверный юзернейм или пароль|Юзернейм немесе құпиясөз қате|Wrong username or password
+welcome|Добро пожаловать! Ваш ID:|Қош келдіңіз! Сіздің ID:|Welcome! Your ID:
+demo|Демо-режим: аккаунты хранятся только в этом браузере, на сервер ничего не отправляется. Поиск людей находит только аккаунты, созданные в этом браузере.|Демо-режим: аккаунттар тек осы браузерде сақталады, серверге ештеңе жіберілмейді. Адам іздеу тек осы браузерде құрылған аккаунттарды табады.|Demo mode: accounts are stored only in this browser and nothing is sent to a server. People search finds only accounts created in this browser.
+login_hint|Войдите в аккаунт, чтобы считать просмотры авто.|Көрулерді санау үшін аккаунтқа кіріңіз.|Log in to count your car views.
+set_t|Настройки|Баптаулар|Settings
+lang|Язык|Тіл|Language
+cur|Валюта|Валюта|Currency
+anim|Анимации|Анимациялар|Animations
+on|Вкл|Қосулы|On
+off|Выкл|Өшірулі|Off
+waGen|Здравствуйте! Хочу получить подборку автомобилей в Nota.|Сәлеметсіз бе! Nota-дан көлік таңдауын алғым келеді.|Hello! I'd like a car selection from Nota.
+waCar|Здравствуйте! Меня интересует автомобиль {n} {y} года ({p}). Хотел бы узнать подробности.|Сәлеметсіз бе! Мені {y} жылғы {n} ({p}) қызықтырады. Толығырақ білгім келеді.|Hello! I'm interested in the {n} ({y}), priced at {p}. I'd like more details.
+waCart|Здравствуйте! Хочу оформить заказ:|Сәлеметсіз бе! Тапсырыс бергім келеді:|Hello! I'd like to place an order:
+waForm|Здравствуйте! Меня зовут {a}, телефон {b}. {c}|Сәлеметсіз бе! Менің атым {a}, телефон {b}. {c}|Hello! My name is {a}, phone {b}. {c}
+В наличии|Бар|In stock
+Спецпредложение|Арнайы ұсыныс|Special offer
+Новое поступление|Жаңа түсім|New arrival
+Резерв|Броньда|Reserved
+Бензин|Бензин|Petrol
+Дизель|Дизель|Diesel
+Электро|Электр|Electric
+Передний|Алдыңғы|Front
+Задний|Артқы|Rear
+Полный|Толық|All-wheel
+АКПП|Автомат|Automatic
+вариатор|Вариатор|CVT
+робот|Робот|Robot
+Седан|Седан|Sedan
+Кроссовер|Кроссовер|Crossover
+Внедорожник|Джип|SUV
+Купе|Купе|Coupe
+Хэтчбек|Хэтчбек|Hatchback
+n_tools|Сервисы|Сервистер|Tools
+tl_t|Сервисы Nota|Nota сервистері|Nota tools
+tl_s|Рассчитайте стоимость, подберите рассрочку или кредит и отследите заказ.|Құнын есептеңіз, бөліп төлеуді немесе несиені таңдаңыз, тапсырысты бақылаңыз.|Estimate the cost, pick an installment or a loan and track your order.
+tab_calc|Расчёт|Есептеу|Calculator
+tab_cr|Кредит|Несие|Credit
+tab_trk|Заказ|Тапсырыс|Order
+cl_car|Автомобиль|Көлік|Car
+sv_own|Своя цена|Өз бағам|Custom price
+cl_price|Цена авто|Көлік бағасы|Car price
+cl_from|Откуда везём|Қайдан жеткіземіз|Shipping from
+fr_kr|Корея|Корея|Korea
+fr_jp|Япония|Жапония|Japan
+fr_de|Германия|Германия|Germany
+fr_ae|ОАЭ|БАӘ|UAE
+fr_cn|Китай|Қытай|China
+fr_us|США|АҚШ|USA
+fr_ru|Россия|Ресей|Russia
+cl_age|Возраст авто|Көлік жасы|Car age
+ag0|до 3 лет|3 жасқа дейін|up to 3 yrs
+ag1|3–5 лет|3–5 жыл|3–5 yrs
+ag2|старше 5 лет|5 жастан асқан|over 5 yrs
+ag3|Электро|Электр|Electric
+cl_ext|Дополнительно|Қосымша|Extras
+ex_chk|Проверка по 150 пунктам|150 тармақ бойынша тексеру|150-point inspection
+ex_ins|Страховка на время доставки|Жеткізу кезеңіне сақтандыру|Transit insurance
+cl_res|Ориентировочная стоимость|Болжамды құны|Estimated cost
+rw_car|Автомобиль|Көлік|Car
+rw_del|Доставка|Жеткізу|Delivery
+rw_duty|Таможенная пошлина|Кеден бажы|Customs duty
+rw_fee|Услуги Nota|Nota қызметі|Nota service
+rw_chk|Проверка|Тексеру|Inspection
+rw_ins|Страховка|Сақтандыру|Insurance
+cl_eta|Срок доставки|Жеткізу мерзімі|Delivery time
+days|дн.|күн|days
+cl_note|Расчёт ориентировочный и демонстрационный. Точные таможенные платежи смотрите на вкладке «Таможня».|Есеп болжамды әрі демонстрациялық. Нақты кедендік төлемдерді «Кеден» қойындысынан қараңыз.|The estimate is approximate and for demo purposes. See exact customs payments on the Customs tab.
+cl_tocr|Рассчитать кредит|Несиені есептеу|Calculate credit
+cl_wa|Отправить расчёт в WhatsApp|Есепті WhatsApp-қа жіберу|Send estimate via WhatsApp
+cr_type|Вариант оплаты|Төлем түрі|Payment option
+cr_inst|Рассрочка 0%|Бөліп төлеу 0%|Installment 0%
+cr_loan|Кредит|Несие|Loan
+cr_down|Первый взнос|Алғашқы жарна|Down payment
+cr_term|Срок|Мерзім|Term
+cr_rate|Ставка, % годовых|Мөлшерлеме, жылдық %|Rate, % per year
+mon|мес.|ай|mo.
+cr_month|Платёж в месяц|Айлық төлем|Monthly payment
+cr_sum|Стоимость авто|Көлік құны|Car price
+cr_dp|Первый взнос|Алғашқы жарна|Down payment
+cr_body|Сумма финансирования|Қаржыландыру сомасы|Amount financed
+cr_over|Переплата|Артық төлем|Overpayment
+cr_all|Всего к выплате|Жалпы төленетін сома|Total to pay
+cr_note_i|Рассрочка без переплаты: взнос от 30%, срок до 12 месяцев.|Артық төлемсіз бөліп төлеу: жарна 30%-дан, мерзімі 12 айға дейін.|Interest-free installment: down payment from 30%, up to 12 months.
+cr_note_l|Кредит с аннуитетными платежами: взнос от 10%, срок до 60 месяцев. Расчёт демонстрационный.|Аннуитеттік төлемдері бар несие: жарна 10%-дан, мерзімі 60 айға дейін. Есеп демонстрациялық.|Loan with annuity payments: down payment from 10%, up to 60 months. Demo calculation.
+cr_wa|Подать заявку в WhatsApp|WhatsApp арқылы өтінім беру|Apply via WhatsApp
+tk_t|Номер заказа|Тапсырыс нөмірі|Order number
+tk_ph|Например, NT-1001|Мысалы, NT-1001|For example, NT-1001
+tk_go|Отследить|Бақылау|Track
+tk_try|Попробуйте:|Байқап көріңіз:|Try:
+tk_mine|Ваши заказы:|Сіздің тапсырыстарыңыз:|Your orders:
+tk_nf|Заказ не найден. Номер выглядит так: NT-1001.|Тапсырыс табылмады. Нөмір мынадай болады: NT-1001.|Order not found. The number looks like NT-1001.
+tk_demo|Демо-режим: новые заказы из корзины проходят этапы автоматически, по одному этапу в минуту.|Демо-режим: себеттен жасалған жаңа тапсырыстар кезеңдерден автоматты түрде өтеді, минутына бір кезең.|Demo mode: new orders from the cart move through the stages automatically, one stage per minute.
+tk_cur|Сейчас|Қазір|Now
+tk_wait|Ожидается|Күтілуде|Pending
+tk_ord|Заказ|Тапсырыс|Order
+tk_wa|Спросить менеджера|Менеджерден сұрау|Ask a manager
+ts1|Заявка принята|Өтінім қабылданды|Request received
+td1|Менеджер связался с вами и уточнил пожелания.|Менеджер сізбен байланысып, тілектеріңізді нақтылады.|A manager contacted you and clarified your wishes.
+ts2|Подбор авто|Көлік таңдау|Car selection
+td2|Подбираем варианты под ваш бюджет.|Бюджетіңізге сай нұсқаларды таңдаймыз.|We are selecting options for your budget.
+ts3|Проверка и выкуп|Тексеру және сатып алу|Inspection and purchase
+td3|Осмотр по 150 пунктам и выкуп автомобиля.|150 тармақ бойынша қарау және көлікті сатып алу.|150-point inspection and purchase of the car.
+ts4|Оплата и документы|Төлем және құжаттар|Payment and documents
+td4|Оформляем договор и документы на авто.|Шарт пен көлік құжаттарын рәсімдейміз.|We prepare the contract and the car documents.
+ts5|В пути|Жолда|On the way
+td5|Автомобиль едет к вам, трекинг у менеджера.|Көлік сізге келе жатыр, трекинг менеджерде.|The car is on its way; tracking is with your manager.
+ts6|Таможня|Кеден|Customs
+td6|Растаможка и постановка на учёт.|Кедендік рәсімдеу және тіркеу.|Customs clearance and registration.
+ts7|Выдача ключей|Кілтті тапсыру|Key handover
+td7|Автомобиль у вас. Приятной дороги!|Көлік сізде. Жолыңыз болсын!|The car is yours. Have a safe trip!
+ord_new|Заказ создан:|Тапсырыс құрылды:|Order created:
+ord_hint|Следите за ним в разделе «Сервисы».|Оны «Сервистер» бөлімінде бақылаңыз.|Track it in the Tools section.
+waCalc|Здравствуйте! Рассчитал на сайте Nota: {n}, доставка: {f}. Итого под ключ: {t}. Хочу уточнить детали.|Сәлеметсіз бе! Nota сайтында есептедім: {n}, жеткізу: {f}. Барлығы: {t}. Толығырақ білгім келеді.|Hello! I ran a calculation on Nota: {n}, shipping from {f}. Total turnkey: {t}. I'd like to clarify the details.
+waCr|Здравствуйте! Хочу оформить «{k}» на сайте Nota: {n}, первый взнос {d}, платёж {m} в месяц на {s} мес.|Сәлеметсіз бе! Nota сайтында «{k}» рәсімдегім келеді: {n}, алғашқы жарна {d}, айлық төлем {m}, мерзімі {s} ай.|Hello! I'd like to apply for "{k}" on Nota: {n}, down payment {d}, {m} per month for {s} months.
+waTrk|Здравствуйте! Подскажите, пожалуйста, статус заказа {o}.|Сәлеметсіз бе! {o} тапсырысының мәртебесін айта аласыз ба?|Hello! Could you tell me the status of order {o}?
+set_acc|Цвет акцента|Акцент түсі|Accent color
+ac_blue|Лёд|Мұз|Ice
+ac_green|Мята|Жалбыз|Mint
+ac_sunset|Закат|Күн батуы|Sunset
+ac_rose|Роза|Раушан|Rose
+ac_gold|Золото|Алтын|Gold
+set_fs|Размер текста|Мәтін өлшемі|Text size
+fs_s|Мелкий|Кіші|Small
+fs_m|Обычный|Қалыпты|Normal
+fs_l|Крупный|Үлкен|Large
+set_blur|Эффект стекла|Шыны әсері|Glass blur
+set_blur_h|Выключите, если сайт тормозит на телефоне.|Телефонда баяу жұмыс істесе, өшіріңіз.|Turn it off if the site is slow on your phone.
+set_unit|Единицы пробега|Жүріс бірлігі|Mileage units
+u_mi|миль|миль|mi
+unit_km|Километры|Километр|Kilometers
+unit_mi|Мили|Миль|Miles
+set_fx|Курсы валют|Валюта бағамдары|Exchange rates
+fx_h|Меняют цены на сайте. Значения примерные.|Сайттағы бағаларды өзгертеді. Мәндер болжамды.|They change prices on the site. Values are approximate.
+set_data|Данные|Деректер|Data
+reset_s|Сбросить настройки|Баптауларды қалпына келтіру|Reset settings
+clear_d|Очистить избранное, корзину и заказы|Таңдаулыларды, себетті және тапсырыстарды тазалау|Clear favorites, cart and orders
+clear_q|Удалить избранное, корзину и заказы в этом браузере?|Осы браузердегі таңдаулылар, себет және тапсырыстар жойылсын ба?|Delete favorites, cart and orders in this browser?
+cleared|Данные очищены|Деректер тазаланды|Data cleared
+reset_ok|Настройки сброшены|Баптаулар қалпына келтірілді|Settings reset
+gx_p|Предыдущее фото|Алдыңғы фото|Previous photo
+gx_n|Следующее фото|Келесі фото|Next photo
+gx_c|Закрыть|Жабу|Close
+ft_t|Это демо-сайт, а не автосалон|Бұл автосалон емес, демо-сайт|This is a demo site, not a real dealership
+ft_p|Это фейк-сайт: мы не продаём машины по-настоящему. Сайт создан в обучающих целях и для продажи. Все автомобили, цены, отзывы, заказы и расчёты вымышлены и показаны только для примера.|Бұл жалған (фейк) сайт: біз көліктерді шын мәнінде сатпаймыз. Сайт оқу мақсатында және сату үшін жасалған. Барлық көліктер, бағалар, пікірлер, тапсырыстар мен есептеулер ойдан шығарылған және тек үлгі ретінде көрсетілген.|This is a fake site: we do not actually sell cars. It was built for learning purposes and for sale. All cars, prices, reviews, orders and calculations are fictional and shown as examples only.
+ft_p2|Понравились дизайн и функции? Купите этот сайт или поддержите автора.|Дизайн мен функциялар ұнады ма? Осы сайтты сатып алыңыз немесе автордың жұмысын қолдаңыз.|Like the design and features? Buy this site or support its author.
+b_don|Пожертвовать на сайт|Сайтқа қайырымдылық жасау|Donate to the site
+b_bsite|Купить сайт|Сайтты сатып алу|Buy this site
+dn_t|Пожертвование на сайт|Сайтқа қайырымдылық|Donate to the site
+dn_p|Спасибо, что цените работу! Перевод через Kaspi.kz, на любую сумму.|Жұмысты бағалағаныңызға рахмет! Kaspi.kz арқылы кез келген сомаға аударыңыз.|Thank you for valuing the work! Transfer via Kaspi.kz, any amount.
+dn_num|Номер телефона|Телефон нөмірі|Phone number
+dn_name|Получатель|Алушы|Recipient
+dn_copy|Скопировать номер|Нөмірді көшіру|Copy number
+dn_copied|Номер скопирован|Нөмір көшірілді|Number copied
+dn_how|Как перевести: Kaspi.kz → Переводы → По номеру телефона. В комментарии напишите «Пожертвование на сайт».|Қалай аудару керек: Kaspi.kz → Аударымдар → Телефон нөмірі бойынша. Түсініктемеге «Сайтқа қайырымдылық» деп жазыңыз.|How to pay: Kaspi.kz → Transfers → By phone number. Write "Donation to the site" in the comment.
+dn_open|Открыть Kaspi.kz|Kaspi.kz ашу|Open Kaspi.kz
+bs_t|Купить этот сайт|Осы сайтты сатып алу|Buy this site
+bs_p|Готовый сайт по продаже авто: можно запустить под свой бизнес.|Көлік сатуға арналған дайын сайт: өз бизнесіңізге іске қосуға болады.|A ready-made car sales site you can launch for your own business.
+bs1|Адаптивный дизайн для телефона и компьютера|Телефон мен компьютерге бейімделген дизайн|Responsive design for phones and desktops
+bs2|Каталог авто с поиском, фильтрами и сортировкой|Іздеуі, сүзгілері және сұрыптауы бар көлік каталогы|Car catalog with search, filters and sorting
+bs3|Галерея фото, избранное и корзина|Фото галерея, таңдаулылар және себет|Photo gallery, favorites and cart
+bs4|Калькулятор стоимости, кредит и рассрочка|Құн калькуляторы, несие және бөліп төлеу|Cost calculator, credit and installments
+bs5|Трекер заказа и личный профиль|Тапсырыс трекері және жеке профиль|Order tracker and user profile
+bs6|Три языка, три валюты и расширенные настройки|Үш тіл, үш валюта және кеңейтілген баптаулар|Three languages, three currencies and advanced settings
+bs7|Заявки приходят прямо в ваш WhatsApp|Өтінімдер тікелей сіздің WhatsApp-қа түседі|Requests go straight to your WhatsApp
+bs_price|Цена и условия обсуждаются индивидуально. Напишите в WhatsApp, и мы всё обсудим.|Бағасы мен шарттары жеке талқыланады. WhatsApp-қа жазыңыз, бәрін талқылаймыз.|Price and terms are discussed individually. Message us on WhatsApp and we will go through everything.
+yf_from|Год от|Жылдан|Year from
+yf_to|Год до|Жылға дейін|Year to
+rst|Сбросить фильтры|Сүзгілерді тазалау|Reset filters
+cmp_t|Сравнение авто|Көліктерді салыстыру|Compare cars
+cmp_add|Сравнить|Салыстыру|Compare
+cmp_bar|Сравнение|Салыстыру|Compare
+cmp_clear|Очистить|Тазалау|Clear
+cmp_max|Можно сравнить не больше 3 авто|Ең көбі 3 көлікті салыстыруға болады|You can compare up to 3 cars
+cmp_one|Добавьте ещё хотя бы одно авто, чтобы сравнить.|Салыстыру үшін тағы кемінде бір көлік қосыңыз.|Add at least one more car to compare.
+cmp_added|Добавлено к сравнению|Салыстыруға қосылды|Added to compare
+cmp_best|Лучшее значение подсвечено.|Үздік мән ерекшеленген.|The best value is highlighted.
+cmp_rm|Убрать|Алып тастау|Remove
+cmp_price|Цена|Баға|Price
+rc_t|Недавно просмотренные|Жуырда қаралған|Recently viewed
+rc_s|Вы смотрели эти автомобили. Вернитесь к ним в одно касание.|Сіз осы көліктерді қарадыңыз. Бір басумен қайта оралыңыз.|You looked at these cars. Come back in one tap.
+rc_clr|Очистить историю|Тарихты тазалау|Clear history
+sh_t|Поделиться карточкой|Карточкамен бөлісу|Share car card
+sh_p|Готовая картинка с ценой и ссылкой для Telegram, WhatsApp и Instagram.|Telegram, WhatsApp және Instagram үшін баға мен сілтемесі бар дайын сурет.|A ready image with the price and a link for Telegram, WhatsApp and Instagram.
+sh_send|Поделиться|Бөлісу|Share
+sh_dl|Скачать картинку|Суретті жүктеу|Download image
+sh_link|Копировать ссылку|Сілтемені көшіру|Copy link
+sh_gen|Готовлю картинку…|Сурет дайындалуда…|Preparing the image…
+sh_txt|Посмотрите: {n}, {p}|Қараңыз: {n}, {p}|Take a look: {n}, {p}
+sh_demo|Демо-сайт, реальных продаж нет|Демо-сайт, нақты сатылым жоқ|Demo site, no real sales
+sh_err|Не удалось создать картинку|Суретті жасау мүмкін болмады|Could not create the image
+tab_cu|Таможня|Кеден|Customs
+cu_year|Год выпуска|Шығарылған жылы|Model year
+cu_vol|Объём двигателя, см³|Қозғалтқыш көлемі, см³|Engine size, cm³
+cu_fuel|Тип двигателя|Қозғалтқыш түрі|Engine type
+fu_ice|Бензин / дизель|Бензин / дизель|Petrol / diesel
+fu_ev|Электро|Электр|Electric
+cu_scheme|Тариф|Тариф|Tariff
+sc_nat|Нац. тариф (ВТО)|Ұлттық тариф (ДСҰ)|National (WTO)
+sc_ett|ЕТТ ЕАЭС|ЕАЭО БКТ|EAEU tariff
+cu_vat|НДС, %|ҚҚС, %|VAT, %
+cu_eur|Курс: 1 € = … $|Бағам: 1 € = … $|Rate: 1 € = … $
+cu_val|Таможенная стоимость|Кедендік құн|Customs value
+cu_duty|Ввозная пошлина|Әкелу бажы|Import duty
+cu_exc|Акциз|Акциз|Excise
+cu_vatr|НДС|ҚҚС|VAT
+cu_fee|Таможенный сбор (6 МРП)|Кедендік алым (6 АЕК)|Customs fee (6 MRP)
+cu_util|Утильсбор|Утильалым|Recycling fee
+cu_reg|Регистрационный сбор|Тіркеу алымы|Registration fee
+cu_tot|Платежи итого|Төлемдер жиыны|Total payments
+cu_all|Авто с платежами|Көлік төлемдермен|Car with payments
+cu_note|Ориентировочный расчёт по ставкам Казахстана на 2026 год (МРП 4 325 ₸). Ставка НДС, утильсбор и пошлина зависят от конкретного авто и декларации: проверьте на сайте КГД МФ РК перед сделкой.|2026 жылға арналған Қазақстан мөлшерлемелері бойынша болжамды есеп (АЕК 4 325 ₸). ҚҚС мөлшерлемесі, утильалым және баж нақты көлік пен декларацияға байланысты: мәміле алдында ҚР ҚМ МКК сайтынан тексеріңіз.|Approximate calculation at Kazakhstan 2026 rates (MRP 4,325 ₸). VAT, recycling fee and duty depend on the specific car and declaration: check the State Revenue Committee website before any deal.
+waCu|Здравствуйте! Посчитал таможню на сайте Nota: {n}, платежи {t}. Хочу уточнить детали.|Сәлеметсіз бе! Nota сайтында кедендік төлемдерді есептедім: {n}, төлемдер {t}. Толығырақ білгім келеді.|Hello! I calculated customs on Nota: {n}, payments {t}. I'd like to clarify the details.`;
+const L={ru:{},kk:{},en:{}};
+D.split("\n").forEach(l=>{const f=l.split("|"),v=f.length==3?f:f.slice(1);L.ru[f[0]]=v[0];L.kk[f[0]]=v[1];L.en[f[0]]=v[2]});
+
+// ---------- Настройки, деньги ----------
+let S={lang:"ru",cur:"KZT",anim:true,acc:"blue",fs:"m",blur:true,unit:"km",fx:null,...ls.g("nx_set",{})};
+const t=k=>L[S.lang][k]??k,say=m=>{const e=$("#toast");e.textContent=m;e.classList.add("show");clearTimeout(say.t);say.t=setTimeout(()=>e.classList.remove("show"),2600)};
+const LOC={ru:"ru-RU",kk:"kk-KZ",en:"en-US"};
+const money=r=>new Intl.NumberFormat(LOC[S.lang],{style:"currency",currency:S.cur,maximumFractionDigits:0}).format(r*RATES[S.cur]);
+const wa=m=>window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(m),"_blank","noopener");
+
+// ---------- Автомобили (цены в рублях) ----------
+const cars=`Toyota|Camry|2023|12000|Бензин|2.5|200|АКПП|Передний|Седан|3250000|#c9ced6|Серебристый|В наличии|9|Toyota Camry
+Toyota|RAV4|2022|28000|Бензин|2.0|149|вариатор|Полный|Кроссовер|3480000|#2f5d50|Зелёный|В наличии|8|Toyota RAV4
+BMW|3 Series|2022|31000|Бензин|2.0|184|АКПП|Задний|Седан|4150000|#1d3b8b|Синий|В наличии|7|BMW 3 Series
+BMW|X5|2021|54000|Дизель|3.0|249|АКПП|Полный|Кроссовер|6890000|#222831|Чёрный|Спецпредложение|9|BMW X5
+Mercedes-Benz|C-Class|2023|9000|Бензин|2.0|204|АКПП|Задний|Седан|5200000|#8d949e|Серый|В наличии|8|Mercedes-Benz C-Class
+Mercedes-Benz|GLE|2020|67000|Дизель|2.9|245|АКПП|Полный|Кроссовер|7350000|#6b1f2a|Бордовый|Спецпредложение|6|Mercedes-Benz GLE
+Audi|A6|2022|22000|Бензин|2.0|245|робот|Полный|Седан|4980000|#b5bcc7|Серебристый|В наличии|6|Audi A6
+Audi|Q5|2021|41000|Бензин|2.0|249|робот|Полный|Кроссовер|4650000|#3a4a63|Тёмно-синий|В наличии|7|Audi Q5
+Kia|K5|2023|7000|Бензин|2.5|194|АКПП|Передний|Седан|2890000|#b42b2b|Красный|В наличии|5|Kia K5
+Kia|Sportage|2023|15000|Бензин|2.0|150|АКПП|Полный|Кроссовер|3190000|#e8e3d6|Бежевый|Спецпредложение|8|Kia Sportage
+Hyundai|Tucson|2022|26000|Бензин|2.0|150|АКПП|Передний|Кроссовер|2990000|#d6a21f|Жёлтый|В наличии|6|Hyundai Tucson
+Hyundai|Accent|2021|38000|Бензин|1.6|123|АКПП|Передний|Седан|1390000|#4d8f9c|Бирюзовый|Резерв|4|Hyundai Accent
+Porsche|911 Carrera|2022|14000|Бензин|3.0|385|робот|Задний|Купе|13900000|#8d949e|Серый|В наличии|10|Porsche 911
+Porsche|Cayenne|2021|36000|Бензин|3.0|340|АКПП|Полный|Кроссовер|9450000|#222831|Чёрный|Спецпредложение|9|Porsche Cayenne
+Lexus|RX 350|2023|8000|Бензин|2.4|275|АКПП|Полный|Кроссовер|7200000|#e8e3d6|Белый|В наличии|8|Lexus RX
+Lexus|LX 600|2022|21000|Бензин|3.5|409|АКПП|Полный|Внедорожник|15800000|#222831|Чёрный|В наличии|9|Lexus LX
+Tesla|Model 3|2023|11000|Электро|0|283|АКПП|Задний|Седан|4200000|#b42b2b|Красный|В наличии|9|Tesla Model 3
+Tesla|Model Y|2023|16000|Электро|0|299|АКПП|Полный|Кроссовер|5100000|#c9ced6|Белый|Новое поступление|10|Tesla Model Y
+Volkswagen|Tiguan|2022|27000|Бензин|2.0|180|робот|Полный|Кроссовер|3350000|#3a4a63|Синий|В наличии|6|Volkswagen Tiguan
+Volkswagen|Golf GTI|2021|29000|Бензин|2.0|245|робот|Передний|Хэтчбек|3050000|#b42b2b|Красный|Новое поступление|7|Volkswagen Golf GTI
+Nissan|X-Trail|2022|24000|Бензин|2.5|171|вариатор|Полный|Кроссовер|3150000|#2f5d50|Зелёный|В наличии|5|Nissan X-Trail
+Range Rover|Sport|2022|19000|Дизель|3.0|350|АКПП|Полный|Внедорожник|12900000|#222831|Чёрный|Спецпредложение|9|Range Rover Sport
+Range Rover|Velar|2021|33000|Бензин|2.0|250|АКПП|Полный|Кроссовер|6900000|#8d949e|Серый|В наличии|7|Range Rover Velar
+Toyota|Land Cruiser 300|2023|6000|Дизель|3.3|309|АКПП|Полный|Внедорожник|14500000|#e8e3d6|Белый|Новое поступление|10|Toyota Land Cruiser (J300)
+Mercedes-Benz|E-Class|2023|5000|Бензин|2.0|258|АКПП|Задний|Седан|6900000|#1d3b8b|Синий|Новое поступление|8|Mercedes-Benz E-Class
+Audi|e-tron GT|2022|13000|Электро|0|476|АКПП|Полный|Седан|11500000|#6b1f2a|Бордовый|В наличии|8|Audi e-tron GT
+Lada|Granta|2021|45000|Бензин|1.6|90|АКПП|Передний|Седан|690000|#c9ced6|Серебристый|В наличии|8|Lada Granta
+Lada|Vesta|2020|62000|Бензин|1.6|106|робот|Передний|Седан|860000|#2f5d50|Зелёный|Спецпредложение|8|Lada Vesta
+Lada|Niva Travel|2021|38000|Бензин|1.7|80|МКПП|Полный|Внедорожник|780000|#d6a21f|Жёлтый|В наличии|7|Lada Niva Travel
+Daewoo|Nexia|2013|120000|Бензин|1.5|80|МКПП|Передний|Седан|520000|#e8e3d6|Белый|Спецпредложение|6|Daewoo Nexia
+Chevrolet|Lacetti|2012|150000|Бензин|1.6|109|МКПП|Передний|Седан|480000|#8d949e|Серый|Спецпредложение|6|Chevrolet Lacetti
+Renault|Logan|2018|95000|Бензин|1.6|102|МКПП|Передний|Седан|640000|#3a4a63|Синий|В наличии|6|Renault Logan
+Nissan|Almera|2017|98000|Бензин|1.6|102|АКПП|Передний|Седан|720000|#222831|Чёрный|В наличии|6|Nissan Almera
+Volkswagen|Polo|2017|91000|Бензин|1.6|110|АКПП|Передний|Седан|980000|#b5bcc7|Серебристый|В наличии|7|Volkswagen Polo
+Hyundai|Solaris|2019|76000|Бензин|1.6|123|АКПП|Передний|Седан|1050000|#b42b2b|Красный|Новое поступление|9|Hyundai Solaris
+Kia|Rio|2018|88000|Бензин|1.6|123|АКПП|Передний|Седан|1090000|#4d8f9c|Бирюзовый|В наличии|8|Kia Rio
+Toyota|Corolla|2016|110000|Бензин|1.6|122|вариатор|Передний|Седан|1190000|#e8e3d6|Белый|В наличии|7|Toyota Corolla
+Renault|Duster|2019|82000|Бензин|2.0|143|АКПП|Полный|Кроссовер|1290000|#6b1f2a|Бордовый|Новое поступление|8|Renault Duster
+Geely|Coolray|2020|58000|Бензин|1.5|150|робот|Передний|Кроссовер|1380000|#1d3b8b|Синий|Новое поступление|8|Geely Coolray`.split("\n").map((r,i)=>{const [b,m,y,km,fuel,vol,hp,g,drive,body,p,c,col,st,pop,w]=r.split("|");return{id:i+1,b,m,y:+y,km:+km,fuel,vol:+vol,hp:+hp,g,drive,body,p:+p,c,col,st,pop:+pop,w}});
+const byId=id=>cars.find(c=>c.id==id);
+const svg=c=>`<svg class="cs" viewBox="0 0 320 130"><ellipse cx="160" cy="118" rx="140" ry="7" fill="rgba(0,0,0,.35)"/><path d="M18 92L28 70Q34 62 46 60L92 56Q112 30 146 28H196Q226 30 244 56L286 62Q304 66 304 84V98H18Z" fill="${c}"/><path d="M104 56Q120 38 148 36H168V56ZM178 36H196Q216 38 232 56H178Z" fill="rgba(255,255,255,.7)"/><circle cx="80" cy="98" r="19" fill="#0b0c10"/><circle cx="246" cy="98" r="19" fill="#0b0c10"/><circle cx="80" cy="98" r="8" fill="#c9ced6"/><circle cx="246" cy="98" r="8" fill="#c9ced6"/></svg>`;
+
+// ---------- Фото из Wikipedia / Wikimedia Commons (открытые источники) ----------
+const PH=ls.g("nx_ph",{});
+cars.forEach(c=>{const v=PH[c.w];if(v){c.im0=v[0];c.img=v[1]}});
+const imgTag=c=>`<img src="${c.img}" data-fb="${c.im0}" alt="${esc(c.b+" "+c.m)}" loading="lazy">`;
+const ph=c=>c.img?imgTag(c):svg(c.c);
+function setPh(){$$(".ph").forEach(el=>{const c=byId(+(el.dataset.pid||el.closest("[data-id]")?.dataset.id));if(c&&c.img&&!el.querySelector("img")){el.querySelector(".cs")?.remove();el.insertAdjacentHTML("afterbegin",imgTag(c))}});gxSync()}
+document.addEventListener("error",e=>{const im=e.target;if(im.tagName!=="IMG"||!im.closest(".ph"))return;
+ if(im.dataset.fb&&im.getAttribute("src")!==im.dataset.fb){im.src=im.dataset.fb;return}
+ const el=im.closest(".ph"),c=byId(+(el.dataset.pid||el.closest("[data-id]").dataset.id));c.img="";im.outerHTML=svg(c.c)},true);
+async function photo(c){if(PH[c.w])return PH[c.w];try{const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(c.w.replace(/ /g,"_")));if(!r.ok)return null;const j=await r.json(),u=j.thumbnail&&j.thumbnail.source;if(!u)return null;PH[c.w]=[u,u.replace(/\/\d+px-/,"/960px-")];ls.s("nx_ph",PH);return PH[c.w]}catch(e){return null}}
+function heroImg(c){const T=(u,f)=>{const im=new Image();im.onload=()=>{$("#hr").style.backgroundImage=`url("${u}")`;$("#hr").classList.add("pic")};im.onerror=()=>f&&T(f);im.src=u};T(c.img,c.im0)}
+function loadPhotos(){cars.forEach(c=>photo(c).then(v=>{if(!v)return;c.im0=v[0];c.img=v[1];setPh();if(c.w.includes("J300"))heroImg(c)}));}
+
+// ---------- Состояние ----------
+let favs=ls.g("nx_fav",[]),cart=ls.g("nx_cart",[]),mode=null,lim=9,brand="",users=ls.g("nx_users",[]),sess=ls.g("nx_sess",null),ptab="login",pendAv="";
+const me=()=>users.find(u=>u.id==sess);
+const saveU=()=>ls.s("nx_users",users);
+
+// ---------- Аккаунты (демо, без сервера) ----------
+async function hash(p,salt){const d=salt+":"+p;try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(d));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=5381;for(const ch of d)h=((h<<5)+h+ch.charCodeAt(0))>>>0;return"f"+h}}
+const newId=()=>{let id;do{id=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000)}while(users.some(u=>u.id==id));return id};
+function readAv(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=256;c.width=c.height=s;const k=Math.max(s/im.width,s/im.height),w=im.width*k,h=im.height*k;c.getContext("2d").drawImage(im,(s-w)/2,(s-h)/2,w,h);res(c.toDataURL("image/jpeg",.85))};im.onerror=()=>res("");im.src=r.result};r.onerror=()=>res("");r.readAsDataURL(file)})}
+const avatar=(u,cls="")=>u.av?`<img class="av ${cls}" src="${u.av}" alt="">`:`<span class="av ${cls}">${esc(u.nick[0]||"?").toUpperCase()}</span>`;
+const isOn=u=>u.id==sess||Date.now()-u.seen<90000;
+const fdate=ts=>new Date(ts).toLocaleDateString(LOC[S.lang],{day:"numeric",month:"long",year:"numeric"});
+function hdrUser(){const u=me();$("#hu").innerHTML=u?avatar(u,"s"):I("user")}
+
+// ---------- Отрисовка ----------
+const card=c=>`<article class="card gl" data-id="${c.id}"><div class="cph ph" data-a="open">${ph(c)}<span class="chip${c.st=="Резерв"?" rs":""}">${t(c.st)}</span><button class="b ic sm fv${favs.includes(c.id)?" on":""}" data-a="fav" aria-label="${t("favs")}">${I("heart")}</button><button class="b ic sm cm${cmp.includes(c.id)?" on":""}" data-a="cmp" aria-label="${t("cmp_add")}">${I("cmp")}</button></div><div class="cb"><h3>${c.b} ${c.m}</h3><p class="sp">${c.y} · ${dist(c.km)} · ${c.vol?c.vol+" "+t("u_l")+", ":""}${c.hp} ${t("u_hp")}<br>${t(c.g)} · ${t(c.drive)} · ${t(c.body)}</p><div class="cf"><b class="pr">${money(c.p)}</b><span class="ca"><button class="b ic" data-a="wa" aria-label="WhatsApp">${I("chat")}</button><button class="b ic" data-a="buy" aria-label="${t("addc")}">${I("cart")}</button></span></div><button class="b w100" data-a="open">${t("det")}</button></div></article>`;
+const F={q:"",sort:"0",max:16e6,y1:0,y2:0};
+function paint(np){let l=cars.filter(c=>(!brand||c.b==brand)&&(c.b+" "+c.m).toLowerCase().includes(F.q.trim().toLowerCase())&&c.p<=F.max&&(!F.y1||c.y>=F.y1)&&(!F.y2||c.y<=F.y2));
+ const s=F.sort;if(s==1)l.sort((a,b)=>a.p-b.p);if(s==2)l.sort((a,b)=>b.p-a.p);if(s==3)l.sort((a,b)=>b.y-a.y);if(s==4)l.sort((a,b)=>b.pop-a.pop);
+ $("#cnt").textContent=t("found")+": "+l.length;
+ $("#grid").innerHTML=l.length?l.slice(0,lim).map(card).join(""):`<p class="none">${t("none")}</p>`;
+ if(np)$$("#grid .card").forEach(e=>e.style.animation="none");
+ $("#more").hidden=l.length<=lim;$("#more").textContent=t("more");$("#mxv").textContent=money(F.max);$("#rst").classList.toggle("show",!!(F.q||brand||F.y1||F.y2||F.max<16e6))}
+function chips(){$("#chips").innerHTML=["",...new Set(cars.map(c=>c.b))].map(b=>`<button class="b${b==brand?" on":""}" data-a="brand" data-v="${b}">${b||t("all")}</button>`).join("")}
+function counts(){$$(".fc").forEach(e=>e.textContent=favs.length);$$(".cc").forEach(e=>e.textContent=cart.reduce((s,i)=>s+i.q,0))}
+function sync(){ls.s("nx_fav",favs);ls.s("nx_cart",cart);counts();paint(true);refresh()}
+
+// ---------- Окна ----------
+const md=$("#md"),mb=$("#mb");
+const show=(h,cls)=>{mb.className="mb"+(cls?" "+cls:"");mb.innerHTML=`<button class="b ic sm x" data-a="cl" aria-label="Close">${I("x")}</button>`+h;md.classList.add("show");document.body.style.overflow="hidden";setPh()};
+const closeM=()=>{md.classList.remove("show");mode=null;document.body.style.overflow="";GX.id=0;$("#gxlb").hidden=true};
+const refresh=()=>{if(mode)({car:()=>carModal(mode[1],true),favs:openFavs,cart:openCart,set:openSet,prof:openProf,donate:openDonate,bsite:openBuySite,cmp:openCmp})[mode[0]]?.()};
+const desc=c=>t("desc").replace("{n}",c.b+" "+c.m).replace("{y}",c.y).replace("{e}",(c.vol?c.vol+" "+t("u_l")+", ":"")+c.hp+" "+t("u_hp")).replace("{g}",t(c.g)).replace("{d}",t(c.drive));
+function viewed(id){const u=me();if(u&&!u.views.includes(id)){u.views.push(id);saveU()}}
+function carModal(id,keep){const c=byId(id);if(!c)return;mode=["car",id];if(GX.id!=id){GX.id=id;GX.i=0}if(!keep){viewed(id);recAdd(id)}
+ const sp=[["k_year",c.y],["k_km",dist(c.km)],["k_fuel",t(c.fuel)],["k_eng",(c.vol?c.vol+" "+t("u_l")+" / ":"")+c.hp+" "+t("u_hp")],["k_gear",t(c.g)],["k_drive",t(c.drive)],["k_body",t(c.body)],["k_col",c.col],["k_st",t(c.st)]];
+ show(`<div class="dt">${gxHTML(c)}<div><h2>${c.b} ${c.m}</h2><b class="pr xl">${money(c.p)}</b><div class="spg">${sp.map(([k,v])=>`<div><span>${t(k)}</span><b>${v}</b></div>`).join("")}</div><p class="mu">${desc(c)}</p><div class="ab"><button class="b p" data-a="wa">${I("chat")} ${t("wa")}</button><button class="b${favs.includes(id)?" on":""}" data-a="fav">${I("heart")} ${t("favs")}</button><button class="b" data-a="buy">${I("cart")} ${t("addc")}</button><button class="b${cmp.includes(id)?" on":""}" data-a="cmp">${I("cmp")} ${t("cmp_add")}</button><button class="b ic" data-a="share" aria-label="${t("share")}">${I("share")}</button><button class="b ic" data-a="copy" aria-label="${t("copyl")}">${I("link")}</button></div></div></div>`);gxLoad(c)}
+function openFavs(){mode=["favs"];const l=favs.map(byId).filter(Boolean);show(`<h2>${t("favs")}</h2>`+(l.length?`<div class="grid">${l.map(card).join("")}</div>`:`<p class="none">${t("empty_f")}</p>`))}
+function openCart(){mode=["cart"];const l=cart.map(i=>({c:byId(i.id),q:i.q}));
+ show(`<h2>${t("cart_t")}</h2>`+(l.length?l.map(({c,q})=>`<div class="it" data-id="${c.id}"><div class="th ph">${ph(c)}</div><div><b>${c.b} ${c.m}</b><div class="qt"><button class="b" data-a="mn">−</button><span>${q}</span><button class="b" data-a="pl">+</button><button class="b ic sm" data-a="rm" aria-label="Remove">${I("trash")}</button></div></div><b>${money(c.p*q)}</b></div>`).join("")+`<div class="tt"><span>${t("total")}</span><span>${money(l.reduce((s,x)=>s+x.c.p*x.q,0))}</span></div><div class="ab"><button class="b p" data-a="chk">${I("chat")} ${t("checkout")}</button><button class="b" data-a="clc">${t("clear_c")}</button></div>`:`<p class="none">${t("empty_c")}</p>`))}
+const pcard=u=>`<div class="fr">${avatar(u)}<div><b>${esc(u.nick)}</b> <small>@${esc(u.user)} · ID ${u.id}</small><small><span class="dot${isOn(u)?" on":""}"></span>${t(isOn(u)?"online":"offline")} · ${t("joined")}: ${fdate(u.created)} · ${t("viewed")}: ${u.views.length}</small></div></div>`;
+function openProf(){mode=["prof"];users=ls.g("nx_users",[]);const u=me();
+ if(!u){show(`<h2>${t("prof")}</h2><div class="tabs"><button class="b${ptab=="login"?" on":""}" data-a="ptab" data-v="login">${t("login")}</button><button class="b${ptab=="reg"?" on":""}" data-a="ptab" data-v="reg">${t("reg")}</button></div>`+(ptab=="login"?`<form class="fm" id="fl"><label>${t("user")}<input class="in" name="u" required autocomplete="username"></label><label>${t("pass")}<input class="in" name="p" type="password" required autocomplete="current-password"></label><div class="err" id="perr"></div><button class="b p" type="submit">${t("do_login")}</button></form>`:`<form class="fm" id="fr"><div class="avu"><span id="avp">${pendAv?`<img class="av l" src="${pendAv}" alt="">`:`<span class="av l">${I("cam")}</span>`}</span><label class="b" style="cursor:pointer">${I("cam")} ${t("choose")}<input class="fi" id="avf" type="file" accept="image/*"></label></div><label>${t("nick")}<input class="in" name="n" required maxlength="24"></label><label>${t("user")}<input class="in" name="u" required maxlength="20" autocomplete="username"></label><label>${t("pass")}<input class="in" name="p" type="password" required autocomplete="new-password"></label><label>${t("pass2")}<input class="in" name="p2" type="password" required autocomplete="new-password"></label><div class="err" id="perr"></div><button class="b p" type="submit">${t("do_reg")}</button></form>`)+`<p class="hint">${t("demo")}</p>`);return}
+ show(`<h2>${t("prof")}</h2><div class="pf"><label style="cursor:pointer;position:relative" title="${t("choose")}">${avatar(u,"l")}<input class="fi" id="avf2" type="file" accept="image/*"></label><div><h3>${esc(u.nick)}</h3><span class="mu">@${esc(u.user)}</span><br><span class="idc">ID ${u.id}</span></div></div>
+ <div class="ps"><div><span>${t("p_status")}</span><b><span class="dot on"></span>${t("online")}</b></div><div><span>${t("joined")}</span><b>${fdate(u.created)}</b></div><div><span>${t("viewed")}</span><b>${u.views.length}</b></div></div>
+ <form class="srow" id="fn" style="margin-bottom:18px"><input class="in" name="n" value="${esc(u.nick)}" maxlength="24" required><button class="b" type="submit">${t("save")}</button></form>
+ <h4 class="mu" style="font-size:.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">${t("find_t")}</h4><form class="srow" id="fs"><input class="in" id="psq" placeholder="${t("find_ph")}" required><button class="b ic" type="submit" aria-label="${t("find_t")}">${I("search")}</button></form><div id="sres"></div>
+ <div class="ab"><button class="b" data-a="out">${I("out")} ${t("logout")}</button></div><p class="hint">${t("demo")}</p>`)}
+
+// ---------- События ----------
+const link=id=>location.href.split("#")[0]+"#car-"+id;
+const copyL=id=>(navigator.clipboard?navigator.clipboard.writeText(link(id)):Promise.reject()).then(()=>say(t("copied")),()=>prompt("URL",link(id)));
+const waCar=c=>t("waCar").replace("{n}",c.b+" "+c.m).replace("{y}",c.y).replace("{p}",money(c.p));
+const ACT={
+ open:id=>carModal(id),
+ fav:id=>{favs=favs.includes(id)?favs.filter(x=>x!=id):[...favs,id];sync()},
+ buy:id=>{const f=cart.find(i=>i.id==id);f?f.q++:cart.push({id,q:1});sync();say(t("added"))},
+ wa:id=>wa(waCar(byId(id))),copy:id=>copyL(id),
+ zoom:(id,a)=>a.classList.toggle("zoom"),
+ pl:id=>{cart.find(i=>i.id==id).q++;sync()},mn:id=>{const i=cart.find(x=>x.id==id);if(--i.q<=0)cart=cart.filter(x=>x!=i);sync()},rm:id=>{cart=cart.filter(x=>x.id!=id);sync()},clc:()=>{cart=[];sync()},
+ chk:()=>{const l=cart.map(i=>({c:byId(i.id),q:i.q})),tot=l.reduce((a,x)=>a+x.c.p*x.q,0),o=mkOrder(tot);wa(t("waCart")+"\n"+l.map(x=>`• ${x.c.b} ${x.c.m} ${x.c.y} × ${x.q} — ${money(x.c.p*x.q)}`).join("\n")+"\n"+t("total")+": "+money(tot)+"\n"+t("tk_t")+": "+o.id);bTrk();say(t("ord_new")+" "+o.id+". "+t("ord_hint"))},
+ favs:openFavs,cart:openCart,set:openSet,prof:openProf,cl:closeM,
+ menu:()=>$("#pill").classList.toggle("open"),
+ brand:(id,a)=>{brand=a.dataset.v;lim=9;chips();paint()},more:()=>{lim+=9;paint(true)},
+ sset:(id,a)=>{const v=a.dataset.v;S[a.dataset.k]=v=="true"?true:v=="false"?false:v;ls.s("nx_set",S);applyAll()},
+ ptab:(id,a)=>{ptab=a.dataset.v;openProf()},
+ out:()=>{sess=null;ls.s("nx_sess",null);hdrUser();openProf()}
+};
+document.addEventListener("click",e=>{const a=e.target.closest("[data-a]");if(!a)return;if(a.getAttribute("href")=="#")e.preventDefault();
+ const c=a.closest("[data-id]");ACT[a.dataset.a]?.(c?+c.dataset.id:mode&&mode[1],a)});
+$("#pill").addEventListener("click",()=>$("#pill").classList.remove("open"));
+md.addEventListener("click",e=>{if(e.target==md)closeM()});
+document.addEventListener("keydown",e=>{if(e.key=="Escape")closeM()});
+$("#q").oninput=e=>{F.q=e.target.value;lim=9;paint()};
+$("#sort").onchange=e=>{F.sort=e.target.value;paint()};
+$("#mx").oninput=e=>{F.max=+e.target.value;lim=9;paint()};
+$("#cf").onsubmit=e=>{e.preventDefault();const i=e.target.elements;wa(t("waForm").replace("{a}",i[0].value).replace("{b}",i[1].value).replace("{c}",i[2].value));e.target.reset()};
+
+document.addEventListener("submit",async e=>{const f=e.target,v=n=>f.elements[n]?.value.trim(),er=m=>{$("#perr").textContent=m};
+ if(f.id=="fr"){e.preventDefault();users=ls.g("nx_users",[]);const n=v("n"),un=v("u").toLowerCase(),p=f.elements.p.value;
+  if(n.length<2||n.length>24)return er(t("e_nick"));if(!/^[a-z0-9_]{3,20}$/.test(un))return er(t("e_user"));
+  if(users.some(u=>u.user==un))return er(t("e_taken"));if(p.length<6)return er(t("e_pw"));if(p!==f.elements.p2.value)return er(t("e_pw2"));
+  const salt=newId()+Date.now(),u={id:newId(),nick:n,user:un,salt,pw:await hash(p,salt),av:pendAv,created:Date.now(),seen:Date.now(),views:[]};
+  users.push(u);saveU();sess=u.id;ls.s("nx_sess",sess);pendAv="";hdrUser();openProf();say(t("welcome")+" "+u.id)}
+ if(f.id=="fl"){e.preventDefault();users=ls.g("nx_users",[]);const u=users.find(x=>x.user==v("u").toLowerCase());
+  if(!u||u.pw!==await hash(f.elements.p.value,u.salt))return er(t("e_bad"));u.seen=Date.now();saveU();sess=u.id;ls.s("nx_sess",sess);hdrUser();openProf();say(t("welcome")+" "+u.id)}
+ if(f.id=="fn"){e.preventDefault();const u=me(),n=v("n");if(n.length<2)return;users=ls.g("nx_users",[]);const w=users.find(x=>x.id==sess);w.nick=n;saveU();openProf()}
+ if(f.id=="fs"){e.preventDefault();users=ls.g("nx_users",[]);const q=$("#psq").value.trim().replace(/^[@#]/,"").toLowerCase();
+  const r=users.filter(u=>u.id==q||u.user==q||(q.length>1&&u.user.includes(q))).slice(0,5);$("#sres").innerHTML=r.length?r.map(pcard).join(""):`<p class="hint">${t("nf")}</p>`}});
+document.addEventListener("change",async e=>{const el=e.target;if(!el.files||!el.files[0])return;
+ if(el.id=="avf"){pendAv=await readAv(el.files[0]);$("#avp").innerHTML=pendAv?`<img class="av l" src="${pendAv}" alt="">`:""}
+ if(el.id=="avf2"){const av=await readAv(el.files[0]);if(!av)return;users=ls.g("nx_users",[]);users.find(x=>x.id==sess).av=av;saveU();hdrUser();openProf()}});
+
+// ---------- Расширенные настройки: цвет, размер текста, единицы, курсы ----------
+const ACC={blue:["#8fd3ff","#b7a6ff","#8ff0d2"],green:["#8ff0d2","#8fd3ff","#c8f58f"],sunset:["#ffb48f","#ff8fb7","#ffd98f"],rose:["#ff9fb6","#d79fff","#ffc79f"],gold:["#ffd98f","#ffb48f","#e9ff9f"]};
+const DEF={...RATES};
+const fxVals=()=>({...(S.fx||{rub:+(1/DEF.USD).toFixed(2),kzt:+(DEF.KZT/DEF.USD).toFixed(2)})});
+function applyFx(){const f=S.fx;if(f&&f.rub>0&&f.kzt>0){RATES.RUB=1;RATES.USD=1/f.rub;RATES.KZT=f.kzt/f.rub}else Object.assign(RATES,DEF)}
+function applyLook(){applyFx();const a=ACC[S.acc]||ACC.blue,r=document.documentElement.style,hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(",");
+ [1,2,3].forEach(n=>{r.setProperty("--c"+n,a[n-1]);r.setProperty("--c"+n+"r",hex(a[n-1]))});
+ r.fontSize=({s:"14px",m:"",l:"18px"})[S.fs]||"";document.body.classList.toggle("noblur",S.blur===false)}
+const dist=km=>(S.unit=="mi"?Math.round(km*.621371):km).toLocaleString(LOC[S.lang])+" "+t(S.unit=="mi"?"u_mi":"u_km");
+const fill=(s,o)=>s.replace(/\{(\w)\}/g,(m,k)=>o[k]!==undefined?o[k]:m);
+function openSet(){mode=["set"];
+ const ch=(k,v,l)=>`<button class="b${S[k]==v?" on":""}" data-a="sset" data-k="${k}" data-v="${v}">${l}</button>`;
+ const sw=k=>`<button class="sv-sw${S.acc==k?" on":""}" data-a="sset" data-k="acc" data-v="${k}" style="background:linear-gradient(135deg,${ACC[k][0]},${ACC[k][1]})" aria-label="${t("ac_"+k)}" title="${t("ac_"+k)}"></button>`;
+ const fx=fxVals();
+ show(`<h2>${t("set_t")}</h2><div class="sg">
+ <div><h4>${t("lang")}</h4><div class="chs">${ch("lang","ru","Русский")}${ch("lang","kk","Қазақша")}${ch("lang","en","English")}</div></div>
+ <div><h4>${t("cur")}</h4><div class="chs">${ch("cur","KZT","Тенге ₸")}${ch("cur","RUB","Рубли ₽")}${ch("cur","USD","Dollar $")}</div></div>
+ <div><h4>${t("set_acc")}</h4><div class="chs">${Object.keys(ACC).map(sw).join("")}</div></div>
+ <div><h4>${t("set_fs")}</h4><div class="chs">${ch("fs","s",t("fs_s"))}${ch("fs","m",t("fs_m"))}${ch("fs","l",t("fs_l"))}</div></div>
+ <div><h4>${t("anim")}</h4><div class="chs">${ch("anim",true,t("on"))}${ch("anim",false,t("off"))}</div></div>
+ <div><h4>${t("set_blur")}</h4><div class="chs">${ch("blur",true,t("on"))}${ch("blur",false,t("off"))}</div><p class="hint" style="margin-top:8px">${t("set_blur_h")}</p></div>
+ <div><h4>${t("set_unit")}</h4><div class="chs">${ch("unit","km",t("unit_km"))}${ch("unit","mi",t("unit_mi"))}</div></div>
+ <div><h4>${t("set_fx")}</h4><div class="sv-fx"><label>1 $ = <input class="in" type="number" step="0.01" min="0.01" data-fx="rub" value="${fx.rub}"> ₽</label><label>1 $ = <input class="in" type="number" step="0.01" min="0.01" data-fx="kzt" value="${fx.kzt}"> ₸</label></div><p class="hint">${t("fx_h")}</p></div>
+ <div><h4>${t("set_data")}</h4><div class="chs"><button class="b" data-a="sreset">${t("reset_s")}</button><button class="b" data-a="sclear">${I("trash")} ${t("clear_d")}</button></div></div>
+ </div>`,"sm")}
+document.addEventListener("change",e=>{const el=e.target;if(!el.dataset||!el.dataset.fx)return;const f=fxVals(),v=+el.value;if(v>0)f[el.dataset.fx]=v;S.fx=f;ls.s("nx_set",S);applyAll()});
+
+// ---------- Галерея автомобиля ----------
+// Свои фото: GALLERY={1:["https://site.kz/camry-1.jpg","https://site.kz/camry-2.jpg"]}  (ключ = номер авто в каталоге)
+const GALLERY={};
+const GP=ls.g("nx_gp",{}),GX={id:0,i:0};
+const svgFront=c=>`<svg class="cs" viewBox="0 0 320 170"><ellipse cx="160" cy="158" rx="105" ry="7" fill="rgba(0,0,0,.35)"/><path d="M70 120L78 78Q84 56 108 50H212Q236 56 242 78L250 120Z" fill="${c}"/><path d="M92 76Q98 62 114 58H206Q222 62 228 76Z" fill="rgba(255,255,255,.7)"/><rect x="62" y="116" width="196" height="26" rx="8" fill="${c}"/><rect x="62" y="116" width="196" height="26" rx="8" fill="rgba(0,0,0,.22)"/><circle cx="92" cy="128" r="9" fill="#ffe9a6"/><circle cx="228" cy="128" r="9" fill="#ffe9a6"/><rect x="132" y="126" width="56" height="12" rx="3" fill="#0b0c10"/><rect x="66" y="140" width="28" height="22" rx="6" fill="#0b0c10"/><rect x="226" y="140" width="28" height="22" rx="6" fill="#0b0c10"/></svg>`;
+const unw=u=>u.startsWith("//")?"https:"+u:u;
+const fk=u=>{const p=u.split("?")[0].split("/"),l=p[p.length-1];return /^\d+px-/.test(l)?p[p.length-2]:l};
+function slides(c){let r=[];const own=GALLERY[c.id];
+ if(own&&own.length)r=own.map(u=>({big:u,small:u}));
+ else{if(c.img)r.push({big:c.img,small:c.im0||c.img});(GP[c.w]||[]).forEach(([s,b])=>{if(!r.some(x=>fk(x.small)==fk(s)))r.push({big:b,small:s})})}
+ return r.length?r:[{svg:svg(c.c)},{svg:svgFront(c.c)}]}
+const gxSig=c=>slides(c).map(s=>s.big||"svg").join("|");
+function gxHTML(c){const L=slides(c);GX.i=Math.min(GX.i,L.length-1);
+ const sl=s=>s.svg?`<div class="gx-sl">${s.svg}</div>`:`<div class="gx-sl"><img src="${esc(s.big)}" data-fb="${esc(s.small)}" alt="${esc(c.b+" "+c.m)}" draggable="false"></div>`;
+ const th=(s,i)=>`<button type="button" class="gx-t${i==GX.i?" on":""}" data-a="gxgo" data-i="${i}" aria-label="${i+1}">${s.svg?s.svg:`<img src="${esc(s.small)}" alt="" loading="lazy" draggable="false">`}</button>`;
+ const many=L.length>1;
+ return `<div class="gx" data-sig="${esc(gxSig(c))}"><div class="gx-main" data-a="gxbig"><div class="gx-track" style="transform:translateX(-${GX.i*100}%)">${L.map(sl).join("")}</div>${many?`<button type="button" class="b ic sm gx-nav gx-p" data-a="gxp" aria-label="${t("gx_p")}">${I("arr")}</button><button type="button" class="b ic sm gx-nav gx-n" data-a="gxn" aria-label="${t("gx_n")}">${I("arr")}</button><span class="gx-cnt">${GX.i+1} / ${L.length}</span>`:""}</div>${many?`<div class="gx-th">${L.map(th).join("")}</div>`:""}</div>`}
+function gxUpdate(c){const g=$(".gx");if(!g||g.dataset.sig==gxSig(c))return;g.outerHTML=gxHTML(c);if(!$("#gxlb").hidden)lbPaint()}
+function gxSync(){if(mode&&mode[0]=="car"){const c=byId(mode[1]);if(c)gxUpdate(c)}}
+async function gxLoad(c){if(GALLERY[c.id]||GP[c.w])return;
+ try{const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/media-list/"+encodeURIComponent(c.w.replace(/ /g,"_")));if(!r.ok)return;
+  const j=await r.json(),bad=/logo|icon|emblem|badge|symbol|flag|map|diagram|chart|signature|wikidata|commons-/i;
+  GP[c.w]=(j.items||[]).filter(x=>x.type=="image"&&x.showInGallery!==false&&/\.(jpe?g|png|webp)$/i.test(x.title)&&!bad.test(x.title)&&x.srcset&&x.srcset.length).slice(0,8).map(x=>{const s=unw(x.srcset[0].src);return[s,s.replace(/\/\d+px-([^\/]*)$/,"/960px-$1")]});
+  ls.s("nx_gp",GP);if(mode&&mode[0]=="car"&&mode[1]==c.id)gxUpdate(c)}catch(e){}}
+function gxGo(i){const c=byId(GX.id);if(!c)return;const n=slides(c).length;GX.i=(i+n)%n;const g=$(".gx");
+ if(g){g.querySelector(".gx-track").style.transform=`translateX(-${GX.i*100}%)`;g.querySelectorAll(".gx-t").forEach((b,k)=>b.classList.toggle("on",k==GX.i));
+  const cn=g.querySelector(".gx-cnt");if(cn)cn.textContent=`${GX.i+1} / ${n}`;
+  const th=g.querySelector(".gx-th"),on=g.querySelector(".gx-t.on");if(th&&on)th.scrollTo({left:on.offsetLeft-th.clientWidth/2+on.clientWidth/2,behavior:"smooth"})}
+ if(!$("#gxlb").hidden)lbPaint()}
+function lbPaint(){const c=byId(GX.id);if(!c)return;const L=slides(c),s=L[GX.i],b=$("#gxlbi");
+ b.innerHTML=s.svg?`<div class="gx-lsv">${s.svg}</div>`:`<img src="${esc(s.big)}" data-fb="${esc(s.small)}" alt="" draggable="false">`;
+ b.classList.remove("zoom");b.scrollTo(0,0);$("#gxlbc").textContent=`${GX.i+1} / ${L.length}`;$$("#gxlb .gx-nav").forEach(x=>x.hidden=L.length<2)}
+document.addEventListener("error",e=>{const im=e.target;if(!im||im.tagName!=="IMG"||!im.closest(".gx,.gx-lb"))return;
+ const fb=im.dataset.fb;if(fb&&im.getAttribute("src")!==fb){im.src=fb;return}const c=byId(GX.id);if(c)im.outerHTML=svg(c.c)},true);
+let tx=-1,ty=0,tsw=0;const gxEl=e=>e.target.closest&&e.target.closest(".gx-main,#gxlb");
+document.addEventListener("touchstart",e=>{if(!gxEl(e))return;tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+document.addEventListener("touchend",e=>{if(!gxEl(e)||tx<0)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;tx=-1;
+ if(!$("#gxlb").hidden&&$("#gxlbi").classList.contains("zoom"))return;
+ if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3){tsw=Date.now();gxGo(GX.i+(dx<0?1:-1))}},{passive:true});
+addEventListener("keydown",e=>{const lb=!$("#gxlb").hidden;
+ if(lb){if(e.key=="Escape"){e.stopImmediatePropagation();$("#gxlb").hidden=true}else if(e.key=="ArrowRight")gxGo(GX.i+1);else if(e.key=="ArrowLeft")gxGo(GX.i-1);return}
+ if(mode&&mode[0]=="car"&&$(".gx")&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){if(e.key=="ArrowRight")gxGo(GX.i+1);if(e.key=="ArrowLeft")gxGo(GX.i-1)}},true);
+
+// ---------- Сервисы: калькулятор, кредит, трекер заказа ----------
+const FROM={kr:[180000,"25–35"],jp:[220000,"30–40"],de:[260000,"20–30"],ae:[200000,"15–25"],cn:[150000,"10–20"],us:[350000,"45–60"],ru:[60000,"5–10"]};
+const DUTY=[.12,.2,.3,.05];
+const ageOf=c=>c.fuel=="Электро"?3:(2026-c.y<=3?0:2026-c.y<=5?1:2);
+const Q={calc:{car:1,rub:byId(1).p,from:"kr",age:ageOf(byId(1)),chk:0,ins:0},cr:{car:1,rub:byId(1).p,type:"inst",down:30,term:12,rate:14}};
+const toCur=r=>Math.round(r*RATES[S.cur]),fromCur=v=>v/RATES[S.cur],sym=()=>({KZT:"₸",RUB:"₽",USD:"$"})[S.cur];
+const carOpts=sel=>`<option value="0"${sel==0?" selected":""}>${t("sv_own")}</option>`+cars.map(c=>`<option value="${c.id}"${c.id==sel?" selected":""}>${c.b} ${c.m}, ${c.y}</option>`).join("");
+const carName=q=>{const c=byId(q.car);return c?c.b+" "+c.m+" "+c.y:t("sv_own")+" "+money(q.rub)};
+const priceIn=(k,q)=>`<label class="sv-f"><span>${t("cl_price")}, ${sym()}</span><input class="in" type="number" inputmode="numeric" min="0" step="${S.cur=="USD"?10:1000}" data-sv="${k}:price" value="${toCur(q.rub)}"></label>`;
+let svT="calc";
+function svTab(v){svT=v;$$(".sv-tabs .b").forEach(b=>b.classList.toggle("on",b.dataset.v==v));$$(".sv-pane").forEach(p=>p.classList.toggle("on",p.id=="sv-"+v))}
+// Калькулятор
+function calcRes(){const q=Q.calc,p=q.rub,del=FROM[q.from][0],duty=p*DUTY[q.age],fee=Math.max(30000,p*.03),chk=q.chk?20000:0,ins=q.ins?p*.01:0;return{p,del,duty,fee,chk,ins,total:p+del+duty+fee+chk+ins}}
+function calcPaint(){const r=calcRes(),q=Q.calc,row=(k,v)=>`<div class="sv-rw"><span>${t(k)}</span><b>${money(v)}</b></div>`;
+ $("#calc-res").innerHTML=`<span class="sv-lb">${t("cl_res")}</span><b class="sv-big">${money(r.total)}</b><div class="sv-rows">${row("rw_car",r.p)}${row("rw_del",r.del)}${row("rw_duty",r.duty)}${row("rw_fee",r.fee)}${q.chk?row("rw_chk",r.chk):""}${q.ins?row("rw_ins",r.ins):""}<div class="sv-rw"><span>${t("cl_eta")}</span><b>${FROM[q.from][1]} ${t("days")}</b></div></div>`;setBig($("#calc-res .sv-big"),r.total,"calc")}
+function bCalc(){const q=Q.calc;
+ $("#sv-calc").innerHTML=`<div class="sv-grid"><div class="sv-fg">
+ <label class="sv-f"><span>${t("cl_car")}</span><select class="in" data-sv="calc:car">${carOpts(q.car)}</select></label>
+ ${priceIn("calc",q)}
+ <label class="sv-f"><span>${t("cl_from")}</span><select class="in" data-sv="calc:from">${Object.keys(FROM).map(k=>`<option value="${k}"${k==q.from?" selected":""}>${t("fr_"+k)}</option>`).join("")}</select></label>
+ <div class="sv-f"><span>${t("cl_age")}</span><div class="chs">${[0,1,2,3].map(i=>`<button type="button" class="b${q.age==i?" on":""}" data-a="svage" data-v="${i}">${t("ag"+i)}</button>`).join("")}</div></div>
+ <div class="sv-f"><span>${t("cl_ext")}</span><div class="chs"><button type="button" class="b${q.chk?" on":""}" data-a="svx" data-v="chk">${t("ex_chk")}</button><button type="button" class="b${q.ins?" on":""}" data-a="svx" data-v="ins">${t("ex_ins")}</button></div></div>
+ </div><div class="sv-res"><div id="calc-res"></div><div class="sv-act"><button type="button" class="b p" data-a="svtocr">${I("card")} ${t("cl_tocr")}</button><button type="button" class="b" data-a="svcwa">${I("chat")} ${t("cl_wa")}</button></div><p class="hint" style="margin:0">${t("cl_note")}</p></div></div>`;calcPaint()}
+// Кредит и рассрочка
+const terms=type=>type=="inst"?[3,6,9,12]:[12,24,36,48,60];
+function crCalc(){const q=Q.cr,inst=q.type=="inst",min=inst?30:10,down=Math.min(90,Math.max(q.down,min)),dp=q.rub*down/100,body=q.rub-dp,n=q.term,r=inst?0:q.rate/1200,m=r?body*r/(1-Math.pow(1+r,-n)):body/n,tot=m*n;return{down,dp,body,n,m,tot,over:tot-body}}
+function crPaint(){const q=Q.cr,r=crCalc(),row=(k,v)=>`<div class="sv-rw"><span>${t(k)}</span><b>${v}</b></div>`,T0=r.dp+r.tot||1,w=x=>(x/T0*100).toFixed(1);
+ $("#crdv").textContent=r.down+"% · "+money(r.dp);
+ $("#cr-res").innerHTML=`<span class="sv-lb">${t("cr_month")}</span><b class="sv-big">${money(r.m)}</b><span class="mu">× ${r.n} ${t("mon")}</span>
+ <div class="sv-bar"><em style="width:${w(r.dp)}%;background:var(--c3)"></em><em style="width:${w(r.body)}%;background:var(--c1)"></em><em style="width:${w(r.over)}%;background:var(--c2)"></em></div>
+ <div class="sv-lg"><span><em style="background:var(--c3)"></em>${t("cr_dp")}</span><span><em style="background:var(--c1)"></em>${t("cr_body")}</span>${r.over>1?`<span><em style="background:var(--c2)"></em>${t("cr_over")}</span>`:""}</div>
+ <div class="sv-rows">${row("cr_sum",money(q.rub))}${row("cr_dp",money(r.dp))}${row("cr_body",money(r.body))}${row("cr_over",money(r.over))}${row("cr_all",money(r.dp+r.tot))}</div>`;setBig($("#cr-res .sv-big"),r.m,"cr")}
+function bCr(){const q=Q.cr,inst=q.type=="inst",min=inst?30:10;if(!terms(q.type).includes(q.term))q.term=inst?12:24;q.down=Math.max(q.down,min);
+ $("#sv-credit").innerHTML=`<div class="sv-grid"><div class="sv-fg">
+ <div class="sv-f"><span>${t("cr_type")}</span><div class="chs"><button type="button" class="b${inst?" on":""}" data-a="svtype" data-v="inst">${t("cr_inst")}</button><button type="button" class="b${inst?"":" on"}" data-a="svtype" data-v="loan">${t("cr_loan")}</button></div></div>
+ <label class="sv-f"><span>${t("cl_car")}</span><select class="in" data-sv="cr:car">${carOpts(q.car)}</select></label>
+ ${priceIn("cr",q)}
+ <label class="sv-f"><span>${t("cr_down")}: <b id="crdv"></b></span><input class="sv-rg" type="range" min="${min}" max="90" step="5" value="${q.down}" data-sv="cr:down"></label>
+ ${inst?"":`<label class="sv-f"><span>${t("cr_rate")}: <b id="crrv">${q.rate}%</b></span><input class="sv-rg" type="range" min="8" max="30" step=".5" value="${q.rate}" data-sv="cr:rate"></label>`}
+ <div class="sv-f"><span>${t("cr_term")}</span><div class="chs">${terms(q.type).map(n=>`<button type="button" class="b${q.term==n?" on":""}" data-a="svterm" data-v="${n}">${n} ${t("mon")}</button>`).join("")}</div></div>
+ </div><div class="sv-res"><div id="cr-res"></div><div class="sv-act"><button type="button" class="b p" data-a="svcrwa">${I("chat")} ${t("cr_wa")}</button></div><p class="hint" style="margin:0">${t(inst?"cr_note_i":"cr_note_l")}</p></div></div>`;crPaint()}
+// Трекер заказа
+const ORD_DEMO={"NT-1001":{car:1,ago:9,st:4},"NT-1002":{car:4,ago:30,st:6},"NT-1003":{car:9,ago:2,st:1}};
+let orders=ls.g("nx_ord",[]);const TK={cur:""};
+const ordStage=o=>o.demo?o.st:Math.min(6,Math.floor((Date.now()-o.created)/6e4));
+function findOrd(raw){let id=String(raw||"").trim().toUpperCase().replace(/\s+/g,"");if(/^\d{3,6}$/.test(id))id="NT-"+id;
+ const d=ORD_DEMO[id];if(d)return{id,demo:1,car:d.car,st:d.st,created:Date.now()-d.ago*864e5};
+ const o=orders.find(x=>x.id==id);return o?{...o}:null}
+function mkOrder(total){const sig=JSON.stringify(cart)+total;let o=orders.find(x=>x.sig==sig&&Date.now()-x.created<3e5);
+ if(!o){let id;do{id="NT-"+(2000+Math.floor(Math.random()*8000))}while(orders.some(x=>x.id==id)||ORD_DEMO[id]);
+  o={id,items:cart.map(i=>({id:i.id,q:i.q})),total,created:Date.now(),sig};orders.unshift(o);orders=orders.slice(0,5);ls.s("nx_ord",orders)}return o}
+function trkShow(raw){const el=$("#trk-res");if(!el)return;
+ if(!String(raw||"").trim()){el.innerHTML="";TK.cur="";return}
+ const o=findOrd(raw);if(!o){TK.cur="";el.innerHTML=`<p class="err" style="margin-top:14px">${t("tk_nf")}</p>`;return}
+ TK.cur=o.id;const st=ordStage(o),fin=st>=6,items=o.demo?[{id:o.car,q:1}]:o.items;
+ const names=items.map(i=>{const c=byId(i.id);return c?c.b+" "+c.m+(i.q>1?" × "+i.q:""):""}).filter(Boolean).join(", "),sum=o.demo?byId(o.car).p:o.total;
+ const when=i=>{const ts=o.demo?o.created+i*((Date.now()-o.created)/Math.max(st,1)):o.created+i*6e4;return new Date(ts).toLocaleString(LOC[S.lang],o.demo?{day:"numeric",month:"long"}:{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})};
+ el.innerHTML=`<div class="sv-ord"><div><span class="sv-lb">${t("tk_ord")}</span><b class="sv-no">${o.id}</b></div><div class="sv-on">${esc(names)}<br><b>${money(sum)}</b></div></div><div class="sv-tm">`+
+  [1,2,3,4,5,6,7].map((n,i)=>{const cls=i<st||fin?"done":i==st?"now":"pend";return `<div class="sv-s ${cls}"><span class="sv-d">${cls=="done"?"✓":n}</span><div><b>${t("ts"+n)}</b><p>${t("td"+n)}</p><small>${cls=="pend"?t("tk_wait"):cls=="now"?t("tk_cur")+" · "+when(i):when(i)}</small></div></div>`}).join("")+
+  `</div><div class="ab"><button type="button" class="b" data-a="svtwa" data-v="${o.id}">${I("chat")} ${t("tk_wa")}</button></div>`}
+function bTrk(){const keep=$("#trk-q")?$("#trk-q").value:"",chip=id=>`<button type="button" class="b" data-a="svtrk" data-v="${id}">${id}</button>`;
+ $("#sv-track").innerHTML=`<form class="srow" id="trk-f"><input class="in" id="trk-q" placeholder="${t("tk_ph")}" autocomplete="off" autocapitalize="characters" aria-label="${t("tk_t")}"><button class="b p" type="submit">${I("search")} ${t("tk_go")}</button></form>
+ <div class="sv-try"><span class="mu">${t("tk_try")}</span>${Object.keys(ORD_DEMO).map(chip).join("")}</div>
+ ${orders.length?`<div class="sv-try"><span class="mu">${t("tk_mine")}</span>${orders.map(o=>chip(o.id)).join("")}</div>`:""}
+ <div id="trk-res"></div><p class="hint">${t("tk_demo")}</p>`;
+ $("#trk-q").value=keep||TK.cur;if(TK.cur)trkShow(TK.cur)}
+function svBuild(){bCalc();bCr();bCu();bTrk()}
+setInterval(()=>{if(TK.cur&&$("#sv-track").classList.contains("on")){const o=findOrd(TK.cur);if(o&&!o.demo)trkShow(TK.cur)}},15000);
+const tools=$("#tools");
+tools.addEventListener("input",e=>{const k=e.target.dataset.sv;if(!k)return;const v=e.target.value;
+ if(k=="calc:price"){Q.calc.rub=Math.max(0,fromCur(+v||0));Q.calc.car=0;$('[data-sv="calc:car"]').value="0";calcPaint()}
+ if(k=="cr:price"){Q.cr.rub=Math.max(0,fromCur(+v||0));Q.cr.car=0;$('[data-sv="cr:car"]').value="0";crPaint()}
+ if(k=="cr:down"){Q.cr.down=+v;crPaint()}
+ if(k=="cr:rate"){Q.cr.rate=+v;$("#crrv").textContent=v+"%";crPaint()}});
+tools.addEventListener("change",e=>{const k=e.target.dataset.sv;if(!k)return;const v=e.target.value;
+ if(k=="calc:car"){const c=byId(+v);Q.calc.car=+v;if(c){Q.calc.rub=c.p;Q.calc.age=ageOf(c)}bCalc()}
+ if(k=="calc:from"){Q.calc.from=v;calcPaint()}
+ if(k=="cr:car"){const c=byId(+v);Q.cr.car=+v;if(c)Q.cr.rub=c.p;bCr()}});
+tools.addEventListener("submit",e=>{if(e.target.id!="trk-f")return;e.preventDefault();trkShow($("#trk-q").value)});
+
+// ---------- Пожертвование и покупка сайта ----------
+const siteWaUrl=()=>"https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(SITE_WA);
+function openDonate(){mode=["donate"];
+ show(`<h2>${t("dn_t")}</h2><p class="mu">${t("dn_p")}</p><div class="sv-kaspi"><span class="sv-lb">Kaspi Bank</span><b class="sv-num">${KASPI.view}</b><span class="mu">${t("dn_name")}: <b style="color:var(--tx)">${KASPI.name}</b></span></div><div class="ab" style="margin-top:0"><button class="b p" data-a="dncopy">${I("link")} ${t("dn_copy")}</button><a class="b" href="https://kaspi.kz" target="_blank" rel="noopener">${t("dn_open")}</a></div><p class="hint">${t("dn_how")}</p>`,"sm")}
+function openBuySite(){mode=["bsite"];
+ show(`<h2>${t("bs_t")}</h2><p class="mu">${t("bs_p")}</p><ul class="sv-ul">${[1,2,3,4,5,6,7].map(i=>`<li>${I("check")}<span>${t("bs"+i)}</span></li>`).join("")}</ul><p class="hint" style="margin:0 0 4px">${t("bs_price")}</p><div class="ab"><a class="b p" href="${siteWaUrl()}" target="_blank" rel="noopener">${I("chat")} ${t("wa")}</a></div>`,"sm")}
+
+// ---------- Обработчики кнопок ----------
+Object.assign(ACT,{
+ svtab:(i,a)=>svTab(a.dataset.v),
+ svage:(i,a)=>{Q.calc.age=+a.dataset.v;bCalc()},
+ svx:(i,a)=>{const k=a.dataset.v;Q.calc[k]=Q.calc[k]?0:1;bCalc()},
+ svtocr:()=>{Q.cr.rub=calcRes().total;Q.cr.car=0;bCr();svTab("credit")},
+ svcwa:()=>{const q=Q.calc;wa(fill(t("waCalc"),{n:carName(q),f:t("fr_"+q.from),t:money(calcRes().total)}))},
+ svtype:(i,a)=>{Q.cr.type=a.dataset.v;bCr()},
+ svterm:(i,a)=>{Q.cr.term=+a.dataset.v;bCr()},
+ svcrwa:()=>{const q=Q.cr,r=crCalc();wa(fill(t("waCr"),{k:t(q.type=="inst"?"cr_inst":"cr_loan"),n:carName(q),d:money(r.dp),m:money(r.m),s:r.n}))},
+ svtrk:(i,a)=>{$("#trk-q").value=a.dataset.v;trkShow(a.dataset.v)},
+ svtwa:(i,a)=>wa(fill(t("waTrk"),{o:a.dataset.v})),
+ dnt:openDonate,bsite:openBuySite,
+ dncopy:()=>{(navigator.clipboard?navigator.clipboard.writeText(KASPI.phone):Promise.reject()).then(()=>say(t("dn_copied")),()=>prompt(t("dn_num"),KASPI.phone))},
+ gxgo:(i,a)=>gxGo(+a.dataset.i),gxp:()=>gxGo(GX.i-1),gxn:()=>gxGo(GX.i+1),
+ gxbig:()=>{if(Date.now()-tsw<400)return;lbPaint();$("#gxlb").hidden=false},
+ lbx:()=>{$("#gxlb").hidden=true},lbp:()=>gxGo(GX.i-1),lbn:()=>gxGo(GX.i+1),
+ lbz:()=>{if(Date.now()-tsw<400)return;$("#gxlbi").classList.toggle("zoom")},
+ sreset:()=>{S={lang:"ru",cur:"KZT",anim:true,acc:"blue",fs:"m",blur:true,unit:"km",fx:null};ls.s("nx_set",S);applyAll();say(t("reset_ok"))},
+ sclear:()=>{if(!confirm(t("clear_q")))return;favs=[];cart=[];orders=[];TK.cur="";ls.s("nx_ord",orders);sync();bTrk();say(t("cleared"))}
+});
+
+// ================= Nota: сравнение, год, таможня, просмотренные, шеринг, анимации =================
+const bump=(el,cls="pulse")=>{if(!el)return;el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)};
+
+// ---------- Плавный счётчик чисел ----------
+const PREV={};
+function setBig(el,val,key){if(!el)return;const from=PREV[key]!==undefined?PREV[key]:val;PREV[key]=val;cancelAnimationFrame(el._r);
+ if(!S.anim||from===val){el.textContent=money(val);return}
+ const t0=performance.now(),step=n=>{const k=Math.min(1,(n-t0)/500),e=1-Math.pow(1-k,3);el.textContent=money(from+(val-from)*e);if(k<1)el._r=requestAnimationFrame(step)};step(t0)}
+
+// ---------- Фильтр по году ----------
+function yrBuild(){const ys=[...new Set(cars.map(c=>c.y))].sort((a,b)=>b-a),o=h=>`<option value="0">${t(h)}</option>`+ys.map(y=>`<option value="${y}">${y}</option>`).join("");
+ $("#y1").innerHTML=o("yf_from");$("#y2").innerHTML=o("yf_to");$("#y1").value=F.y1;$("#y2").value=F.y2}
+$("#y1").onchange=e=>{F.y1=+e.target.value;if(F.y1&&F.y2&&F.y1>F.y2){F.y2=0;$("#y2").value=0}lim=9;paint()};
+$("#y2").onchange=e=>{F.y2=+e.target.value;if(F.y1&&F.y2&&F.y2<F.y1){F.y1=0;$("#y1").value=0}lim=9;paint()};
+
+// ---------- Сравнение авто ----------
+let cmp=ls.g("nx_cmp",[]).filter(id=>byId(id));
+function cmpBar(){const b=$("#cmpbar");if(!b)return;b.classList.toggle("show",cmp.length>0);$("#cmpn").textContent=cmp.length+" / 3";
+ $("#cmpth").innerHTML=cmp.map(id=>`<span class="cmp-c">${byId(id).m}</span>`).join("")}
+function cmpSync(){ls.s("nx_cmp",cmp);cmpBar();paint(true);refresh()}
+function openCmp(){mode=["cmp"];const l=cmp.map(byId).filter(Boolean);
+ if(!l.length){show(`<h2>${t("cmp_t")}</h2><p class="none">${t("cmp_one")}</p>`);return}
+ const best=(f,dir)=>{const m=dir>0?Math.max(...l.map(f)):Math.min(...l.map(f));return c=>l.length>1&&f(c)==m};
+ const rows=[["cmp_price",c=>money(c.p),best(c=>c.p,-1)],["k_year",c=>c.y,best(c=>c.y,1)],["k_km",c=>dist(c.km),best(c=>c.km,-1)],["k_fuel",c=>t(c.fuel)],
+  ["k_eng",c=>(c.vol?c.vol+" "+t("u_l")+" / ":"")+c.hp+" "+t("u_hp"),best(c=>c.hp,1)],["k_gear",c=>t(c.g)],["k_drive",c=>t(c.drive)],["k_body",c=>t(c.body)],["k_col",c=>c.col],["k_st",c=>t(c.st)]];
+ show(`<h2>${t("cmp_t")}</h2><p class="mu">${l.length<2?t("cmp_one"):t("cmp_best")}</p><div class="cmpw"><table class="cmp"><thead><tr><th></th>${l.map(c=>`<th data-id="${c.id}"><div class="cph ph" data-a="open">${ph(c)}</div><b>${c.b} ${c.m}</b><button class="b" data-a="cmp">${I("x")} ${t("cmp_rm")}</button></th>`).join("")}</tr></thead><tbody>${rows.map(([k,f,bst])=>`<tr><th>${t(k)}</th>${l.map(c=>`<td class="${bst&&bst(c)?"best":""}">${f(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="ab"><button class="b" data-a="cmpx">${I("trash")} ${t("cmp_clear")}</button></div>`)}
+
+// ---------- Недавно просмотренные ----------
+let rec=ls.g("nx_rec",[]).filter(id=>byId(id));
+function recPaint(){const s=$("#recent");if(!s)return;const l=rec.map(byId).filter(Boolean);s.hidden=!l.length;if(!l.length)return;
+ $("#recg").innerHTML=l.map(c=>`<article class="mini gl" data-id="${c.id}"><div class="cph ph" data-a="open">${ph(c)}</div><div class="mi-b"><b>${c.b} ${c.m}</b><span>${c.y} · ${money(c.p)}</span></div></article>`).join("");setPh()}
+function recAdd(id){rec=[id,...rec.filter(x=>x!=id)].slice(0,8);ls.s("nx_rec",rec);recPaint()}
+
+// ---------- Карточка для шеринга ----------
+let SH={};
+const shText=c=>fill(t("sh_txt"),{n:c.b+" "+c.m+" "+c.y,p:money(c.p)});
+const tmo=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(r,ms))]);
+const loadImg=(u,cors)=>new Promise((res,rej)=>{const im=new Image();if(cors)im.crossOrigin="anonymous";im.onload=()=>res(im);im.onerror=rej;im.src=u});
+async function carPic(c){for(const u of [c.img,c.im0].filter(Boolean)){try{return await tmo(loadImg(u,1),4000)}catch(e){}}
+ const sv=svg(c.c).replace('<svg class="cs"','<svg xmlns="http://www.w3.org/2000/svg" width="960" height="390"');
+ const im=await loadImg("data:image/svg+xml;charset=utf-8,"+encodeURIComponent(sv));im.isSvg=true;return im}
+async function drawCard(c){const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d"),ff=getComputedStyle(document.body).fontFamily,a=ACC[S.acc]||ACC.blue;
+ try{await tmo(document.fonts.load("800 60px Manrope"),1200)}catch(e){}
+ const bg=x.createLinearGradient(0,0,W,H);bg.addColorStop(0,"#1b1d27");bg.addColorStop(1,"#0b0c10");x.fillStyle=bg;x.fillRect(0,0,W,H);
+ [[W*.95,0,560,a[0]],[0,H*.6,560,a[1]]].forEach(([cx,cy,r,col])=>{const g=x.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,col+"44");g.addColorStop(1,col+"00");x.fillStyle=g;x.fillRect(0,0,W,H)});
+ const rr=(X,Y,w,h,r)=>{x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()};
+ // логотип
+ const lg=x.createLinearGradient(64,60,148,144);lg.addColorStop(0,a[0]);lg.addColorStop(1,a[1]);x.fillStyle=lg;rr(64,60,84,84,28);x.fill();
+ x.save();x.translate(64+15,60+15);x.scale(2.25,2.25);x.lineWidth=2.2;x.strokeStyle="#0b0c10";x.lineCap="round";x.lineJoin="round";
+ x.stroke(new Path2D("M9 18V6l11-2v12"));x.beginPath();x.arc(6.5,18,2.5,0,7);x.stroke();x.beginPath();x.arc(17.5,16,2.5,0,7);x.stroke();x.restore();
+ x.fillStyle="#f4f5f8";x.font=`800 58px ${ff}`;x.textBaseline="middle";x.fillText("Nota",172,104);
+ // фото
+ const pic=await carPic(c),PX=64,PY=190,PW=952,PH2=600;x.save();rr(PX,PY,PW,PH2,44);x.clip();
+ const pg=x.createLinearGradient(0,PY,0,PY+PH2);pg.addColorStop(0,"#1c1e28");pg.addColorStop(1,"#101116");x.fillStyle=pg;x.fillRect(PX,PY,PW,PH2);
+ const iw=pic.naturalWidth||pic.width,ih=pic.naturalHeight||pic.height,k=pic.isSvg?Math.min(PW*.9/iw,PH2*.9/ih):Math.max(PW/iw,PH2/ih);
+ x.drawImage(pic,PX+(PW-iw*k)/2,PY+(PH2-ih*k)/2,iw*k,ih*k);x.restore();
+ x.strokeStyle="rgba(255,255,255,.14)";x.lineWidth=2;rr(PX,PY,PW,PH2,44);x.stroke();
+ // название и цена
+ const name=c.b+" "+c.m;let fs=76;x.textBaseline="alphabetic";do{x.font=`800 ${fs}px ${ff}`;fs-=3}while(x.measureText(name).width>952&&fs>34);
+ x.fillStyle="#f4f5f8";x.fillText(name,64,890);
+ const pr=money(c.p),pgr=x.createLinearGradient(64,0,600,0);pgr.addColorStop(0,a[0]);pgr.addColorStop(1,a[1]);x.fillStyle=pgr;x.font=`800 88px ${ff}`;x.fillText(pr,64,992);
+ // характеристики
+ const sp=[c.y,dist(c.km),(c.vol?c.vol+" "+t("u_l")+", ":"")+c.hp+" "+t("u_hp"),t(c.g),t(c.drive)];x.font=`700 30px ${ff}`;let px=64,py=1040;
+ sp.forEach(s=>{const w=x.measureText(String(s)).width+48;if(px+w>1016){px=64;py+=82}x.fillStyle="rgba(255,255,255,.08)";rr(px,py,w,62,31);x.fill();x.strokeStyle="rgba(255,255,255,.14)";x.lineWidth=2;x.stroke();x.fillStyle="#f4f5f8";x.textBaseline="middle";x.fillText(String(s),px+24,py+32);px+=w+12});
+ x.textBaseline="alphabetic";x.fillStyle="#9ca3b3";x.font=`600 28px ${ff}`;x.fillText(t("sh_demo"),64,1296);
+ return cv}
+function openShare(id){const c=byId(id);if(!c)return;mode=["share",id];
+ const lk=link(id),tx=shText(c),enc=encodeURIComponent;
+ show(`<h2>${t("sh_t")}</h2><p class="mu">${t("sh_p")}</p><div class="shp" id="shp"><span class="mu">${t("sh_gen")}</span></div><div class="ab" id="shb" style="display:none"><button class="b p" data-a="shnat">${I("share")} ${t("sh_send")}</button><button class="b" data-a="shdl">${I("link")} ${t("sh_dl")}</button><button class="b" data-a="copy">${I("link")} ${t("sh_link")}</button><a class="b" target="_blank" rel="noopener" href="https://t.me/share/url?url=${enc(lk)}&text=${enc(tx)}">Telegram</a><a class="b" target="_blank" rel="noopener" href="https://wa.me/?text=${enc(tx+" "+lk)}">WhatsApp</a></div>`,"sm");
+ drawCard(c).then(cv=>new Promise(r=>cv.toBlob(r,"image/png"))).then(b=>{if(!mode||mode[0]!="share"||mode[1]!=id)return;if(!b)throw 0;
+  if(SH.url)URL.revokeObjectURL(SH.url);SH={b,url:URL.createObjectURL(b),id};$("#shp").innerHTML=`<img src="${SH.url}" alt="">`;$("#shb").style.display=""})
+ .catch(()=>{if(mode&&mode[0]=="share")$("#shp").innerHTML=`<p class="err">${t("sh_err")}</p>`})}
+
+// ---------- Таможня (ставки Казахстана, ориентировочно) ----------
+const MRP=4325; // месячный расчётный показатель 2026, тенге
+const ETT_NEW=[[8500,.54,2.5],[16700,.48,3.5],[42300,.48,5.5],[84500,.48,7.5],[169000,.48,15],[Infinity,.48,20]]; // до N €: % и минимум €/см³
+const ETT_35=[[1000,1.5],[1500,1.7],[1800,2.5],[2300,2.7],[3000,3],[Infinity,3.6]];
+const ETT_5=[[1000,3],[1500,3.2],[1800,3.5],[2300,4.8],[3000,5],[Infinity,5.7]];
+const pick=(tb,v)=>tb.find(r=>v<=r[0]);
+Q.cu={car:1,rub:byId(1).p,year:byId(1).y,vol:Math.round(byId(1).vol*1000),fuel:byId(1).fuel=="Электро"?"ev":"ice",scheme:"nat",vat:12,eur:1.08};
+function cuCalc(){const q=Q.cu,ev=q.fuel=="ev",pk=q.rub*RATES.KZT,eurKzt=q.eur/RATES.USD*RATES.KZT,age=Math.max(0,2026-q.year),vol=ev?0:q.vol;let duty=0;
+ if(ev)duty=q.scheme=="ett"?.15*pk:0;
+ else if(q.scheme=="nat"){duty=.15*pk;if(age>7&&vol>1500&&vol<=3000)duty=Math.min(.18*pk,Math.max(.15*pk,.5*vol*eurKzt))}
+ else if(age<=3){const r=pick(ETT_NEW,pk/eurKzt);duty=Math.max(r[1]*pk,r[2]*vol*eurKzt)}
+ else duty=pick(age<=5?ETT_35:ETT_5,vol)[1]*vol*eurKzt;
+ const exc=!ev&&vol>3000?100*vol:0,vat=(pk+duty+exc)*q.vat/100,fee=6*MRP,coef=vol<=1000?1.5:vol<=2000?3.5:vol<=3000?5:11.5,util=50*MRP*coef,reg=(age<=2?.25:age<=3?50:500)*MRP;
+ return{pk,duty,exc,vat,fee,util,reg,total:duty+exc+vat+fee+util+reg}}
+function cuPaint(){const r=cuCalc(),q=Q.cu,K=1/RATES.KZT,row=(k,v,always)=>v||always?`<div class="sv-rw"><span>${t(k)}</span><b>${money(v*K)}</b></div>`:"";
+ $("#cu-res").innerHTML=`<span class="sv-lb">${t("cu_tot")} · ${t("sc_"+q.scheme)}</span><b class="sv-big">${money(r.total*K)}</b><div class="sv-rows">${row("cu_val",r.pk,1)}${row("cu_duty",r.duty,1)}${row("cu_exc",r.exc)}${row("cu_vatr",r.vat,1)}${row("cu_fee",r.fee,1)}${row("cu_util",r.util,1)}${row("cu_reg",r.reg,1)}<div class="sv-rw"><span>${t("cu_all")}</span><b>${money(q.rub+r.total*K)}</b></div></div>`;
+ setBig($("#cu-res .sv-big"),r.total*K,"cu")}
+function bCu(){const q=Q.cu,ev=q.fuel=="ev",ch=(a,v,on,l)=>`<button type="button" class="b${on?" on":""}" data-a="${a}" data-v="${v}">${l}</button>`;
+ $("#sv-customs").innerHTML=`<div class="sv-grid"><div class="sv-fg">
+ <label class="sv-f"><span>${t("cl_car")}</span><select class="in" data-sv="cu:car">${carOpts(q.car)}</select></label>
+ ${priceIn("cu",q)}
+ <div class="sv-2"><label class="sv-f"><span>${t("cu_year")}</span><input class="in" type="number" inputmode="numeric" min="1990" max="2026" data-sv="cu:year" value="${q.year}"></label>${ev?"":`<label class="sv-f"><span>${t("cu_vol")}</span><input class="in" type="number" inputmode="numeric" min="500" max="8000" step="50" data-sv="cu:vol" value="${q.vol}"></label>`}</div>
+ <div class="sv-f"><span>${t("cu_fuel")}</span><div class="chs">${ch("cufuel","ice",!ev,t("fu_ice"))}${ch("cufuel","ev",ev,t("fu_ev"))}</div></div>
+ <div class="sv-f"><span>${t("cu_scheme")}</span><div class="chs">${ch("cusch","nat",q.scheme=="nat",t("sc_nat"))}${ch("cusch","ett",q.scheme=="ett",t("sc_ett"))}</div></div>
+ <div class="sv-2"><label class="sv-f"><span>${t("cu_vat")}</span><input class="in" type="number" inputmode="decimal" step="1" min="0" max="30" data-sv="cu:vat" value="${q.vat}"></label><label class="sv-f"><span>${t("cu_eur")}</span><input class="in" type="number" inputmode="decimal" step="0.01" min="0.5" max="2" data-sv="cu:eur" value="${q.eur}"></label></div>
+ </div><div class="sv-res"><div id="cu-res"></div><div class="sv-act"><button type="button" class="b" data-a="cuwa">${I("chat")} ${t("cl_wa")}</button></div><p class="hint" style="margin:0">${t("cu_note")}</p></div></div>`;cuPaint()}
+tools.addEventListener("input",e=>{const k=e.target.dataset.sv;if(!k||!k.startsWith("cu:"))return;const v=e.target.value,q=Q.cu;
+ if(k=="cu:price"){q.rub=Math.max(0,fromCur(+v||0));q.car=0;$('[data-sv="cu:car"]').value="0"}
+ if(k=="cu:year")q.year=+v||2026;if(k=="cu:vol")q.vol=+v||0;if(k=="cu:vat")q.vat=Math.max(0,+v||0);if(k=="cu:eur")q.eur=+v>0?+v:1.08;
+ cuPaint()});
+tools.addEventListener("change",e=>{if(e.target.dataset.sv!="cu:car")return;const c=byId(+e.target.value),q=Q.cu;q.car=+e.target.value;
+ if(c){q.rub=c.p;q.year=c.y;q.vol=Math.round(c.vol*1000);q.fuel=c.fuel=="Электро"?"ev":"ice"}bCu()});
+
+// ---------- Анимации ----------
+const spb=document.getElementById("sp");let spt=0;
+addEventListener("scroll",()=>{if(spt)return;spt=requestAnimationFrame(()=>{spt=0;const h=document.documentElement;spb.style.transform=`scaleX(${h.scrollTop/((h.scrollHeight-h.clientHeight)||1)})`})},{passive:true});
+document.addEventListener("pointerdown",e=>{if(!S.anim)return;const b=e.target.closest&&e.target.closest(".b");if(!b)return;
+ const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*1.7,i=document.createElement("i");i.className="rip";
+ i.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),700)},{passive:true});
+if(matchMedia("(hover:hover) and (pointer:fine)").matches){const g=$("#grid");
+ g.addEventListener("pointermove",e=>{if(!S.anim)return;const c=e.target.closest(".card");if(!c)return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+  c.classList.add("tilt");c.style.transform=`translateY(-8px) perspective(900px) rotateX(${(-y*7).toFixed(2)}deg) rotateY(${(x*9).toFixed(2)}deg)`});
+ g.addEventListener("pointerout",e=>{const c=e.target.closest&&e.target.closest(".card");if(c&&!c.contains(e.relatedTarget)){c.style.transform="";c.classList.remove("tilt")}})}
+const _fav=ACT.fav,_buy=ACT.buy;
+ACT.fav=(id,a)=>{_fav(id,a);$$(`[data-id="${id}"] .fv, .dt .b[data-a="fav"]`).forEach(e=>bump(e))};
+ACT.buy=(id,a)=>{_buy(id,a);$$(".cc").forEach(e=>bump(e,"bump"))};
+const hideSplash=()=>setTimeout(()=>{const s=$("#splash");if(!s)return;s.classList.add("out");setTimeout(()=>s.remove(),800)},S.anim?1000:0);
+if(document.readyState=="complete")hideSplash();else addEventListener("load",hideSplash);
+
+// ---------- Кнопки ----------
+Object.assign(ACT,{
+ cmp:id=>{if(cmp.includes(id))cmp=cmp.filter(x=>x!=id);else if(cmp.length>=3){say(t("cmp_max"));return}else{cmp.push(id);say(t("cmp_added"))}cmpSync();$$(`[data-id="${id}"] .cm, .dt .b[data-a="cmp"]`).forEach(e=>bump(e))},
+ cmpo:openCmp,
+ cmpx:()=>{cmp=[];cmpSync();if(mode&&mode[0]=="cmp")closeM()},
+ recx:()=>{rec=[];ls.s("nx_rec",rec);recPaint()},
+ rst:()=>{F.q="";$("#q").value="";F.y1=0;F.y2=0;F.max=16e6;$("#mx").value=16e6;F.sort="0";brand="";lim=9;chips();yrBuild();applyAllSort();paint()},
+ cufuel:(i,a)=>{Q.cu.fuel=a.dataset.v;bCu()},
+ cusch:(i,a)=>{Q.cu.scheme=a.dataset.v;bCu()},
+ cuwa:()=>wa(fill(t("waCu"),{n:carName(Q.cu),t:money(cuCalc().total/RATES.KZT)})),
+ share:id=>openShare(id),
+ shnat:()=>{const c=byId(SH.id),f=new File([SH.b],"nota-car.png",{type:"image/png"}),d={title:c.b+" "+c.m,text:shText(c),url:link(c.id)};
+  if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({...d,files:[f]}).catch(()=>{});else if(navigator.share)navigator.share(d).catch(()=>{});else ACT.shdl()},
+ shdl:()=>{const c=byId(SH.id),a=document.createElement("a");a.href=SH.url;a.download=("nota-"+c.b+"-"+c.m).replace(/\s+/g,"-")+".png";document.body.appendChild(a);a.click();a.remove()}
+});
+function applyAllSort(){$("#sort").value=F.sort}
+
+// ---------- Язык, валюта, запуск ----------
+function applyAll(){applyLook();document.documentElement.lang=S.lang;document.body.classList.toggle("noanim",!S.anim);
+ $$("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));$$("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));
+ $("#sort").innerHTML=[0,1,2,3,4].map(i=>`<option value="${i}">${t("so"+i)}</option>`).join("");$("#sort").value=F.sort;
+ const h="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(t("waGen"));$("#wafab").href=h;$("#wa1").href=h;$("#wasite").href=siteWaUrl();
+ chips();paint(true);counts();hdrUser();svBuild();yrBuild();recPaint();cmpBar();refresh()}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+$$(".rv").forEach(e=>io.observe(e));
+const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$(".pill a").forEach(a=>a.classList.toggle("act",a.getAttribute("href")=="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
+$$("main section[id]").forEach(s=>io2.observe(s));
+setInterval(()=>{if(!sess)return;users=ls.g("nx_users",[]);const u=me();if(u){u.seen=Date.now();saveU()}},30000);
+addEventListener("pagehide",()=>{users=ls.g("nx_users",[]);const u=me();if(u){u.seen=0;saveU()}});
+applyAll();loadPhotos();
+const lc=byId(24);if(lc.img)heroImg(lc);
+const hm=location.hash.match(/^#car-(\d+)/);if(hm)carModal(+hm[1]);
+})();
+</script>
+<style>
+.nm{position:fixed;inset:0;z-index:75;background:#0b0c10;display:none;grid-template-columns:340px 1fr;color:var(--tx)}
+.nm.show{display:grid;animation:pop .35s both}
+.nm [hidden],.bdg[hidden]{display:none!important}
+.nl{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--bd);padding-top:env(safe-area-inset-top)}
+.nlh{display:flex;justify-content:space-between;align-items:center;padding:16px 14px 10px}.nlh h2{font-size:1.4rem}
+.lst{flex:1;overflow:auto}
+.nd{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;transition:background .2s}.nd:hover,.nd.on{background:var(--g2)}
+.nd .mt{flex:1;min-width:0}.nd p{color:var(--mu);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nu{background:var(--c1);color:#0b0c10;border-radius:10px;min-width:20px;text-align:center;font-size:.72rem;font-weight:800;padding:0 6px}
+.nc{display:flex;flex-direction:column;min-height:0;min-width:0}
+.nc.emp>:not(.ne){display:none!important}.nc:not(.emp)>.ne{display:none}
+.ne{flex:1;display:grid;place-content:center;text-align:center;gap:8px;padding:20px}
+.nh{display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));border-bottom:1px solid var(--bd);background:rgba(17,18,24,.92)}
+.nh small{font-size:.76rem}.bk{display:none}
+.nsr,.npn,.nrb{display:flex;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--bd);background:rgba(17,18,24,.92);font-size:.84rem}
+.npn{cursor:pointer;color:var(--c1)}.nrb{justify-content:space-between;border-top:1px solid var(--bd);border-bottom:0}.nrb span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.nb{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:6px}
+.m{max-width:min(80%,460px);padding:8px 12px;border-radius:18px;background:rgba(30,32,42,.94);align-self:flex-start;cursor:pointer;animation:pop .3s both;word-wrap:break-word;overflow-wrap:anywhere;transition:opacity .25s}
+.m.me{align-self:flex-end;background:linear-gradient(135deg,rgba(var(--c1r),.95),rgba(var(--c2r),.95));color:#0b0c10}
+.m small{display:block;text-align:right;font-size:.66rem;opacity:.75;margin-top:2px}.m.dim{opacity:.22}
+.rp{border-left:3px solid var(--c3);padding:2px 8px;margin-bottom:4px;font-size:.78rem;opacity:.85;border-radius:4px;background:rgba(0,0,0,.18)}
+.rx{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}.rx span{background:rgba(0,0,0,.28);color:#fff;border-radius:10px;padding:1px 7px;font-size:.78rem}
+.imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:4px;margin-bottom:2px}.imgs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;cursor:zoom-in;display:block}
+.vp{display:flex;align-items:center;gap:8px;min-width:230px}.wv{display:flex;align-items:center;gap:2px;height:30px;flex:1}.wv i{flex:1;background:currentColor;opacity:.35;border-radius:2px;min-width:2px;transition:opacity .2s}.wv i.f{opacity:1}.vt{font-size:.75rem;min-width:34px}
+.vp .b.sm{width:auto;min-width:38px;padding:0 8px;font-size:.75rem}
+.npv{display:flex;gap:10px;padding:10px 12px;overflow:auto;border-top:1px solid var(--bd)}.npv div{position:relative;flex:none}.npv img{width:64px;height:64px;object-fit:cover;border-radius:12px;display:block}
+.npv button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#000;color:#fff;font-size:.7rem}
+.nf{padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--bd);background:rgba(17,18,24,.92)}
+.nfr{display:flex;gap:8px;align-items:center}.nfr .in{flex:1}#nfd .vp{flex:1}
+.rd{width:10px;height:10px;border-radius:50%;background:#ff5a6b;animation:pul 1s infinite}@keyframes pul{50%{opacity:.25}}
+.nsh{position:fixed;inset:0;z-index:80;background:rgba(5,6,9,.6);display:flex;align-items:flex-end;justify-content:center}
+.nsb{width:min(420px,100%);background:#111218;border:1px solid var(--bd);border-radius:26px 26px 0 0;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom));display:grid;gap:8px;max-height:80vh;overflow:auto;animation:pop .3s both}
+.rxr{display:flex;gap:8px;justify-content:center}.nsb h4{color:var(--mu);font-size:.8rem}
+.wg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.wg button{aspect-ratio:1;border-radius:16px;border:2px solid var(--bd)}.wg button.on{border-color:var(--c1)}
+.gal{position:fixed;inset:0;z-index:85;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center}
+.gal>img{max-width:100%;max-height:100%;object-fit:contain}.gtop{position:absolute;top:calc(12px + env(safe-area-inset-top));left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.gl1,.gr1{position:absolute;top:calc(50% - 22px)}.gl1{left:12px}.gr1{right:12px}
+@media(max-width:860px){.nm{grid-template-columns:1fr}.nm .nc{display:none}.nm.chat .nc{display:flex}.nm.chat .nl{display:none}.bk{display:inline-flex}.m{max-width:88%}}
+</style>
+<script>
+/* NUR MESSAGES. Слой messageService — единственное место, работающее с данными.
+   Для Supabase замените его методы: тексты и статусы -> таблица messages (+Realtime),
+   фото и голосовые (src) -> Storage, обои (dialog.wp) -> таблица chat_settings. */
+(()=>{"use strict";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const E=s=>String(s==null?"":s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const K="nm_v1",now=()=>Date.now(),uid=()=>Math.random().toString(36).slice(2,9);
+const tm=t=>new Date(t).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+const dur=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+const say=m=>{const e=$("#toast");if(!e)return;e.textContent=m;e.classList.add("show");clearTimeout(say.t);say.t=setTimeout(()=>e.classList.remove("show"),2400)};
+const WP={g1:"linear-gradient(160deg,#1b1d27,#10121a)",g2:"linear-gradient(135deg,#1d2b4a,#3b1f4f)",g3:"linear-gradient(135deg,#0f3b3a,#143a5c)",g4:"linear-gradient(135deg,#4a1d2b,#1f1d4f)",g5:"linear-gradient(160deg,#3a2a12,#1a1208)",s1:"#0d0e13",s2:"#12202b",s3:"#1b1530",s4:"#112417"};
+const bg=w=>w&&w.startsWith("data:")?`linear-gradient(rgba(9,9,12,.35),rgba(9,9,12,.35)),url("${w}") center/cover`:(WP[w]||WP.g1);
+const M=(me,text,min,x={})=>({id:uid(),me,type:"text",text,t:now()-min*6e4,st:"read",...x});
+const seed=()=>[
+ {id:"d1",name:"Айдос Мусин",online:1,verified:1,wp:"g2",unread:0,msgs:[M(0,"Здравствуйте! Toyota Camry 2023 ещё в наличии?",55),M(1,"Добрый день! Да, в наличии. Могу прислать фото и отчёт о проверке.",52),M(0,"Отлично, пришлите, пожалуйста. И какая итоговая цена с доставкой?",48)]},
+ {id:"d2",name:"Дана Касымова",online:0,verified:0,wp:"s2",unread:2,msgs:[M(1,"Дана, подобрали для вас Lada Vesta и Hyundai Solaris до 1,1 млн ₽.",300),M(0,"Спасибо! Посмотрела — Solaris нравится больше.",120),M(0,"Можно посмотреть её по видеосвязи?",118)]},
+ {id:"d3",name:"Менеджер Nota",online:1,verified:1,wp:"g3",unread:0,msgs:[M(0,"Ваша заявка принята. Подборку подготовим в течение дня.",1440),M(1,"Спасибо, жду!",1430)]}];
+let D=(()=>{try{const v=JSON.parse(localStorage.getItem(K));if(Array.isArray(v)&&v.length)return v}catch(e){}return seed()})();
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}};
+const svc={
+ save,get:id=>D.find(d=>d.id==id),msg:(did,id)=>(svc.get(did)||{msgs:[]}).msgs.find(x=>x.id==id),
+ send(did,m){m={id:uid(),me:1,t:now(),st:"sent",...m};svc.get(did).msgs.push(m);save();return m},
+ recv(did,text){const m={id:uid(),me:0,type:"text",text,t:now(),st:"read"};svc.get(did).msgs.push(m);save();return m},
+ remove(did,id){const d=svc.get(did);d.msgs=d.msgs.filter(x=>x.id!=id);save()},
+ pin(did,id){const m=svc.msg(did,id);m.pin=!m.pin;save()},
+ react(did,id,e){const m=svc.msg(did,id);m.rx=m.rx||{};if(m.rx[e])delete m.rx[e];else m.rx[e]=1;if(!Object.keys(m.rx).length)delete m.rx;save()},
+ wall(did,w){svc.get(did).wp=w;save()},
+ read(did){const d=svc.get(did);d.unread=0;save()}
+};
+let cur=null,replyTo=null,editing=null,pend=[],rec=null,draft=null,G=null;const TY={},AU={};
+const prv=m=>m.type=="img"?"📷 Фото"+(m.text?" · "+m.text:""):m.type=="voice"?"🎙 Голосовое · "+dur(m.dur):m.text;
+const ticks=s=>s=="read"?'<b style="color:#0b5fff">✓✓</b>':s=="delivered"?"✓✓":"✓";
+const stat=d=>TY[d.id]?"печатает…":d.online?"в сети":"был(а) недавно";
+const player=m=>`<div class="vp" data-v="${m.id}"><button class="b ic sm pl">▶</button><div class="wv">${m.wave.map(h=>`<i style="height:${h}%"></i>`).join("")}</div><span class="vt">${dur(m.dur)}</span><button class="b sm sp">1×</button></div>`;
+const msgH=m=>{const d=svc.get(cur),r=m.reply&&d.msgs.find(x=>x.id==m.reply);
+ let b=(m.fwd?'<div class="rp">↪ Пересланное сообщение</div>':"")+(r?`<div class="rp">${E(prv(r))}</div>`:"");
+ if(m.type=="img")b+=`<div class="imgs">${m.imgs.map((s,i)=>`<img src="${s}" data-g="${m.id}" data-i="${i}" alt="">`).join("")}</div>`+(m.text?`<div>${E(m.text)}</div>`:"");
+ else if(m.type=="voice")b+=player(m);else b+=`<div>${E(m.text)}</div>`;
+ return `<div class="m${m.me?" me":""}" data-m="${m.id}">${b}${m.rx?`<div class="rx">${Object.keys(m.rx).map(e=>`<span>${e}</span>`).join("")}</div>`:""}<small>${m.pin?"📌 ":""}${m.edited?"изменено · ":""}${tm(m.t)}${m.me?" "+ticks(m.st):""}</small></div>`};
+const rp=id=>{const m=svc.msg(cur,id),el=$(`[data-m="${id}"]`);if(m&&el)el.outerHTML=msgH(m)};
+function badge(){const n=D.reduce((s,d)=>s+(d.unread||0),0),b=$("#nmb");if(b){b.textContent=n;b.hidden=!n}}
+function list(){const q=$("#nsq").value.trim().toLowerCase();
+ $("#nlst").innerHTML=D.filter(d=>d.name.toLowerCase().includes(q)).map(d=>{const l=d.msgs[d.msgs.length-1];return `<div class="nd${d.id==cur?" on":""}" data-d="${d.id}"><span class="av">${E(d.name[0])}</span><div class="mt"><b><span class="dot${d.online?" on":""}"></span>${E(d.name)}${d.verified?" ✔":""}</b><p>${l?E(prv(l)):"Нет сообщений"}</p></div>${d.unread?`<span class="nu">${d.unread}</span>`:""}</div>`}).join("")||'<p class="none">Диалоги не найдены</p>';badge()}
+function sfilter(){const q=($("#nmq").value||"").trim().toLowerCase();let f=null;$$("#nb .m").forEach(m=>{const hit=!q||m.textContent.toLowerCase().includes(q);m.classList.toggle("dim",!hit);if(q&&hit&&!f)f=m});if(f)f.scrollIntoView({block:"center",behavior:"smooth"})}
+function chat(keep){const d=svc.get(cur),nc=$("#nc");nc.classList.toggle("emp",!d);$("#nm").classList.toggle("chat",!!d);if(!d)return;
+ $("#nhd").innerHTML=`<button class="b ic sm bk" data-n="back" aria-label="Назад">←</button><span class="av">${E(d.name[0])}</span><div style="flex:1;min-width:0"><b>${E(d.name)}${d.verified?" ✔":""}</b><small class="mu" style="display:block" id="nst">${stat(d)}</small></div><button class="b ic sm" data-n="msearch" aria-label="Поиск по сообщениям"><svg class="i"><use href="#i-search"/></svg></button><button class="b ic sm" data-n="wall" aria-label="Обои">🎨</button>`;
+ const nb=$("#nb"),s=nb.scrollTop;nb.style.background=bg(d.wp);
+ nb.innerHTML=d.msgs.length?d.msgs.map(msgH).join(""):'<p class="none">Сообщений пока нет — напишите первым</p>';
+ nb.scrollTop=keep?s:nb.scrollHeight;
+ const p=[...d.msgs].reverse().find(m=>m.pin),pn=$("#npin");pn.hidden=!p;if(p){pn.dataset.id=p.id;pn.innerHTML="📌 "+E(prv(p))}
+ sfilter()}
+function open(id){cur=id;svc.read(id);replyTo=editing=null;pend=[];$("#ni").value="";bar();pv();tog();chat();list()}
+function openNm(){$("#nm").classList.add("show");document.body.style.overflow="hidden";if(!cur&&innerWidth>860)cur=D[0].id;if(cur)open(cur);else{list();chat()}}
+function closeNm(){$("#nm").classList.remove("show");document.body.style.overflow=""}
+function bar(){const b=$("#nrb"),id=replyTo||editing,m=id&&cur&&svc.msg(cur,id);b.hidden=!m;if(m)b.innerHTML=`<span>${editing?"✎ Редактирование":"↩ Ответ"}: ${E(prv(m))}</span><button class="b ic sm" data-n="barx" aria-label="Отмена">✕</button>`}
+function pv(){const p=$("#npv");p.hidden=!pend.length;p.innerHTML=pend.map((s,i)=>`<div><img src="${s}" alt=""><button data-n="pvdel" data-i="${i}" aria-label="Убрать">✕</button></div>`).join("")}
+function tog(){const v=$("#ni").value.trim()||pend.length||editing;$("#nmic").hidden=!!v;$("#nsend").hidden=!v}
+const sheet=h=>{const s=$("#nsh");s.innerHTML=`<div class="nsb">${h}</div>`;s.hidden=false},closeSheet=()=>{$("#nsh").hidden=true};
+const shrink=(f,s,q=.8)=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,s/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",q))};im.onerror=()=>r("");im.src=fr.result};fr.onerror=()=>r("");fr.readAsDataURL(f)});
+const b2d=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.onerror=()=>r("");f.readAsDataURL(b)});
+function track(did,id){[[800,"delivered"],[2200,"read"]].forEach(([ms,st])=>setTimeout(()=>{const m=svc.msg(did,id);if(!m)return;m.st=st;save();if(cur==did)rp(id)},ms))}
+const REP=["Понял, спасибо!","Хорошо, давайте так.","Можете уточнить детали?","Отлично, договорились 👍","Мне нужно подумать, отвечу позже.","Принято, жду от вас новостей."];
+function auto(did){if(TY[did])return;TY[did]=1;if(cur==did&&$("#nst"))$("#nst").textContent="печатает…";
+ setTimeout(()=>{TY[did]=0;const d=svc.get(did);if(!d)return;svc.recv(did,REP[Math.floor(Math.random()*REP.length)]);
+  if(cur==did&&$("#nm").classList.contains("show"))chat();else d.unread=(d.unread||0)+1;save();list()},1800+Math.random()*1200)}
+function send(){const inp=$("#ni"),txt=inp.value.trim();if(!cur)return;
+ if(editing){const m=svc.msg(cur,editing);if(m&&txt){m.edited=1;m.text=txt;save();rp(m.id)}editing=null;inp.value="";bar();tog();return}
+ if(!txt&&!pend.length)return;
+ const m=svc.send(cur,pend.length?{type:"img",imgs:pend,text:txt,reply:replyTo}:{type:"text",text:txt,reply:replyTo});
+ pend=[];replyTo=null;inp.value="";pv();bar();tog();chat();list();track(cur,m.id);auto(cur)}
+/* Голос */
+const ui=()=>{$("#nfa").hidden=!!(rec||draft);$("#nfr").hidden=!rec;$("#nfd").hidden=!draft;if(rec)$("#rt").textContent=dur((now()-rec.t0)/1000)};
+async function peaks(b){try{const ac=new (window.AudioContext||window.webkitAudioContext)(),buf=await ac.decodeAudioData(await b.arrayBuffer()),d=buf.getChannelData(0),n=36,s=Math.floor(d.length/n),o=[];for(let i=0;i<n;i++){let m=0;for(let j=0;j<s;j+=Math.max(1,s>>6))m=Math.max(m,Math.abs(d[i*s+j]||0));o.push(m)}ac.close();const mx=Math.max(...o,.01);return o.map(v=>Math.max(12,Math.round(v/mx*100)))}catch(e){return Array.from({length:36},()=>20+Math.floor(Math.random()*70))}}
+async function rstart(){if(!navigator.mediaDevices||!window.MediaRecorder||!cur)return say("Запись голоса не поддерживается в этом браузере");
+ try{const st=await navigator.mediaDevices.getUserMedia({audio:true}),mr=new MediaRecorder(st),ch=[],c=rec={mr,ch,t0:now(),cancel:0};
+  mr.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};
+  mr.onstop=async()=>{st.getTracks().forEach(t=>t.stop());clearInterval(c.iv);
+   if(c.cancel){rec=null;ui();return}
+   const blob=new Blob(ch,{type:mr.mimeType||"audio/webm"}),src=await b2d(blob),wave=await peaks(blob);
+   draft={src,dur:Math.max(1,Math.round((now()-c.t0)/1000)),wave};rec=null;
+   $("#nfd").innerHTML=player({id:"draft",wave:draft.wave,dur:draft.dur})+'<button class="b ic sm" data-n="ddel" aria-label="Удалить">🗑</button><button class="b p ic sm" data-n="dsend" aria-label="Отправить">➤</button>';ui()};
+  mr.start();c.iv=setInterval(ui,250);ui()}catch(e){rec=null;say("Нет доступа к микрофону")}}
+function dclear(){if(AU.draft){AU.draft.pause();delete AU.draft}draft=null;$("#nfd").innerHTML="";ui()}
+function vclick(v,t){const id=v.dataset.v,m=id=="draft"?draft:svc.msg(cur,id);if(!m)return;let a=AU[id];
+ if(t.closest(".sp")){const r=[1,1.5,2],x=r[(r.indexOf(+v.dataset.r||1)+1)%3];v.dataset.r=x;t.closest(".sp").textContent=x+"×";if(a)a.playbackRate=x;return}
+ if(!t.closest(".pl"))return;
+ if(!a){a=AU[id]=new Audio(m.src);
+  a.ontimeupdate=()=>{const w=$(`[data-v="${id}"]`);if(!w)return;const L=isFinite(a.duration)&&a.duration?a.duration:m.dur,p=a.currentTime/L;[...w.querySelectorAll(".wv i")].forEach((x,i,l)=>x.classList.toggle("f",i/l.length<p));w.querySelector(".vt").textContent=dur(a.currentTime)};
+  a.onplay=()=>{const w=$(`[data-v="${id}"] .pl`);if(w)w.textContent="❚❚"};
+  a.onpause=()=>{const w=$(`[data-v="${id}"] .pl`);if(w)w.textContent="▶"};
+  a.onended=()=>{const w=$(`[data-v="${id}"]`);if(!w)return;w.querySelectorAll(".wv i").forEach(x=>x.classList.remove("f"));w.querySelector(".vt").textContent=dur(m.dur);a.currentTime=0}}
+ Object.values(AU).forEach(x=>{if(x!==a)x.pause()});a.playbackRate=+v.dataset.r||1;a.paused?a.play().catch(()=>say("Не удалось воспроизвести")):a.pause()}
+/* Галерея */
+const allImgs=()=>svc.get(cur).msgs.flatMap(m=>(m.imgs||[]).map((s,i)=>({mid:m.id,i,s,me:m.me})));
+function gal(mid,i){const a=allImgs();G=Math.max(0,a.findIndex(x=>x.mid==mid&&x.i==i));gr()}
+function gr(){const a=allImgs(),g=$("#ngal");if(!a.length){G=null;g.hidden=true;return}G=(G+a.length)%a.length;const x=a[G];
+ g.innerHTML=`<img src="${x.s}" alt=""><div class="gtop"><span>${G+1} / ${a.length}</span><span style="display:flex;gap:8px">${x.me?'<button class="b ic sm" data-n="gd" aria-label="Удалить">🗑</button>':""}<button class="b ic sm" data-n="gx" aria-label="Закрыть">✕</button></span></div>${a.length>1?'<button class="b ic gl1" data-n="gp">‹</button><button class="b ic gr1" data-n="gn">›</button>':""}`;g.hidden=false}
+/* Меню сообщения, обои, пересылка */
+function mmenu(id){const m=svc.msg(cur,id);if(!m)return;
+ sheet(`<div class="rxr">${["👍","❤️","😂","🔥","😮"].map(e=>`<button class="b ic sm" data-n="rx" data-id="${id}" data-e="${e}">${e}</button>`).join("")}</div>`+
+ [["reply","↩ Ответить"],["fwd","↪ Переслать"],...(m.me&&m.type=="text"?[["edit","✎ Изменить"]]:[]),["pin",m.pin?"📌 Открепить":"📌 Закрепить"],["del","🗑 Удалить"]].map(([n,l])=>`<button class="b w100" data-n="${n}" data-id="${id}">${l}</button>`).join(""))}
+function wallSheet(){const d=svc.get(cur);sheet(`<h4>Обои этого диалога</h4><div class="wg">${Object.keys(WP).map(k=>`<button class="${d.wp==k?"on":""}" data-n="setw" data-w="${k}" style="background:${WP[k]}" aria-label="Обои"></button>`).join("")}</div><label class="b w100" style="cursor:pointer">📷 Своё фото<input id="nwf" type="file" accept="image/*" hidden></label><button class="b w100" data-n="setw" data-w="g1">Сбросить</button>`)}
+function act(n,el){const id=el.dataset.id;
+ switch(n){
+ case"close":closeNm();break;
+ case"back":$("#nm").classList.remove("chat");break;
+ case"msearch":{const s=$("#nms");s.hidden=!s.hidden;if(!s.hidden)$("#nmq").focus();else{$("#nmq").value="";sfilter()}break}
+ case"wall":wallSheet();break;
+ case"setw":svc.wall(cur,el.dataset.w);chat(true);closeSheet();break;
+ case"send":send();break;
+ case"mic":rstart();break;
+ case"rcancel":if(rec){rec.cancel=1;rec.mr.stop()}break;
+ case"rstop":if(rec)rec.mr.stop();break;
+ case"ddel":dclear();break;
+ case"dsend":{if(!draft)break;const m=svc.send(cur,{type:"voice",src:draft.src,dur:draft.dur,wave:draft.wave,reply:replyTo});dclear();replyTo=null;bar();chat();list();track(cur,m.id);auto(cur);break}
+ case"reply":replyTo=id;editing=null;bar();closeSheet();$("#ni").focus();break;
+ case"edit":{const m=svc.msg(cur,id);editing=id;replyTo=null;$("#ni").value=m.text;bar();tog();closeSheet();$("#ni").focus();break}
+ case"barx":if(editing)$("#ni").value="";replyTo=editing=null;bar();tog();break;
+ case"pin":svc.pin(cur,id);closeSheet();chat(true);break;
+ case"del":svc.remove(cur,id);closeSheet();chat(true);list();break;
+ case"rx":svc.react(cur,id,el.dataset.e);closeSheet();rp(id);break;
+ case"fwd":sheet(`<h4>Переслать в…</h4>`+D.map(d=>`<button class="b w100" data-n="fwdto" data-id="${id}" data-t="${d.id}">${E(d.name)}</button>`).join(""));break;
+ case"fwdto":{const m=svc.msg(cur,id),c={type:m.type,fwd:1};["text","imgs","src","dur","wave"].forEach(k=>{if(m[k]!==undefined)c[k]=m[k]});svc.send(el.dataset.t,c);closeSheet();say("Переслано: "+svc.get(el.dataset.t).name);list();if(el.dataset.t==cur)chat();break}
+ case"pvdel":pend.splice(+el.dataset.i,1);pv();tog();break;
+ case"gopin":{const x=$(`[data-m="${el.dataset.id}"]`);if(x)x.scrollIntoView({block:"center",behavior:"smooth"});break}
+ case"gx":G=null;$("#ngal").hidden=true;break;
+ case"gp":G--;gr();break;
+ case"gn":G++;gr();break;
+ case"gd":{const x=allImgs()[G],m=svc.msg(cur,x.mid);m.imgs.splice(x.i,1);if(!m.imgs.length){if(m.text)m.type="text";else svc.remove(cur,m.id)}save();chat(true);list();gr();say("Фото удалено");break}
+ }}
+/* Сборка интерфейса */
+document.body.insertAdjacentHTML("beforeend",`<div class="nm" id="nm" role="dialog" aria-label="Сообщения">
+<aside class="nl"><div class="nlh"><h2>Сообщения</h2><button class="b ic sm" data-n="close" aria-label="Закрыть">✕</button></div><div style="padding:0 14px 10px"><input class="in" id="nsq" placeholder="Поиск диалогов" style="width:100%" autocomplete="off"></div><div class="lst" id="nlst"></div></aside>
+<section class="nc emp" id="nc"><div class="ne"><div style="font-size:3rem">💬</div><h3>Выберите диалог</h3><p class="mu">Откройте чат в списке, чтобы начать переписку</p></div>
+<div class="nh" id="nhd"></div><div class="nsr" id="nms" hidden><input class="in" id="nmq" placeholder="Поиск по сообщениям" style="flex:1" autocomplete="off"></div><div class="npn" id="npin" data-n="gopin" hidden></div>
+<div class="nb" id="nb"></div><div class="nrb" id="nrb" hidden></div><div class="npv" id="npv" hidden></div>
+<div class="nf"><div class="nfr" id="nfa"><label class="b ic sm" style="cursor:pointer" title="Фото">📎<input id="nfile" type="file" accept="image/*" multiple hidden></label><input class="in" id="ni" placeholder="Сообщение" autocomplete="off"><button class="b ic sm" data-n="mic" id="nmic" aria-label="Записать голос">🎙</button><button class="b p ic sm" data-n="send" id="nsend" aria-label="Отправить" hidden>➤</button></div>
+<div class="nfr" id="nfr" hidden><span class="rd"></span><b id="rt">0:00</b><span class="mu" style="flex:1">Идёт запись…</span><button class="b sm" data-n="rcancel">Отмена</button><button class="b p sm" data-n="rstop">Стоп</button></div><div class="nfr" id="nfd" hidden></div></div></section>
+<div class="nsh" id="nsh" hidden></div><div class="gal" id="ngal" hidden></div></div>`);
+const tr=$(".tr"),hb=document.createElement("button");hb.className="b ic dm";hb.style.position="relative";hb.setAttribute("aria-label","Сообщения");hb.innerHTML='<svg class="i"><use href="#i-chat"/></svg><b class="bdg" id="nmb" hidden>0</b>';
+tr.insertBefore(hb,tr.querySelector('[data-a="set"]')||tr.firstChild);hb.onclick=openNm;
+const pl=document.createElement("a");pl.href="#";pl.textContent="Сообщения";pl.onclick=e=>{e.preventDefault();openNm()};$("#pill").appendChild(pl);
+const nm=$("#nm");
+nm.addEventListener("click",e=>{const t=e.target;
+ if(t.id=="nsh")return closeSheet();
+ const n=t.closest("[data-n]");if(n)return act(n.dataset.n,n);
+ const im=t.closest("img[data-g]");if(im)return gal(im.dataset.g,+im.dataset.i);
+ const v=t.closest("[data-v]");if(v&&t.closest("button"))return vclick(v,t);
+ const d=t.closest("[data-d]");if(d)return open(d.dataset.d);
+ const m=t.closest("[data-m]");if(m)mmenu(m.dataset.m)});
+nm.addEventListener("change",async e=>{if(e.target.id=="nwf"&&e.target.files[0]){const s=await shrink(e.target.files[0],1200,.7);if(s){svc.wall(cur,s);chat(true);closeSheet()}else say("Не удалось загрузить фото")}});
+$("#nfile").addEventListener("change",async e=>{for(const f of [...e.target.files].slice(0,10-pend.length)){const s=await shrink(f,1000);if(s)pend.push(s)}e.target.value="";pv();tog()});
+$("#ni").addEventListener("input",tog);$("#ni").addEventListener("keydown",e=>{if(e.key=="Enter"){e.preventDefault();send()}});
+$("#nsq").addEventListener("input",list);$("#nmq").addEventListener("input",sfilter);
+document.addEventListener("keydown",e=>{if(e.key!="Escape"||!nm.classList.contains("show"))return;if(!$("#nsh").hidden)closeSheet();else if(!$("#ngal").hidden){G=null;$("#ngal").hidden=true}else closeNm()});
+badge();
+})();
+</script>
+</body>
+</html>
